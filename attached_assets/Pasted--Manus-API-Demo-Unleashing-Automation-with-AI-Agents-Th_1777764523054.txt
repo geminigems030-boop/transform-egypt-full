@@ -1,0 +1,137 @@
+# Manus API Demo: Unleashing Automation with AI Agents
+
+This document provides a comprehensive demonstration of the Manus API, showcasing its core functionalities through practical examples. The Manus API allows you to programmatically interact with Manus AI agents, enabling powerful automation and integration into your applications and workflows.
+
+## Core Concepts
+
+Before diving into the examples, let's understand some fundamental concepts of the Manus API:
+
+*   **Tasks**: The central unit of work in Manus. You create tasks to instruct AI agents to perform actions, answer questions, or generate content. Tasks can be single-turn or multi-turn conversations.
+*   **Messages**: All interactions within a task are represented as messages. This includes user prompts, agent responses, status updates, and error messages.
+*   **Connectors**: Integrations with third-party applications (e.g., Gmail, Google Calendar, GitHub). By attaching connectors to a task, you grant the AI agent access to perform actions within those applications.
+*   **Webhooks**: A mechanism for Manus to send real-time notifications to your application when significant events occur in a task's lifecycle (e.g., task creation, completion, or requiring user input).
+*   **Projects**: Used to group related tasks and inject shared instructions or personas into agents. This allows for consistent behavior and context across multiple tasks.
+*   **Agents**: Custom AI entities with their own identity and main task. You can interact with default agents or create custom ones for specific use cases.
+
+## API Key and Base URL
+
+All requests to the Manus API are made to `https://api.manus.ai/v2` and require an API key in the `x-manus-api-key` header. You can generate your API key from the [Manus Integrations page](https://manus.im/app#settings/integrations/api).
+
+## Demo Examples
+
+We will explore the following examples:
+
+1.  **Basic Task Creation and Polling**: Demonstrates how to create a simple task and poll for its completion and results.
+2.  **Task Creation with Connectors (Gmail)**: Shows how to leverage third-party integrations by including connectors in your task requests.
+3.  **Webhook Integration (Conceptual)**: Explains how to set up a webhook receiver to get real-time updates on task status.
+
+---
+
+### 1. Basic Task Creation and Polling
+
+This example illustrates the fundamental process of initiating a task with a Manus AI agent and then continuously checking its status until completion. This is suitable for one-off automated triggers where immediate feedback is not critical, and you can poll for results.
+
+**Key API Endpoints Used:**
+
+*   `POST /v2/task.create`: To initiate a new task [2].
+*   `GET /v2/task.listMessages`: To retrieve messages and status updates for a given task [5].
+
+**How it works:**
+
+1.  A new task is created with a simple text prompt.
+2.  The script then enters a polling loop, repeatedly calling `task.listMessages`.
+3.  It checks the `agent_status` in the `status_update` messages. The loop continues as long as the status is `running` or `waiting`.
+4.  Once the `agent_status` is `stopped`, the script extracts and prints the final `assistant_message` content.
+
+**Python Code (`manus_api_demo_1_basic_task.py`):**
+
+```python
+import requests
+import os
+import time
+
+MANUS_API_KEY = os.environ.get("MANUS_API_KEY")
+BASE_URL = "https://api.manus.ai/v2"
+
+def create_task(message_content):
+    headers = {
+        "Content-Type": "application/json",
+        "x-manus-api-key": MANUS_API_KEY,
+    }
+    payload = {
+        "message": {"content": message_content},
+        "title": "Basic Demo Task"
+    }
+    response = requests.post(f"{BASE_URL}/task.create", headers=headers, json=payload)
+    response.raise_for_status()
+    return response.json()
+
+def list_messages(task_id):
+    headers = {
+        "x-manus-api-key": MANUS_API_KEY,
+    }
+    response = requests.get(f"{BASE_URL}/task.listMessages?task_id={task_id}&order=asc", headers=headers)
+    response.raise_for_status()
+    return response.json()
+
+if __name__ == "__main__":
+    if not MANUS_API_KEY:
+        print("Error: MANUS_API_KEY environment variable not set.")
+        exit(1)
+
+    print("Creating a new task...")
+    task_response = create_task("Write a short poem about AI.")
+    task_id = task_response["task_id"]
+    task_url = task_response["task_url"]
+    print(f"Task created: {task_id}")
+    print(f"View in Manus app: {task_url}")
+
+    print("Polling for task completion...")
+    status = "running"
+    while status == "running" or status == "waiting":
+        time.sleep(5) # Poll every 5 seconds
+        messages_response = list_messages(task_id)
+        for message in messages_response["messages"]:
+            if message["type"] == "status_update":
+                status = message["status_update"]["agent_status"]
+                print(f"Current status: {status}")
+                if status == "stopped":
+                    print("Task completed!")
+                    for msg in messages_response["messages"]:
+                        if msg["type"] == "assistant_message":
+                            print("\n--- Assistant Message ---")
+                            print(msg["assistant_message"]["content"])
+                            if "attachments" in msg["assistant_message"]:
+                                print("Attachments:")
+                                for attachment in msg["assistant_message"]["attachments"]:
+                                    print(f"  - {attachment["file_name"]}: {attachment["url"]}")
+                    break
+            elif message["type"] == "assistant_message":
+                # Print assistant messages as they come in, if any before final stop
+                pass
+
+    if status == "error":
+        print("Task encountered an error.")
+        for message in messages_response["messages"]:
+            if message["type"] == "error_message":
+                print(f"Error: {message["error_message"]["message"]}")
+```
+
+---
+
+### 2. Task Creation with Connectors (Gmail)
+
+This example demonstrates how to integrate Manus with third-party services using connectors. By specifying a connector ID in the task creation request, the AI agent gains the ability to interact with that service. In this case, we'll use the Gmail connector to ask the agent to summarize unread emails.
+
+**Prerequisites:**
+
+*   You must have the Gmail connector authorized in your Manus account. You can do this on the [Manus Integrations page](https://manus.im/app#settings/integrations/api).
+
+**Key API Endpoints Used:**
+
+*   `POST /v2/task.create`: To initiate a new task with connector information [2].
+*   `GET /v2/task.listMessages`: To retrieve messages and status updates for a given task [5].
+
+**How it works:**
+
+1.  A task is created with a prompt that requires access to Gmail (e.g., 

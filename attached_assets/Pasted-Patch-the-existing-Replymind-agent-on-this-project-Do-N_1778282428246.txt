@@ -1,0 +1,31 @@
+Patch the existing Replymind agent on this project. Do NOT rebuild or refactor anything. The dashboard at transform-egypt.com, the inbox flow, memory sync (663 example pairs), webhook subscription (messages, messaging_postbacks, conversations, messaging_referrals, feed, leadgen), and Claude Sonnet drafting all work and must keep working unchanged.
+
+PROBLEM:
+Meta App Review for instagram_manage_messages is pending. The app has Standard access, not Advanced, so calls to POST https://graph.instagram.com/v25.0/me/messages currently fail with "(#3) Application does not have the capability" for any IG user who is not an admin/dev/tester on the app. Meanwhile real customer DMs are stacking up in the dashboard inbox (4 unread on #96941678, 3 on the latest, etc.) with no way to push the AI draft back out.
+
+WORKAROUND TO IMPLEMENT:
+A "Suggest-only fallback" that activates automatically when the IG send fails with capability error, PLUS a manual "Copy reply" path so Mervat / the team can paste the AI draft into Instagram's native inbox on their phone until Meta approves.
+
+EXACT CHANGES:
+
+1. **In the IG send function** (wherever the call to /me/messages lives — find it, don't recreate it):
+   - Wrap the existing send call in try/catch.
+   - On error, parse the response. If error.code === 10 OR error.message includes "does not have the capability" OR error.message includes "ig_multi_app", treat it as EXPECTED (not a crash). Set a flag on the conversation/message record: `send_status: "blocked_capability"` and `pending_reply_text: <the AI draft>`.
+   - For all other errors keep current behavior.
+   - On success keep current behavior (`send_status: "sent"`).
+
+2. **In the inbox UI** (Direct Messages tab on the admin dashboard):
+   - For any conversation where the latest outgoing AI draft has `send_status: "blocked_capability"`, show a small amber badge next to the conversation: "Pending — copy & send manually".
+   - Inside the conversation detail view, render the AI draft text in a copy-able box with a "Copy reply" button (one-tap copy to clipboard) and a "Mark as sent" button that sets `send_status: "manually_sent"` and clears the badge. Keep the existing Approve/Edit/Regenerate/Dismiss controls — just add these two next to them.
+   - If the user is on mobile, also show a "Open Instagram" deep link button (`instagram://direct/inbox`) right under "Copy reply" so the flow is: tap Copy → tap Open Instagram → paste → send → come back → tap Mark as sent.
+
+3. **Add one env var, default OFF:** `IG_SEND_DRY_RUN` (boolean). When true, ALL outbound IG sends skip the API call entirely and go straight to the blocked_capability path. This lets us force the workaround on globally if Meta's gate is flaky and we want predictable behavior. Default false so behavior is unchanged when capability is finally granted.
+
+4. **Add a counter to the dashboard header**, next to "Submissions 39" and "Instagram Inbox" — show "Pending manual: N" where N = count of conversations with at least one `send_status: "blocked_capability"` draft that hasn't been marked manually_sent or dismissed. Only render the badge when N > 0.
+
+5. **Do NOT touch:**
+   - Memory sync logic (the 663 pairs / past 90 days / past 12 months buttons).
+   - Webhook signature verification.
+   - The Replymind agent prompt or model (claude-sonnet-4-6).
+   - DMs mode / Comments mode (auto/suggest/off behavior stays as-is — auto mode just now means "auto-draft and try to auto-send; if blocked, queue for manual copy").
+   - The existing Approve /​​​​​​​​​​​​​​​​

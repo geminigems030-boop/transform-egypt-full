@@ -1,0 +1,147 @@
+You are working on an existing live e-commerce website (Transform boutique).
+
+IMPORTANT:
+- DO NOT redesign anything
+- DO NOT change UI / layout / spacing
+- ONLY add products + bundles
+- Use existing styling exactly
+
+----------------------------------
+
+VISUAL RULE (VERY IMPORTANT)
+
+All product images must match this style:
+- Luxury gold background
+- Soft glow lighting
+- High contrast, premium finish
+- Clean product focus
+- No clutter
+- Maintain original brand packaging
+
+----------------------------------
+
+TASK 1: ADD PRODUCTS (WITH CORRECT BRANDING + IMAGES)
+
+----------------------------------
+
+1. TransforM X Platin — Hair Mist (Jasmine)
+
+Image: Use Platin perfume bottle (clear glass, gold label)
+
+Category: Accessories
+
+----------------------------------
+
+2. TransforM X The Hair Shop — Repair Shampoo
+
+Image: Use black shampoo bottle with gold background + natural elements (chamomile / cucumber)
+
+Category: Haircare
+
+----------------------------------
+
+3. TransforM X The Hair Shop — Repair Mask
+
+Image: Use black conditioning mask tube on stone with cream texture
+
+Category: Haircare
+
+----------------------------------
+
+4. TransforM X Schwarzkopf — Color Booster
+
+Image: Use pink Fibre Clinix bottle (gold background, water drops)
+
+Category: Treatments
+
+----------------------------------
+
+5. TransforM X Miss Lashes — Lash Cleanser
+
+Image: Use model applying foam cleanser on lashes (pink bottle)
+
+Category: Accessories
+
+----------------------------------
+
+TASK 2: KEEP ORIGINAL BRANDING
+
+- DO NOT remove original logos:
+  - The Hair Shop
+  - Platin
+  - Schwarzkopf
+  - Miss Lashes
+
+- Product title format:
+  "TransforM X [Brand] — Product Name"
+
+----------------------------------
+
+TASK 3: ADD BUNDLES SECTION
+
+Section name: "Bundles"
+
+----------------------------------
+
+1. Blowdry Glow Kit
+
+Products:
+- Repair Shampoo (The Hair Shop)
+- Repair Mask (The Hair Shop)
+- Hair Mist (Platin)
+
+Image:
+Use gold aesthetic product composition (shampoo + mask + perfume)
+
+----------------------------------
+
+2. Color Care Kit
+
+Products:
+- Repair Shampoo (The Hair Shop)
+- Repair Mask (The Hair Shop)
+- Color Booster (Schwarzkopf)
+
+Image:
+Use pink + gold aesthetic featuring booster
+
+----------------------------------
+
+3. Extensions Care Kit
+
+Products:
+- Repair Shampoo (The Hair Shop)
+- Repair Mask (The Hair Shop)
+- Hair Mist (Platin)
+
+Image:
+Use clean luxury gold composition
+
+----------------------------------
+
+TASK 4: BUNDLE RULES
+
+- Show included products visually
+- Add label:
+  "TransforM Signature Bundle" or
+  "TransforM X Schwarzkopf Bundle"
+- Apply 10–15% discount
+- Add "Add Bundle to Cart"
+
+----------------------------------
+
+TASK 5: CATEGORY PLACEMENT
+
+- Haircare → Shampoo / Mask
+- Treatments → Booster
+- Accessories → Hair Mist / Lash Cleanser
+
+----------------------------------
+
+FINAL RESULT:
+
+All new products and bundles should:
+- Match the luxury gold visual identity
+- Keep co-branding clear
+- Feel native to the existing boutique
+- Look high-end and consistent across the page

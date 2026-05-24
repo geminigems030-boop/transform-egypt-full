@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5" />
+    <title>TransforM Egypt — #1 Hair Extensions &amp; Luxury Beauty in Cairo</title>
+    <meta name="description" content="Egypt's #1 premium luxury beauty salon. Hair extensions, lash extensions, microblading, facials &amp; professional makeup in Cairo. Celebrity-level results for every client." />
+    <meta name="keywords" content="hair extensions Egypt, hair extensions Cairo, luxury beauty salon Cairo, microblading Cairo, lash extensions Egypt, TransforM Egypt" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+
+    <!-- Facebook Domain Verification -->
+    <meta name="facebook-domain-verification" content="1ds4vipyrj4n5axf2pcu89r526ple0" />
+
+    <!-- Meta Pixel Code -->
+    <script src="https://connect.facebook.net/signals/config/1621776232209731?v=2.9.319&amp;r=stable&amp;domain=transform-egypt.com&amp;hme=7441a59ee5070e08bd0157a62d39bd95bf3afdcc83dafbad800e78b5416300a9&amp;ex_m=104%2C207%2C155%2C22%2C72%2C73%2C146%2C68%2C67%2C11%2C164%2C90%2C16%2C138%2C48%2C147%2C77%2C112%2C47%2C127%2C39%2C75%2C78%2C134%2C160%2C166%2C8%2C4%2C5%2C7%2C6%2C3%2C91%2C101%2C167%2C172%2C221%2C62%2C188%2C189%2C55%2C278%2C30%2C74%2C233%2C232%2C231%2C23%2C33%2C103%2C61%2C10%2C63%2C97%2C98%2C99%2C105%2C130%2C31%2C29%2C132%2C133%2C129%2C128%2C156%2C76%2C159%2C157%2C158%2C50%2C60%2C123%2C15%2C163%2C45%2C265%2C266%2C264%2C26%2C27%2C28%2C18%2C20%2C44%2C40%2C42%2C41%2C83%2C92%2C96%2C110%2C145%2C148%2C46%2C111%2C24%2C21%2C119%2C69%2C36%2C150%2C149%2C151%2C142%2C140%2C25%2C35%2C59%2C109%2C162%2C70%2C17%2C153%2C114%2C81%2C66%2C19%2C85%2C86%2C116%2C84%2C136%2C135%2C139%2C161%2C34%2C280%2C296%2C214%2C203%2C204%2C202%2C299%2C290%2C52%2C215%2C107%2C131%2C80%2C121%2C54%2C49%2C113%2C120%2C126%2C58%2C64%2C152%2C115%2C37%2C32%2C53%2C56%2C100%2C165%2C1%2C124%2C14%2C122%2C12%2C2%2C57%2C93%2C65%2C118%2C89%2C88%2C168%2C169%2C94%2C95%2C9%2C125%2C102%2C51%2C143%2C87%2C79%2C71%2C117%2C106%2C43%2C144%2C0%2C82%2C137%2C141%2C154%2C38%2C108%2C13%2C170" async=""></script><script async="" src="https://connect.facebook.net/en_US/fbevents.js"></script><script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1621776232209731');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1621776232209731&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-E5ZX507JSN"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-E5ZX507JSN');
+    </script>
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://transform-egypt.com/" />
+    <meta property="og:title" content="TransforM Egypt — #1 Hair Extensions &amp; Luxury Beauty in Cairo" />
+    <meta property="og:description" content="Egypt's #1 premium luxury beauty salon. Hair extensions, lash extensions, microblading, facials &amp; professional makeup in Cairo. Celebrity-level results for every client." />
+    <meta property="og:image" content="https://transform-egypt.com/opengraph.jpg" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="TransforM Egypt — #1 Hair Extensions &amp; Luxury Beauty in Cairo" />
+    <meta name="twitter:description" content="Egypt's #1 premium luxury beauty salon. Hair extensions, lash extensions, microblading, facials &amp; professional makeup in Cairo. Celebrity-level results for every client." />
+    <meta name="twitter:image" content="https://transform-egypt.com/opengraph.jpg" />
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://transform-egypt.com/" />
+
+    <!-- Hreflang -->
+    <link rel="alternate" hreflang="en" href="https://transform-egypt.com/" />
+    <link rel="alternate" hreflang="ar" href="https://transform-egypt.com/ar/" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Above-the-fold hero asset — preload so LCP fires before JS hydrates (item E3) -->
+    <link rel="preload" as="image" href="/logo-t.png" fetchpriority="high" />
+
+    <!-- Fonts — preload for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Cairo:wght@400;500;600;700&family=El+Messiri:wght@400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet" />
+
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "HairSalon",
+      "@id": "https://transform-egypt.com/#organization",
+      "name": "TransforM Egypt",
+      "alternateName": "TransforM",
+      "description": "Egypt's #1 premium luxury beauty salon. Hair extensions, lash extensions, microblading, facials and professional makeup in Cairo and across Egypt.",
+      "url": "https://transform-egypt.com",
+      "logo": "https://transform-egypt.com/logo-t.png",
+      "image": "https://transform-egypt.com/opengraph.jpg",
+      "telephone": ["+201009780008", "+201004545700"],
+      "priceRange": "EGP 500 - EGP 30,000",
+      "currenciesAccepted": "EGP",
+      "paymentAccepted": "Cash, Credit Card, Visa, Mastercard, Bank Transfer",
+      "openingHoursSpecification": [{
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+        "opens": "10:00",
+        "closes": "22:00"
+      }],
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "City Stars Mall, Ground Floor, Gate 7",
+        "addressLocality": "Cairo",
+        "addressRegion": "Cairo Governorate",
+        "addressCountry": "EG"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "30.0728",
+        "longitude": "31.3463"
+      },
+      "areaServed": [
+        { "@type": "City", "name": "Cairo" },
+        { "@type": "City", "name": "Giza" },
+        { "@type": "City", "name": "New Cairo" },
+        { "@type": "City", "name": "Sheikh Zayed" },
+        { "@type": "City", "name": "New Alamein" }
+      ],
+      "department": [
+        {
+          "@type": "HairSalon",
+          "name": "TransforM Egypt — City Stars Mall",
+          "address": { "@type": "PostalAddress", "streetAddress": "City Stars Mall, Ground Floor, Gate 7", "addressLocality": "Heliopolis, Cairo", "addressCountry": "EG" },
+          "telephone": "+201009780008"
+        },
+        {
+          "@type": "HairSalon",
+          "name": "TransforM Egypt — Sofitel Downtown Cairo",
+          "address": { "@type": "PostalAddress", "streetAddress": "Sofitel Downtown Cairo, Lower Level", "addressLocality": "Downtown, Cairo", "addressCountry": "EG" },
+          "telephone": "+201004545700"
+        },
+        {
+          "@type": "HairSalon",
+          "name": "TransforM Egypt — O Mall New Alamein",
+          "address": { "@type": "PostalAddress", "streetAddress": "O Mall, New Alamein", "addressLocality": "New Alamein", "addressCountry": "EG" },
+          "telephone": "+201009780008"
+        }
+      ],
+      "sameAs": [
+        "https://www.instagram.com/transformegypt",
+        "https://www.facebook.com/share/1GAJKnTcWe/",
+        "https://www.tiktok.com/@transformegypt"
+      ],
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "500",
+        "bestRating": "5",
+        "worstRating": "1"
+      },
+      "founder": {
+        "@type": "Person",
+        "name": "Mervat Atalla",
+        "jobTitle": "Founder & CEO, Beauty Expert & Image Consultant",
+        "description": "Founder and CEO of TransforM Egypt. Beauty expert and image consultant available for VIP private consultations. Featured on Heya w Bas with Radwa El Sherbiny."
+      },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Beauty Services",
+        "itemListElement": [
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Luxury Hair Extensions" }, "priceCurrency": "EGP", "price": "10000" },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Lash Extensions" }, "priceCurrency": "EGP", "price": "1050" },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Microblading & Brows" }, "priceCurrency": "EGP", "price": "1450" },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Skin Care & Facials" }, "priceCurrency": "EGP", "price": "500" },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Nails & Beauty" }, "priceCurrency": "EGP", "price": "150" },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Bridal Package" }, "priceCurrency": "EGP", "price": "5000" }
+        ]
+      }
+    }
+    </script>
+
+    <!-- FAQ Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How long do hair extensions last?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Tape-in extensions last 6-8 weeks before re-application, keratin-bond extensions last up to 6 months, and clip-ins are reusable for over a year with proper care." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is the first consultation really free?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Every first-time client receives a complimentary one-on-one consultation with a senior stylist to color-match, assess your hair condition, and design a plan tailored to your goals." }
+        },
+        {
+          "@type": "Question",
+          "name": "What types of hair do you use?",
+          "acceptedAnswer": { "@type": "Answer", "text": "We carry premium Indian temple-grade Remy, Slavic Russian single-donor, Brazilian wave, Turkish, and tape-in collections. Every bundle is inspected at origin and color-matched in-house before fitting." }
+        },
+        {
+          "@type": "Question",
+          "name": "Do extensions damage natural hair?",
+          "acceptedAnswer": { "@type": "Answer", "text": "When fitted by a trained stylist using premium materials, extensions do not damage healthy hair. We use lightweight, weight-distributed techniques and follow strict removal protocols to protect your natural growth." }
+        },
+        {
+          "@type": "Question",
+          "name": "How long does microblading take and how long does it last?",
+          "acceptedAnswer": { "@type": "Answer", "text": "A microblading session takes about 2 hours, with a complimentary touch-up at 4-6 weeks. Results last 12-18 months depending on skin type and aftercare." }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I book a bridal package or full-day service?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Absolutely. Our bridal packages combine hair, makeup, lashes, nails and skincare into a private suite session. Trial appointments are required and we recommend booking at least 8 weeks before the wedding date." }
+        }
+      ]
+    }
+    </script>
+    <script type="module" crossorigin src="/assets/index-TEHqCYAy.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-BtkArCKM.css">
+  </head>
+  <body>
+    <noscript>
+      <div style="padding:2rem;text-align:center;font-family:sans-serif;">
+        <h1>TransforM Egypt</h1>
+        <p>Please enable JavaScript to experience our full luxury beauty platform.</p>
+        <p>Call us: <a href="tel:+201009780008">+20 100 978 0008</a></p>
+      </div>
+    </noscript>
+    <div id="root"></div>
+  
+
+</body></html>

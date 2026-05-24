@@ -1,0 +1,156 @@
+----------------------------------
+
+TASK 6: ADD EXTENSIONS PRODUCTS
+
+----------------------------------
+
+1. Gushli 100% Human Hair Weft Extensions — 22"
+
+Brand: Gushli (by TransforM)
+
+Images:
+- Use clean cut-out product (like current site)
+- Include shade visuals (DaisyBlend / MoonStone / Champagne)
+
+Options:
+- Length: 12 / 16 / 20 / 22 / 24
+- Shades:
+  - MoonStone (cool ashy brown)
+  - Champagne (dark roots + beige blonde)
+  - DaisyBlend (brown + blonde blend)
+
+Highlights:
+- 100% human hair
+- Double drawn
+- 120g
+- Continuous weft
+- 3–9 months lifespan
+
+Category: Weft Extensions
+
+----------------------------------
+
+2. Tape-In Hair Extensions — Natural Blonde
+
+Images:
+- Clean luxury close-up (existing style)
+
+Category: Tape-In
+
+----------------------------------
+
+3. Keratin Bond Extensions — Dark Brown
+
+Images:
+- Close-up strands on white background
+
+Category: Keratin
+
+----------------------------------
+
+4. Full Lace Wig — Natural Wave
+
+Images:
+- Dramatic black luxury shot (hand holding hair)
+
+Category: Wigs
+
+----------------------------------
+
+TASK 7: ADD BRUSHES
+
+----------------------------------
+
+1. TransforM X The Hair Shop — Loop Brush
+
+Image:
+- Brush used on hair (loop bristles visible)
+
+Highlights:
+- No snag
+- Safe for extensions
+- Anti-breakage
+
+Category: Accessories
+
+----------------------------------
+
+2. Gushli Heat X-Treme Styling Brush
+
+Image:
+- Foldable brush (gold luxury setup)
+
+Highlights:
+- Reduces frizz
+- Adds shine
+- Travel friendly
+
+Category: Accessories
+
+----------------------------------
+
+3. TransforM X Platin — Detangling Brush
+
+Image:
+- Black open-bristle brush (clean white background)
+
+Highlights:
+- Anti-static
+- Gentle detangling
+- All hair types
+
+Category: Accessories
+
+----------------------------------
+
+TASK 8: EXTENSIONS BUNDLES
+
+----------------------------------
+
+1. Full Transformation Kit
+
+Products:
+- Weft Extensions (any shade)
+- Loop Brush
+- Repair Shampoo
+- Repair Mask
+
+----------------------------------
+
+2. Tape-In Maintenance Kit
+
+Products:
+- Tape-In Extensions
+- Loop Brush
+- Repair Shampoo
+
+----------------------------------
+
+3. Keratin Care Kit
+
+Products:
+- Keratin Extensions
+- Repair Shampoo
+- Repair Mask
+- Hair Mist
+
+----------------------------------
+
+BUNDLE RULES:
+
+- Keep luxury gold visuals
+- Show hair + product combo
+- Add label: "Salon Professional Kit"
+- Apply 10–15% discount
+
+----------------------------------
+
+FINAL NOTE:
+
+Everything must:
+- Match current boutique UI
+- Keep gold/black luxury aesthetic
+- Use real product images provided
+- Maintain TransforM premium positioning
+
+DO NOT redesign anything — ONLY add products and bundles

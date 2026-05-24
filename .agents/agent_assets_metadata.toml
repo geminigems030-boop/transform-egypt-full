@@ -1,0 +1,229 @@
+uploads = []
+
+[[generated]]
+id = "s1-UWuImVPAdQdQKAi0eQ"
+uri = "file://attached_assets/generated_images/lucky_story_bg.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "nktIFVR2xw0crByyY3M9a"
+uri = "file://attached_assets/generated_images/lucky_post_bg.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "1uyAOsbJBU4S1z01o5HSD"
+uri = "file://attached_assets/generated_images/lucky_story_v3_bg.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "wcgxSkbqYxOxm-iOY8jpn"
+uri = "file://attached_assets/generated_images/lucky_story_v4_bg.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "BbbdQUN0ggBsn2wYjcsVl"
+uri = "file://attached_assets/generated_images/v5_hero_bg.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "ahCcOybt7v7rzHvEvCyh-"
+uri = "file://attached_assets/generated_images/v5_post1_bg.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "DrsunqAin82XRf3UizqBZ"
+uri = "file://attached_assets/generated_images/v5_post2_bg.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "9u5c0YWCMBO7EWmLXYeqI"
+uri = "file://attached_assets/generated_images/v5_post3_bg.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "GnUJuEQtxGkCSjxxrb78O"
+uri = "file://attached_assets/generated_images/lc_chair_9x16.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "Xy6ToB7vbBfKoBv12W_rB"
+uri = "file://attached_assets/generated_images/lc_chair_1x1.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "ewy_hhW8h72ko5FLog0EQ"
+uri = "file://attached_assets/generated_images/lc_5chairs_1x1.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "rSYNbrgIq5qaCj_959vCT"
+uri = "file://attached_assets/generated_images/AI_poster_v1.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "NHzSP5784hZof7kMVnhnC"
+uri = "file://attached_assets/generated_images/AI_poster_v2.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "TUHZ9FCxu3UdYBOvbEYiY"
+uri = "file://attached_assets/generated_images/AI_poster_v3.png"
+type = "image"
+title = "generated_image"
+
+[[outputs]]
+id = "YwFPDljnk8SHwwwygeaoD"
+uri = "file://screenshots/lucky-1-hero.jpeg"
+type = "image"
+title = "1. Hero — Live Counter"
+
+[[outputs]]
+id = "WKztY5uBcnNOSiGaevAOa"
+uri = "file://screenshots/lucky-2-quiz.jpeg"
+type = "image"
+title = "2. Quiz — Step 2 of 5"
+
+[[outputs]]
+id = "gLRi7DhU_rxEZuT8Lfu5G"
+uri = "file://screenshots/lucky-3-recommendation.jpeg"
+type = "image"
+title = "3. Personalized Recommendation"
+
+[[outputs]]
+id = "9qrnDtNM4GoGiDyy_MJal"
+uri = "file://screenshots/lucky-4-wheel.jpeg"
+type = "image"
+title = "4. The Spin Wheel + Form"
+
+[[outputs]]
+id = "QaBnX6muHsjDca4vxQCDN"
+uri = "file://screenshots/lucky-5-result.jpeg"
+type = "image"
+title = "5. Prize Result Modal"
+
+[[outputs]]
+id = "n3x67JxQ5A00mzwhxnklt"
+uri = "file://screenshots/lucky-hero-mobile.jpg"
+type = "image"
+title = "Mobile View — Hero"
+
+[[outputs]]
+id = "CltFDkwlyfxYB_EC-2-jR"
+uri = "file://attached_assets/generated_images/lucky_story_FINAL.png"
+type = "image"
+title = "Instagram Story — Lucky Wheel (1080×1920)"
+
+[[outputs]]
+id = "47EiKj-AjBVRzB1CKVAYo"
+uri = "file://attached_assets/generated_images/lucky_post_FINAL.png"
+type = "image"
+title = "Instagram Post — Lucky Wheel (1080×1080)"
+
+[[outputs]]
+id = "7I0M_QwqQ0vDHrQ3Vk2Py"
+uri = "file://attached_assets/generated_images/lucky_story_v2_AR_FINAL.png"
+type = "image"
+title = "V2 — AR-First (same model)"
+
+[[outputs]]
+id = "hJ3bniTpOKZIQkOB96E17"
+uri = "file://attached_assets/generated_images/lucky_story_v3_FINAL.png"
+type = "image"
+title = "V3 — Joyful (She spun. She won.)"
+
+[[outputs]]
+id = "hPINNZ9pjE5ZNzaA2rrha"
+uri = "file://attached_assets/generated_images/lucky_story_v4_FINAL.png"
+type = "image"
+title = "V4 — Bold Editorial (5 winners. one wheel.)"
+
+[[outputs]]
+id = "IibOs7CRMF4a0wdC1JktW"
+uri = "file://attached_assets/generated_images/CAMPAIGN_01_hero_story.png"
+type = "image"
+title = "01 — Hero Story (golden tear)"
+
+[[outputs]]
+id = "_vFSvq-qRpvLmByyCW114"
+uri = "file://attached_assets/generated_images/CAMPAIGN_02_carousel_1.png"
+type = "image"
+title = "02 — Carousel I: Announce"
+
+[[outputs]]
+id = "9bLmdpCnMtmv4ewyQgqxn"
+uri = "file://attached_assets/generated_images/CAMPAIGN_03_carousel_2.png"
+type = "image"
+title = "03 — Carousel II: The Three Prizes"
+
+[[outputs]]
+id = "xBGUv388YMz8MqTeuPqlJ"
+uri = "file://attached_assets/generated_images/CAMPAIGN_04_carousel_3.png"
+type = "image"
+title = "04 — Carousel III: Will the Wheel Choose You?"
+
+[[outputs]]
+id = "g6tVgJLgalsn7k9al-4Xc"
+uri = "file://attached_assets/generated_images/CAMPAIGN_05_reels_cover.png"
+type = "image"
+title = "05 — Reels Cover"
+
+[[outputs]]
+id = "EIWevM83GWV2QhNLjFMWV"
+uri = "file://attached_assets/generated_images/LC_01_hero_story.png"
+type = "image"
+title = "01 — Hero Story (AI-designed, 9:16)"
+
+[[outputs]]
+id = "vZeVTl-G55-JHZe2E9dLT"
+uri = "file://attached_assets/generated_images/LC_02_carousel_1.png"
+type = "image"
+title = "02 — Carousel I: Episode One (AI-designed)"
+
+[[outputs]]
+id = "A_AhRPhFJadzi3t9mf55x"
+uri = "file://attached_assets/generated_images/LC_03_carousel_2.png"
+type = "image"
+title = "03 — Carousel II: 5 Chairs / 3 Prizes"
+
+[[outputs]]
+id = "Rk-6dsoQPoo5vCCkQkuIs"
+uri = "file://attached_assets/generated_images/LC_05_reels_cover.png"
+type = "image"
+title = "05 — Reels Cover (AI-designed, 9:16)"
+
+[[outputs]]
+id = "DqbwOpgntgM-NXc7iFbEZ"
+uri = "file://attached_assets/CAPTIONS_lucky_chair.md"
+type = "text"
+title = "Caption pack (bilingual)"
+
+[[outputs]]
+id = "mDcvPPmp5T1IYvgY_eXG7"
+uri = "file://attached_assets/generated_images/LC_04_carousel_3.png"
+type = "image"
+title = "04 — Founder slide (real Mervat photo on AI-designed layout)"
+
+[[outputs]]
+id = "DPujpNigzf7NM9n85qhSi"
+uri = "file://exports/transform-egypt-project.tar.gz"
+type = "unspecified"
+title = "Complete Project Source Code (.tar.gz)"
+
+[[outputs]]
+id = "U4oYU-kDTA6ctSpJV1myn"
+uri = "file://.local/outputs/TransforM-Egypt-Brand-Deck-2026.pdf"
+type = "pdf"
+title = "TransforM Egypt — Brand Deck 2026 (PDF)"

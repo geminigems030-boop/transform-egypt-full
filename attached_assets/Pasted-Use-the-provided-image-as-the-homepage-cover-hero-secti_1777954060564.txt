@@ -1,0 +1,97 @@
+Use the provided image as the homepage cover (hero section) for TransforM Boutique.
+
+Goal:
+Create a clean, luxury hero section using this image as the main visual.
+
+-----------------------------------
+
+1. HERO IMAGE
+
+- Set the image as a full-width background
+- Height: 100vh (full screen)
+- Keep image high quality (no blur, no heavy compression)
+
+Positioning:
+- Center the image so the face and products are fully visible
+- Do NOT crop the head, hands, or products
+- Adjust for mobile to keep face + products in frame (center-top focus)
+
+-----------------------------------
+
+2. OVERLAY
+
+- Add a subtle dark gradient overlay:
+  - Black → transparent
+  - Opacity: 20–25%
+- Keep the image clearly visible (do NOT darken too much)
+
+-----------------------------------
+
+3. TEXT (MINIMAL)
+
+Place on left side:
+
+Title:
+"TransforM Boutique"
+
+Subtitle:
+"Luxury Hair Extensions & Wigs"
+
+Button:
+"Shop Now"
+
+-----------------------------------
+
+4. STYLE
+
+- Font:
+  - Title: elegant serif (Playfair Display)
+  - Subtitle: clean sans-serif (Inter)
+
+- Colors:
+  - Text: warm ivory (#F5F2EC)
+  - Button: champagne gold background + dark text
+
+- Spacing:
+  - Keep layout minimal and premium
+  - Do not overcrowd the image
+
+-----------------------------------
+
+5. BUTTON
+
+- Rounded edges
+- Soft hover effect (slight glow or scale)
+- Keep size elegant (not too big)
+
+-----------------------------------
+
+6. RESPONSIVE
+
+- Desktop: full-screen hero
+- Mobile:
+  - Ensure face and products remain visible
+  - Adjust text size and spacing
+  - Keep button easily clickable
+
+-----------------------------------
+
+7. ANIMATION
+
+- Add soft fade-in on load (image + text)
+- Optional: very subtle parallax scroll
+
+-----------------------------------
+
+8. DO NOT
+
+- Do not add extra graphics
+- Do not add multiple colors
+- Do not clutter the section
+- Do not distort or crop the image badly
+
+-----------------------------------
+
+FINAL RESULT:
+
+A clean, premium luxury boutique cover section that highlights the founder and products with strong visual impact and high-end brand feel.

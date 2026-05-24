@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TransforM — Before After</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:100%; height:100%; overflow:hidden; }
+.ad {
+  width: 100vw; height: 100vh;
+  background: #050505;
+  display: flex;
+  flex-direction: column;
+}
+.split {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
+  overflow: hidden;
+}
+.panel {
+  position: relative;
+  overflow: hidden;
+}
+.panel img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+.panel-label {
+  position: absolute;
+  bottom: 2.5vh;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2vw;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  padding: 0.5vh 1.5vw;
+}
+.before-label {
+  right: 1.5vw;
+  color: rgba(232,225,216,0.75);
+  background: rgba(5,5,5,0.65);
+  border: 1px solid rgba(232,225,216,0.2);
+}
+.after-label {
+  left: 1.5vw;
+  color: #d4b47d;
+  background: rgba(5,5,5,0.7);
+  border: 1px solid rgba(212,180,125,0.4);
+}
+.before-overlay {
+  position: absolute; inset: 0;
+  background: rgba(5,5,5,0.15);
+}
+.after-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to right, rgba(5,5,5,0.1) 0%, rgba(5,5,5,0) 100%);
+}
+.center-divider {
+  position: absolute;
+  left: 50%; top: 0; bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, transparent, #d4b47d 30%, #d4b47d 70%, transparent);
+  transform: translateX(-50%);
+  z-index: 2;
+}
+.center-icon {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  background: #d4b47d;
+  width: 4.5vw; height: 4.5vw;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1vw;
+  font-weight: 700;
+  color: #050505;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  flex-direction: column;
+  line-height: 1.1;
+}
+.bottom {
+  background: #050505;
+  padding: 2.5vh 5vw;
+  border-top: 1px solid rgba(212,180,125,0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 1vh;
+}
+.headline-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.headline-ar {
+  font-family: 'Cairo', sans-serif;
+  font-size: 3.2vw;
+  font-weight: 700;
+  color: #fff;
+  direction: rtl;
+}
+.headline-ar span {
+  color: #d4b47d;
+}
+.headline-en {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4vw;
+  font-style: italic;
+  color: rgba(232,225,216,0.65);
+  direction: ltr;
+  text-align: left;
+  max-width: 30vw;
+}
+.locs-row {
+  display: flex;
+  gap: 1.5vw;
+  align-items: center;
+}
+.loc-tag {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1vw;
+  letter-spacing: 0.2em;
+  color: #d4b47d;
+  text-transform: uppercase;
+  border: 1px solid rgba(212,180,125,0.35);
+  padding: 0.35vh 1.2vw;
+}
+.sep { color: rgba(212,180,125,0.4); font-size: 1vw; }
+.cta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.cta-btn {
+  background: #d4b47d;
+  color: #050505;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3vw;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  padding: 1.1vh 2.8vw;
+  text-transform: uppercase;
+}
+.wa {
+  font-family: 'Cairo', sans-serif;
+  font-size: 1.1vw;
+  color: rgba(232,225,216,0.6);
+  direction: ltr;
+}
+</style>
+</head>
+<body>
+<div class="ad">
+  <div class="split">
+    <div class="panel" style="order:2;">
+      <img src="./dina-before.jpeg" alt="Before">
+      <div class="before-overlay"></div>
+      <div class="panel-label before-label">BEFORE</div>
+    </div>
+    <div class="panel" style="order:1;">
+      <img src="./dina-after.jpeg" alt="After">
+      <div class="after-overlay"></div>
+      <div class="panel-label after-label">AFTER ✦</div>
+    </div>
+    <div class="center-divider"></div>
+    <div class="center-icon"><span>T</span></div>
+  </div>
+  <div class="bottom">
+    <div class="headline-row">
+      <div class="headline-ar">الفرق <span>واضح.</span></div>
+      <div class="headline-en">Real results. Real hair.<br>Real transformation.</div>
+    </div>
+    <div class="locs-row">
+      <div class="loc-tag">City Stars — Gate 7</div>
+      <span class="sep">✦</span>
+      <div class="loc-tag">Sofitel Downtown</div>
+    </div>
+    <div class="cta-row">
+      <div class="cta-btn">احجزي تحويلتك</div>
+      <div class="wa">WhatsApp: 0100 978 0008</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

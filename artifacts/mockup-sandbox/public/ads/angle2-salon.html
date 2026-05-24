@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TransforM — Salon Experience</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:100%; height:100%; overflow:hidden; }
+.ad {
+  width: 100vw; height: 100vh;
+  position: relative;
+  background: #050505;
+}
+.hero {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+}
+.overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(
+    165deg,
+    rgba(5,5,5,0.72) 0%,
+    rgba(5,5,5,0.3) 50%,
+    rgba(5,5,5,0.65) 100%
+  );
+}
+.content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 5vh 6vw;
+}
+.top {
+  display: flex;
+  flex-direction: column;
+  gap: 1vh;
+}
+.brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4vw;
+  letter-spacing: 0.35em;
+  color: #d4b47d;
+  text-transform: uppercase;
+}
+.rule {
+  width: 4vw; height: 1px;
+  background: #d4b47d;
+}
+.headline-ar {
+  font-family: 'Cairo', sans-serif;
+  font-size: 5.5vw;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.15;
+  direction: rtl;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+}
+.headline-en {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.8vw;
+  font-weight: 400;
+  font-style: italic;
+  color: #e8e1d8;
+  line-height: 1.3;
+  margin-top: 0.5vh;
+}
+.bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5vh;
+}
+.locations-row {
+  display: flex;
+  gap: 3vw;
+  align-items: center;
+}
+.loc {
+  display: flex;
+  flex-direction: column;
+}
+.loc-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5vw;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  color: #d4b47d;
+  text-transform: uppercase;
+}
+.loc-detail {
+  font-family: 'Cairo', sans-serif;
+  font-size: 1vw;
+  color: rgba(232,225,216,0.7);
+  margin-top: 0.2vh;
+}
+.vert-rule {
+  width: 1px; height: 5vh;
+  background: rgba(212,180,125,0.35);
+}
+.cta-row {
+  display: flex;
+  align-items: center;
+  gap: 2vw;
+}
+.cta-btn {
+  background: #d4b47d;
+  color: #050505;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3vw;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  padding: 1.3vh 3vw;
+  text-transform: uppercase;
+}
+.wa {
+  color: #e8e1d8;
+  font-family: 'Cairo', sans-serif;
+  font-size: 1vw;
+  direction: ltr;
+}
+</style>
+</head>
+<body>
+<div class="ad">
+  <img class="hero" src="./salon-interior.jpg" alt="TransforM Salon">
+  <div class="overlay"></div>
+  <div class="content">
+    <div class="top">
+      <div class="brand">TransforM Egypt</div>
+      <div class="rule"></div>
+      <div class="headline-ar">تجربة جمال<br>على مستوى عالمي</div>
+      <div class="headline-en">A world-class beauty experience,<br>in the heart of Cairo.</div>
+    </div>
+    <div class="bottom">
+      <div class="locations-row">
+        <div class="loc">
+          <div class="loc-name">City Stars</div>
+          <div class="loc-detail">الدور الأرضي — بوابة ٧، مصر الجديدة</div>
+          <div class="loc-detail" style="direction:ltr;color:#d4b47d;">0100 978 0008</div>
+        </div>
+        <div class="vert-rule"></div>
+        <div class="loc">
+          <div class="loc-name">Sofitel</div>
+          <div class="loc-detail">سوفيتيل داون تاون القاهرة — الدور السفلي</div>
+          <div class="loc-detail" style="direction:ltr;color:#d4b47d;">0100 454 5700</div>
+        </div>
+      </div>
+      <div class="cta-row">
+        <div class="cta-btn">BOOK YOUR SESSION</div>
+        <div class="wa">WhatsApp: 0100 978 0008</div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

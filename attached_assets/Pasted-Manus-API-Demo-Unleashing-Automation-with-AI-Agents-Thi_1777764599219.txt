@@ -1,0 +1,43 @@
+Manus API Demo: Unleashing Automation with AI Agents
+This document provides a comprehensive demonstration of the Manus API, showcasing its core functionalities through practical examples. The Manus API allows you to programmatically interact with Manus AI agents, enabling powerful automation and integration into your applications and workflows.
+
+Core Concepts
+Before diving into the examples, let’s understand some fundamental concepts of the Manus API:
+
+	•	Tasks: The central unit of work in Manus. You create tasks to instruct AI agents to perform actions, answer questions, or generate content. Tasks can be single-turn or multi-turn conversations.
+	•	Messages: All interactions within a task are represented as messages. This includes user prompts, agent responses, status updates, and error messages.
+	•	Connectors: Integrations with third-party applications (e.g., Gmail, Google Calendar, GitHub). By attaching connectors to a task, you grant the AI agent access to perform actions within those applications.
+	•	Webhooks: A mechanism for Manus to send real-time notifications to your application when significant events occur in a task’s lifecycle (e.g., task creation, completion, or requiring user input).
+	•	Projects: Used to group related tasks and inject shared instructions or personas into agents. This allows for consistent behavior and context across multiple tasks.
+	•	Agents: Custom AI entities with their own identity and main task. You can interact with default agents or create custom ones for specific use cases.
+
+API Key and Base URL
+All requests to the Manus API are made to `https://api.manus.ai/v2` and require an API key in the `x-manus-api-key` header. You can generate your API key from the Manus Integrations page.
+
+Demo Examples
+We will explore the following examples:
+
+	1.	Basic Task Creation and Polling: Demonstrates how to create a simple task and poll for its completion and results.
+	2.	Task Creation with Connectors (Gmail): Shows how to leverage third-party integrations by including connectors in your task requests.
+	3.	Webhook Integration (Conceptual): Explains how to set up a webhook receiver to get real-time updates on task status.
+
+
+1. Basic Task Creation and Polling
+This example illustrates the fundamental process of initiating a task with a Manus AI agent and then continuously checking its status until completion. This is suitable for one-off automated triggers where immediate feedback is not critical, and you can poll for results.
+
+Key API Endpoints Used:
+
+	•	`POST /v2/task.create`: To initiate a new task [2].
+	•	`GET /v2/task.listMessages`: To retrieve messages and status updates for a given task [5].
+
+How it works:
+
+	1.	A new task is created with a simple text prompt.
+	2.	The script then enters a polling loop, repeatedly calling `task.listMessages`.
+	3.	It checks the `agent_status` in the `status_update` messages. The loop continues as long as the status is `running` or `waiting`.
+	4.	Once the `agent_status` is `stopped`, the script extracts and prints the final `assistant_message` content.
+
+Python Code (`manus_api_demo_1_basic_task.py`):
+
+
+￼

@@ -1,0 +1,828 @@
+
+Create a world-class luxury bilingual website and ecommerce platform for TransforM (@transformegypt), Egypt and The Middle East's #1 premium beauty brand specializing in hair extensions, lash extensions, microblading, facials, and professional makeup.
+
+═══════════════════════════════════════════════════════════════════
+
+DEPLOYMENT & DOMAIN
+
+Custom domain: transform-egypt.com
+
+Requirements:
+• Custom domain DNS connection with SSL support
+• Environment variables configuration
+• Optimized production build for Vercel/Netlify deployment
+• CDN integration for global performance
+
+═══════════════════════════════════════════════════════════════════
+
+TECH STACK
+
+Framework: Next.js 14+ (App Router)
+Frontend: React 18+
+Styling: Tailwind CSS
+Animations: Framer Motion
+Language: TypeScript (preferred for type safety)
+Image Optimization: Next.js Image component
+Forms: React Hook Form + Zod validation
+State Management: Zustand or React Context
+Analytics: Google Analytics 4 + Meta Pixel
+
+═══════════════════════════════════════════════════════════════════
+
+DESIGN AESTHETIC
+
+Blend three luxury inspirations:
+• Old-Money European spa elegance
+• Beverly Hills celebrity glam salon  
+• Ultra-modern Dubai luxury clinic
+
+Result: Editorial, high-fashion, minimal, ultra-premium
+
+Design Philosophy:
+• Every pixel must scream luxury
+• White space is premium space
+• Subtle animations enhance, never distract
+• Mobile-first, but desktop-impressive
+• Speed = Luxury (fast loading is non-negotiable)
+
+═══════════════════════════════════════════════════════════════════
+
+BRAND COLOR PALETTE (OFFICIAL)
+
+Primary Colors:
+• Deep Black: #000000 (backgrounds, text, luxury depth)
+• Metallic Gold: #D4AF37 (accents, CTAs, premium highlights)
+• Pure White: #FFFFFF (text on dark, clean spaces)
+• Warm Grey: #B9ADA1 (subtle accents, borders)
+
+Secondary Colors:
+• Ivory: #F8F5F0 (soft backgrounds, alternating sections)
+• Soft Taupe: #E8E1D8 (cards, subtle containers)
+
+Gradient Usage:
+• Hero overlays: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.7) 100%)
+• Gold shimmer: linear-gradient(135deg, #D4AF37 0%, #F4E4C1 50%, #D4AF37 100%)
+
+═══════════════════════════════════════════════════════════════════
+
+TYPOGRAPHY SYSTEM
+
+Fonts:
+• Headings: Playfair Display (serif, elegant, luxury)
+• Body: Inter (sans-serif, modern, readable)
+
+Typography Scale:
+• Hero Title: 72px (desktop) / 40px (mobile)
+• Section Titles: 48px (desktop) / 32px (mobile)
+• Subsection Titles: 32px (desktop) / 24px (mobile)
+• Subheadings: 24px (desktop) / 18px (mobile)
+• Body Text: 16px (desktop) / 16px (mobile)
+• Small Text: 14px (captions, labels)
+
+Font Weights:
+• Playfair Display: 400 (regular), 600 (semibold), 700 (bold)
+• Inter: 300 (light), 400 (regular), 500 (medium), 600 (semibold), 700 (bold)
+
+Line Heights:
+• Headings: 1.2
+• Body: 1.6
+• Small text: 1.4
+
+Letter Spacing:
+• Headings: -0.02em (tighter, more elegant)
+• Body: 0em (normal)
+• Uppercase labels: 0.1em (wider, more luxurious)
+
+═══════════════════════════════════════════════════════════════════
+
+BUTTON SYSTEM
+
+Primary Button (Main CTAs):
+• Background: #000000
+• Text: #FFFFFF
+• Padding: 16px 32px
+• Border-radius: 2px (sharp, modern)
+• Hover: Background #D4AF37, Text #000000
+• Transition: all 300ms ease
+
+Secondary Button (Alternative CTAs):
+• Background: transparent
+• Border: 2px solid #D4AF37
+• Text: #D4AF37
+• Padding: 14px 30px
+• Hover: Background #D4AF37, Text #000000
+• Transition: all 300ms ease
+
+Shop Button (E-commerce):
+• Background: #D4AF37
+• Text: #000000
+• Padding: 16px 32px
+• Border-radius: 2px
+• Hover: Background #000000, Text #FFFFFF, Border 2px solid #D4AF37
+• Transition: all 300ms ease
+
+Floating WhatsApp Button:
+• Position: fixed, bottom-right (24px from bottom, 24px from right)
+• Background: #D4AF37
+• Icon: WhatsApp white
+• Size: 64px × 64px circle
+• Shadow: 0 4px 12px rgba(212, 175, 55, 0.4)
+• Hover: Scale 1.1, shadow intensifies
+• Z-index: 1000
+
+═══════════════════════════════════════════════════════════════════
+
+LANGUAGE SYSTEM (BILINGUAL EN/AR)
+
+Language Switcher:
+• Position: Top navigation bar
+• Format: EN | AR (toggle or dropdown)
+• Active language: Gold (#D4AF37)
+• Inactive language: Grey (#B9ADA1)
+
+Technical Requirements:
+• Automatic RTL layout for Arabic (dir="rtl")
+• Internationalized routing: /en and /ar
+• SEO-friendly language URLs
+• Proper Arabic font rendering (use 'Noto Sans Arabic' or 'Cairo' for Arabic)
+• Mirror layouts for RTL (not just text direction)
+• Test all components in both directions
+
+Example Routes:
+• /en → English homepage
+• /ar → Arabic homepage
+• /en/services → English services
+• /ar/services → Arabic services
+
+Content Strategy:
+• All text content must have English and Arabic versions
+• Images with text overlays need bilingual versions
+• Form labels, buttons, error messages in both languages
+• Meta descriptions and SEO content in both languages
+
+═══════════════════════════════════════════════════════════════════
+
+PERFORMANCE REQUIREMENTS (CRITICAL)
+
+Speed Targets:
+• First Contentful Paint (FCP): < 1.5 seconds
+• Largest Contentful Paint (LCP): < 2.5 seconds
+• Time to Interactive (TTI): < 3.5 seconds
+• Cumulative Layout Shift (CLS): < 0.1
+• Lighthouse Performance Score: 90+
+• Lighthouse Accessibility Score: 95+
+• Lighthouse Best Practices Score: 95+
+• Lighthouse SEO Score: 100
+
+Image Optimization:
+• All images in WebP format with JPEG fallback
+• Lazy loading for all images below fold
+• Use Next.js Image component with proper width/height
+• Responsive images with srcset
+• Compress images to < 200KB each
+• Hero images: max 500KB
+• Thumbnail images: max 50KB
+
+Code Optimization:
+• Code splitting for routes
+• Dynamic imports for heavy components
+• Tree shaking enabled
+• Minification and compression (Gzip/Brotli)
+• Remove unused CSS
+• Defer non-critical JavaScript
+
+Caching Strategy:
+• Static assets: cache for 1 year
+• API responses: cache appropriately
+• Service Worker for offline capability (optional)
+
+═══════════════════════════════════════════════════════════════════
+
+ANIMATION PHILOSOPHY
+
+Principles:
+• Subtle and purposeful - enhance luxury, never distract
+• Smooth 60fps animations
+• Respect user's motion preferences (prefers-reduced-motion)
+• Progressive enhancement (works without JS)
+
+Animation Library: Framer Motion
+
+Key Animations:
+
+1. Scroll Animations:
+   • Fade-in on scroll (opacity 0 → 1, translateY 20px → 0)
+   • Stagger children by 100ms for card grids
+   • Trigger when element is 20% in viewport
+
+2. Hero Parallax:
+   • Background image moves slower than foreground (10-20% speed)
+   • Subtle, elegant, not dizzying
+
+3. Hover States:
+   • Buttons: 300ms transition
+   • Cards: lift effect (translateY -8px, shadow increase)
+   • Images: subtle zoom (scale 1.05, 500ms)
+
+4. Page Transitions:
+   • Fade between routes (200ms)
+   • Smooth, seamless navigation
+
+5. Loading States:
+   • Skeleton screens (not spinners)
+   • Gold shimmer effect for loading content
+
+Example Framer Motion Code:
+```javascript
+const fadeInUp = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.6, ease: "easeOut" }
+};
+═══════════════════════════════════════════════════════════════════
+ACCESSIBILITY (WCAG 2.1 AA COMPLIANCE)
+Requirements: • Proper semantic HTML (header, nav, main, section, article, footer) • Heading hierarchy (H1 → H6, no skipping levels) • Alt text for ALL images (descriptive, not "image" or "photo") • Keyboard navigation support (tab order logical) • Focus indicators with gold outline (#D4AF37, 2px solid) • ARIA labels for interactive elements • Color contrast ratio 4.5:1 minimum (text to background) • Form labels properly associated with inputs • Error messages clear and descriptive • Skip to main content link
+Testing: • Test with screen readers (NVDA, JAWS, VoiceOver) • Test keyboard-only navigation • Run axe DevTools or WAVE for accessibility audit
+═══════════════════════════════════════════════════════════════════
+ANALYTICS & TRACKING
+Google Analytics 4: • Page views tracking • Event tracking for all CTAs • Scroll depth tracking (25%, 50%, 75%, 100%) • Form submission tracking • E-commerce tracking (product views, add to cart, purchases)
+Meta Pixel: • Page view events • Custom conversion events (booking started, booking completed) • Product catalog integration • Dynamic ads retargeting
+Custom Events to Track: • CTA clicks (Book Appointment, Shop Now, WhatsApp) • Service card clicks • Before/After slider interactions • Video plays (if testimonial videos) • Instagram feed clicks • Language switch • Search queries (if search implemented) • Newsletter signups
+Heatmap Integration: • Microsoft Clarity or Hotjar • Track user behavior, clicks, scrolls • Session recordings for UX optimization
+═══════════════════════════════════════════════════════════════════
+MAIN NAVIGATION
+Desktop Navigation (Sticky): • Logo (left): TransforM logo (links to homepage) • Menu (center): Home | Hair Extensions | Services | Transformations | Boutique | Reviews | About | Blog • Actions (right): Language Switcher (EN | AR) | Book Appointment (gold button) • Background: Black with subtle transparency (backdrop-blur) • Height: 80px • Sticky on scroll with smooth transition
+Mobile Navigation: • Logo (left) • Hamburger menu (right, animated to X on open) • Full-screen overlay menu (black background, gold accents) • Menu items stacked vertically, large touch targets (min 48px height) • Book Appointment button prominent at bottom • Language switcher at top
+═══════════════════════════════════════════════════════════════════
+HOMEPAGE STRUCTURE
+─────────────────────────────────────────────────────────────────
+SECTION 1: HERO (Full-screen, cinematic)
+Layout: • Full viewport height (100vh) • Background: High-quality image or video (luxury salon or model with extensions) • Overlay: Black gradient (bottom to top, 70% to 30% opacity)
+Content: • Headline: "The #1 Hair Extensions Center in Egypt & The Middle East"
+Font: Playfair Display, 72px (desktop) / 40px (mobile)
+Color: #D4AF37 (gold)
+Animation: Fade in + slide up (delay 200ms)
+• Subheadline: "Luxury hair transformations. Celebrity-level beauty services."
+Font: Inter, 24px (desktop) / 18px (mobile)
+Color: #FFFFFF
+Animation: Fade in + slide up (delay 400ms)
+• CTA Buttons (horizontal row):
+"Book Appointment" (Primary button - black)
+"View Transformations" (Secondary button - gold border)
+"Shop Hair Extensions" (Shop button - gold)
+Animation: Fade in + slide up (delay 600ms, stagger 100ms each)
+• Scroll indicator: Animated down arrow (gold, subtle bounce)
+Parallax Effect: • Background image moves at 50% scroll speed • Foreground content moves at 100% scroll speed
+─────────────────────────────────────────────────────────────────
+SECTION 2: SOCIAL PROOF (Trust indicators)
+Layout: • Background: #F8F5F0 (ivory) • Padding: 80px 0 (desktop) / 60px 0 (mobile) • Centered content, max-width 1200px
+Content Grid (4 columns on desktop, 2 on tablet, 1 on mobile):
+Google Reviews: • 5-star rating (gold stars) • "4.9/5 from 500+ reviews" • Google logo
+Years of Excellence: • Large number "10+" (Playfair Display, gold) • "Years Transforming Beauty"
+Happy Clients: • Large number "5,000+" (Playfair Display, gold) • "Satisfied Clients"
+Celebrity Clientele: • Icon or small images • "Trusted by Celebrities"
+Animation: Fade in on scroll, stagger by 100ms
+─────────────────────────────────────────────────────────────────
+SECTION 3: TRANSFORMATION GALLERY (Before/After)
+Layout: • Background: #000000 (black) • Padding: 120px 0 (desktop) / 80px 0 (mobile)
+Header: • Title: "Real Transformations, Real Results" (Playfair Display, 48px, gold) • Subtitle: "See the TransforM difference" (Inter, 18px, white)
+Category Tabs (filter): • All | Hair Extensions | Hair Color | Lash Extensions | Brows • Active tab: gold underline • Inactive tabs: white text, hover gold
+Gallery: • Interactive before/after sliders (3-4 visible) • Each slider:
+Split-screen layout
+Draggable gold handle with TransforM logo
+Labels "BEFORE" (left) and "AFTER" (right)
+Client name and service below (optional) • Masonry or grid layout • Lightbox on click (full-screen view)
+CTA: • "View All Transformations" button (gold)
+─────────────────────────────────────────────────────────────────
+SECTION 4: SIGNATURE SERVICES (Main offerings)
+Layout: • Background: #FFFFFF (white) • Padding: 120px 0 (desktop) / 80px 0 (mobile)
+Header: • Title: "Signature Services" (Playfair Display, 48px, black) • Subtitle: "Celebrity-level beauty, tailored for you" (Inter, 18px, grey)
+Service Cards (5 cards):
+Hair Extensions (HERO CARD - larger, featured): • High-quality image • Service name: "Hair Extensions" (Playfair Display, 32px) • Description: "Premium quality extensions for volume, length, and confidence. Tape-in, keratin, and micro-ring options." • Starting price: "From EGP 3,500" • "Book Now" button (gold) • Badge: "MOST POPULAR" (gold ribbon)
+Lash Extensions: • Image • Service name (24px) • Description • Starting price • "Book Now" button
+Microblading & Brows: • Image • Service name (24px) • Description • Starting price • "Book Now" button
+Facials & Skin Treatments: • Image • Service name (24px) • Description • Starting price • "Book Now" button
+Professional Makeup: • Image • Service name (24px) • Description • Starting price • "Book Now" button
+Card Design: • White background • Subtle shadow on hover (lift effect) • Gold accent border on hover • Image aspect ratio: 4:3 • Padding: 24px • Border-radius: 4px
+Layout: • Desktop: Hero card (2 columns width), other 4 cards (1 column each, 2×2 grid) • Mobile: Stacked vertically, hero card first
+─────────────────────────────────────────────────────────────────
+SECTION 5: WHY CHOOSE TRANSFORM (Value propositions)
+Layout: • Background: #F8F5F0 (ivory) • Padding: 100px 0 (desktop) / 70px 0 (mobile)
+Header: • Title: "Why Choose TransforM?" (Playfair Display, 48px, black)
+Features Grid (5 items, icon + text):
+Premium Hair Extensions • Icon: Gold hair icon • Title: "Premium Quality Extensions" • Description: "100% human hair, ethically sourced, long-lasting"
+Expert Beauty Artists • Icon: Gold star icon • Title: "Expert Beauty Artists" • Description: "Certified technicians with 10+ years experience"
+Luxury Spa Experience • Icon: Gold spa icon • Title: "Luxury Spa Experience" • Description: "Relax in our elegant, Dubai-inspired salon"
+Celebrity-Level Service • Icon: Gold crown icon • Title: "Celebrity-Level Service" • Description: "VIP treatment for every client, every visit"
+Top Beauty Destination • Icon: Gold location pin icon • Title: "Cairo's #1 Beauty Destination" • Description: "Trusted by thousands across Egypt and the Middle East"
+Layout: • Desktop: 5 columns • Tablet: 2-3 columns • Mobile: 1 column (stacked)
+Design: • Centered text • Icon above (48px, gold) • Title (Inter, 20px, semibold, black) • Description (Inter, 16px, grey)
+─────────────────────────────────────────────────────────────────
+SECTION 6: FOUNDER STORY (Brand authenticity)
+Layout: • Background: #FFFFFF (white) • Padding: 120px 0 (desktop) / 80px 0 (mobile) • Split layout: 50/50 (image left, content right)
+Left Side: • Professional portrait of Mervat Attalla • Elegant, sophisticated photography • Subtle gold frame border • Image aspect ratio: 3:4 (portrait)
+Right Side: • Eyebrow: "Meet Our Founder" (Inter, 14px, uppercase, gold, letter-spacing 0.1em) • Name: "Mervat Attalla" (Playfair Display, 40px, black) • Title: "Founder & Master Beauty Artist" (Inter, 18px, grey) • Story (3-4 paragraphs):
+Vision behind TransforM
+Expertise and background
+Commitment to excellence
+Personal touch and client care • Signature: Stylized signature graphic (gold) • CTA: "Book a Consultation" button (gold)
+Mobile Layout: • Image on top (full-width) • Content below (stacked)
+─────────────────────────────────────────────────────────────────
+SECTION 7: INSTAGRAM FEED (Social proof & engagement)
+Layout: • Background: #000000 (black) • Padding: 100px 0 (desktop) / 70px 0 (mobile)
+Header: • Title: "Follow Our Transformations" (Playfair Display, 48px, gold) • Handle: "@transformegypt" (Inter, 24px, white, clickable link)
+Instagram Grid: • 3×2 grid (6 posts) on desktop • 2×3 grid on tablet • 1×6 grid (scrollable) on mobile • Square images (1:1 aspect ratio) • Hover effect: Overlay with likes/comments count • Click: Opens Instagram post in new tab
+Integration: • Use Instagram Basic Display API or embed code • Auto-update with latest posts • Fallback: Manual image upload if API unavailable
+CTA: • "Follow Us on Instagram" button (gold) • Instagram icon
+─────────────────────────────────────────────────────────────────
+SECTION 8: AI CONSULTATION QUIZ (Interactive engagement)
+Layout: • Background: #F8F5F0 (ivory) • Padding: 120px 0 (desktop) / 80px 0 (mobile) • Centered content, max-width 800px
+Header: • Title: "Find Your Perfect Hair Extensions" (Playfair Display, 48px, black) • Subtitle: "Take our 60-second quiz for personalized recommendations" (Inter, 18px, grey)
+Quiz Flow (Multi-step form):
+Step 1: Current Hair Length • Options: Short (above shoulders) | Medium (shoulder length) | Long (below shoulders) • Visual icons for each option
+Step 2: Hair Thickness • Options: Thin | Medium | Thick • Visual icons
+Step 3: Desired Volume • Options: Natural volume | Noticeable volume | Maximum volume • Visual icons
+Step 4: Desired Length • Options: Shoulder length | Mid-back | Waist length • Visual icons
+Step 5: Style Preference • Options: Straight | Wavy | Curly • Visual icons
+Progress Indicator: • Step counter: "Step 2 of 5" • Progress bar (gold fill)
+Results Page: • Recommended service (e.g., "Tape-In Extensions") • Why it's perfect for you (personalized message) • Expected results (before/after example) • Pricing estimate • "Book Your Transformation" CTA (gold button) • "Start Over" link
+Design: • Large, touch-friendly buttons • Smooth transitions between steps • Mobile-optimized (swipe gestures optional)
+─────────────────────────────────────────────────────────────────
+SECTION 9: VIRTUAL TRY-ON (Innovative feature)
+Layout: • Background: #FFFFFF (white) • Padding: 120px 0 (desktop) / 80px 0 (mobile)
+Header: • Title: "Try Before You Transform" (Playfair Display, 48px, black) • Subtitle: "Upload your photo and preview your new look" (Inter, 18px, grey)
+Functionality: • Photo upload area (drag & drop or click to upload) • Preview area showing uploaded photo • Extension options:
+Length selector (slider or buttons)
+Color selector (swatches)
+Volume selector (slider) • "Apply" button to generate preview • Before/After comparison view • "Book This Look" CTA (gold button)
+Technical Implementation: • Use AI/ML library (TensorFlow.js or external API) • Or simplified version: Overlay extension images on uploaded photo • Privacy note: "Your photo is not stored and is deleted after session"
+Design: • Clean, intuitive interface • Loading state with gold shimmer • Mobile-friendly (camera upload option)
+─────────────────────────────────────────────────────────────────
+SECTION 10: TESTIMONIALS (Social proof)
+Layout: • Background: #000000 (black) • Padding: 100px 0 (desktop) / 70px 0 (mobile)
+Header: • Title: "What Our Clients Say" (Playfair Display, 48px, gold) • Subtitle: "Real reviews from real transformations" (Inter, 18px, white)
+Testimonial Cards (Carousel/Slider): • 3 visible on desktop, 1 on mobile • Auto-rotate every 5 seconds (pausable)
+Each Card: • Client photo (circular, 80px diameter) • 5-star rating (gold stars) • Testimonial text (Inter, 16px, white, italic) • Client name (Inter, 16px, semibold, gold) • Service received (Inter, 14px, grey) • Verified badge (optional)
+Design: • Dark card background (#1a1a1a) • Gold accent border • Subtle shadow • Smooth carousel transitions
+Navigation: • Dots indicator (gold active, grey inactive) • Arrow buttons (gold, left/right)
+CTA: • "Read More Reviews" button (gold) • Links to Google Reviews or dedicated reviews page
+─────────────────────────────────────────────────────────────────
+SECTION 11: BOOKING CTA (Conversion focus)
+Layout: • Full-width section • Background: Luxury salon interior image (from reference photos) • Overlay: Black gradient (60% opacity) • Padding: 150px 0 (desktop) / 100px 0 (mobile)
+Content (Centered): • Headline: "Ready for Your Transformation?" (Playfair Display, 60px, gold) • Subheadline: "Book your appointment today and experience celebrity-level beauty services" (Inter, 20px, white) • Phone: "+20 XXX XXX XXXX" (Inter, 24px, gold, clickable tel: link) • Location: "Cairo, Egypt" (Inter, 18px, white)
+CTA Buttons (Side by side):
+"Book Online" (Gold button, large)
+"WhatsApp Booking" (Black button with WhatsApp icon, large)
+Design: • Buttons: 56px height, 200px width minimum • Spacing: 24px between buttons • Mobile: Stacked vertically, full-width
+Additional Info: • Working hours: "Open 7 days a week, 10 AM - 10 PM" • Free consultation offer: "First-time clients get a FREE consultation"
+═══════════════════════════════════════════════════════════════════
+ONLINE BOUTIQUE (E-COMMERCE)
+─────────────────────────────────────────────────────────────────
+Shop Homepage (/boutique or /shop):
+Layout: • Hero banner: "Shop Premium Hair Extensions & Beauty Products" • Category navigation (horizontal scroll on mobile) • Featured products grid • Promotional banner (if applicable)
+Product Categories:
+Hair Extensions
+Tape-In Extensions
+Keratin Bond Extensions
+Micro-Ring Extensions
+Clip-In Extensions
+Weft Extensions
+Luxury Wigs
+Full Lace Wigs
+Lace Front Wigs
+Medical Wigs
+Topper Units
+Crown Toppers
+Full Coverage Toppers
+TransforM Exclusive Products
+Hair Care Line
+Styling Products
+Maintenance Kits
+Professional Hair Care
+Shampoos & Conditioners
+Treatments & Masks
+Styling Tools
+─────────────────────────────────────────────────────────────────
+Product Listing Page:
+Filters (Sidebar on desktop, drawer on mobile): • Category • Length (8", 12", 16", 20", 24", 28") • Color (swatches: Blonde, Brown, Black, Red, Ombre, Balayage) • Type (Tape-In, Keratin, Micro-Ring, Clip-In, Weft) • Price Range (slider: EGP 0 - 20,000) • In Stock / Out of Stock toggle
+Sorting: • Featured • Best Selling • Price: Low to High • Price: High to Low • Newest • Highest Rated
+Product Grid: • 4 columns (desktop), 2 columns (tablet), 1 column (mobile) • Each product card:
+High-quality product image (hover: second image)
+Product name
+Price (bold, black) with strikethrough original price if on sale
+Star rating + review count
+"Add to Cart" button (appears on hover on desktop, always visible on mobile)
+"Quick View" icon (eye icon, opens modal)
+Wishlist heart icon (top-right corner)
+Badge: "NEW", "SALE", "BESTSELLER" (if applicable)
+Pagination: • Load more button or infinite scroll • Show "X of Y products"
+─────────────────────────────────────────────────────────────────
+Product Detail Page:
+Layout: Split (60/40 - images left, details right)
+Left Side - Product Images: • Main image (large, zoomable on hover/click) • Thumbnail gallery (4-6 images, vertical on desktop, horizontal on mobile) • 360° view option (if available) • Video (if available)
+Right Side - Product Details:
+• Breadcrumb: Home > Boutique > Hair Extensions > [Product Name] • Product Name (Playfair Display, 32px, black) • Star Rating + Review Count (clickable, scrolls to reviews) • Price (Playfair Display, 28px, gold)
+Original price (strikethrough, grey) if on sale
+Savings amount "Save EGP 500" (green)
+• Short Description (2-3 sentences)
+• Options:
+Length Selector:
+Buttons: 12" | 16" | 20" | 24"
+Active: gold background, black text
+Inactive: white background, black text, gold border
+Color Selector:
+Color swatches (circles, 40px diameter)
+Active: gold border (3px)
+Tooltip on hover: Color name
+Quantity Selector:
+Minus button | Number input | Plus button
+Min: 1, Max: 10 (or stock quantity)
+• Stock Status:
+In Stock: Green dot + "In Stock"
+Low Stock: Orange dot + "Only 3 left"
+Out of Stock: Red dot + "Out of Stock" (disable Add to Cart)
+• Add to Cart Button (Large, gold, full-width)
+Icon: Shopping cart
+Text: "Add to Cart - EGP X,XXX"
+Loading state on click
+Success feedback: Checkmark + "Added to Cart"
+• Buy Now Button (Black, full-width, below Add to Cart)
+Skips cart, goes directly to checkout
+• Wishlist Button (Heart icon, outline, gold)
+• Share Buttons (Facebook, WhatsApp, Copy Link)
+• Product Features (Bullet points with icons):
+100% Human Hair
+Ethically Sourced
+6-12 Month Lifespan
+Heat Stylable
+Color Treated
+Free Shipping over EGP 1,000
+• Accordion Sections:
+Description (Full product description)
+How to Apply (Step-by-step guide with images)
+Care Instructions (Washing, styling, maintenance)
+Shipping & Returns (Policies, timelines)
+Size Guide (Length chart with visual reference)
+Below Product Details:
+• Related Products: "Complete Your Look" (4 products, horizontal scroll)
+• Customer Reviews Section:
+Overall rating (large, gold stars)
+Rating breakdown (5 stars: 80%, 4 stars: 15%, etc.)
+"Write a Review" button (gold)
+Individual reviews:
+Reviewer name + verified purchase badge
+Star rating
+Review date
+Review text
+Helpful votes (thumbs up/down)
+Photos uploaded by customers (if any)
+Pagination or "Load More"
+• FAQ Section (Specific to product)
+• Recently Viewed Products (Bottom of page)
+─────────────────────────────────────────────────────────────────
+Shopping Cart:
+Layout: Full-width or sidebar drawer (slide-in from right)
+Header: • "Shopping Cart" title • Item count: "(3 items)" • Close button (X)
+Cart Items: • Each item row:
+Product image (thumbnail, 80px)
+Product name + selected options (length, color)
+Price per unit
+Quantity selector (- | number | +)
+Subtotal (price ￗ quantity)
+Remove button (trash icon, red on hover)
+• Empty cart state:
+Icon (empty cart illustration)
+Message: "Your cart is empty"
+"Continue Shopping" button
+Cart Summary (Sticky on scroll): • Subtotal: EGP X,XXX • Shipping: FREE (or calculated at checkout) • Discount (if coupon applied): -EGP XXX • Total: EGP X,XXX (large, bold, gold)
+• Coupon Code Input:
+Input field: "Enter coupon code"
+"Apply" button
+Success/error message
+• Checkout Button (Gold, large, full-width)
+"Proceed to Checkout"
+• Continue Shopping Link (black text, underline on hover)
+• Trust Badges:
+Secure Checkout icon
+Free Shipping icon
+Easy Returns icon
+─────────────────────────────────────────────────────────────────
+Checkout Page:
+Layout: Multi-step or single-page (recommended: single-page with sections)
+Progress Indicator (if multi-step): • Step 1: Shipping | Step 2: Payment | Step 3: Confirmation • Active step: gold, completed: gold checkmark, upcoming: grey
+Section 1: Contact Information • Email address (for order confirmation) • Phone number • "Create account" checkbox (optional)
+Section 2: Shipping Address • First Name | Last Name • Address Line 1 • Address Line 2 (optional) • City (dropdown or autocomplete) • Governorate (dropdown) • Postal Code • Country (default: Egypt, locked or dropdown) • "Save address for next time" checkbox
+Section 3: Shipping Method • Standard Shipping (3-5 business days) - FREE • Express Shipping (1-2 business days) - EGP 50 • Radio buttons, selected: gold
+Section 4: Payment Method • Cash on Delivery (COD)
+Icon: Cash
+Note: "Pay when you receive your order" • Credit/Debit Card
+Card number input
+Expiry date | CVV
+Cardholder name
+Secure payment badge (SSL, Visa, Mastercard logos) • Mobile Wallet (if applicable)
+Vodafone Cash, Orange Cash, etc.
+Section 5: Order Review (Sidebar on desktop, section on mobile) • Order summary (same as cart summary) • Product thumbnails + names + quantities • Subtotal, shipping, discount, total • "Place Order" button (Gold, large)
+Loading state on click
+Disable double-click
+Legal: • "By placing this order, you agree to our Terms & Conditions and Privacy Policy" • Checkboxes (required)
+Security: • SSL badge • "Your payment information is secure" message
+─────────────────────────────────────────────────────────────────
+Order Confirmation Page:
+Layout: Centered, clean
+Success Message: • Checkmark icon (gold, large, animated) • Headline: "Order Confirmed!" (Playfair Display, 48px, gold) • Subheadline: "Thank you for your order, [Customer Name]" • Order number: "#TF-12345" • Confirmation email sent message
+Order Details: • Estimated delivery date • Shipping address • Payment method • Order summary (products, quantities, total)
+Next Steps: • "Track Your Order" button (gold) • "Continue Shopping" button (black) • "Download Invoice" link (PDF)
+Support: • "Need help? Contact us" link • WhatsApp support button
+═══════════════════════════════════════════════════════════════════
+SEO STRUCTURE & LANDING PAGES
+─────────────────────────────────────────────────────────────────
+SEO Requirements (Global):
+Meta Tags (Every page): • Title tag: 50-60 characters, include primary keyword • Meta description: 150-160 characters, compelling, include CTA • Open Graph tags (og:title, og:description, og:image, og:url) • Twitter Card tags • Canonical URL • Hreflang tags for EN/AR versions
+Structured Data (Schema.org): • Organization schema (homepage) • LocalBusiness schema (contact/about pages) • Product schema (product pages) • Review schema (testimonials/reviews) • BreadcrumbList schema (all pages) • FAQPage schema (FAQ sections)
+Technical SEO: • XML sitemap (auto-generated, submitted to Google Search Console) • Robots.txt (allow all, link to sitemap) • 404 page (custom, branded, helpful) • 301 redirects for old URLs (if migrating) • Mobile-friendly (responsive design) • Fast loading (see Performance Requirements) • HTTPS (SSL certificate) • Clean URL structure (no parameters, readable)
+─────────────────────────────────────────────────────────────────
+SEO Landing Pages:
+Create dedicated, optimized landing pages for high-intent keywords:
+/hair-extensions-egypt • H1: "Best Hair Extensions in Egypt - TransforM Beauty" • Content: 800-1000 words
+Why TransforM is #1 in Egypt
+Types of extensions offered
+Benefits of professional extensions
+Client testimonials (Egypt-specific)
+Before/after gallery
+Pricing information
+Booking CTA • Target keywords: "hair extensions Egypt", "best hair extensions Egypt", "hair extensions Cairo" • Internal links: Service pages, boutique, booking • Images: Alt text optimized, compressed
+/hair-extensions-cairo • H1: "Premium Hair Extensions in Cairo - Celebrity-Level Results" • Content: 800-1000 words
+Cairo-specific information (location, accessibility)
+Why Cairo women choose TransforM
+Types of extensions
+Consultation process
+Client success stories (Cairo-based)
+Before/after gallery
+Booking CTA • Target keywords: "hair extensions Cairo", "best hair salon Cairo", "hair extensions near me" • Local SEO: Google My Business integration, map embed
+/lash-extensions-cairo • H1: "Luxury Lash Extensions in Cairo - Natural to Glamorous" • Content: 800-1000 words
+Lash extension types (classic, volume, hybrid, mega volume)
+Benefits and process
+Aftercare instructions
+Why choose TransforM for lashes
+Technician expertise
+Before/after gallery
+Pricing and booking • Target keywords: "lash extensions Cairo", "eyelash extensions Egypt", "best lash salon Cairo"
+/microblading-cairo • H1: "Expert Microblading in Cairo - Natural, Long-Lasting Brows" • Content: 800-1000 words
+What is microblading
+Benefits and results
+Process and healing
+Why TransforM's microblading is superior
+Certified technicians
+Before/after gallery
+Pricing and booking • Target keywords: "microblading Cairo", "eyebrow tattoo Egypt", "permanent makeup Cairo"
+/bridal-beauty-packages-cairo • H1: "Bridal Beauty Packages in Cairo - Look Stunning on Your Big Day" • Content: 800-1000 words
+Bridal package details (hair, makeup, lashes, brows)
+Trial session information
+Timeline and booking process
+Bridal testimonials
+Before/after bridal transformations
+Pricing and booking • Target keywords: "bridal makeup Cairo", "wedding beauty Egypt", "bridal hair extensions"
+Landing Page Design: • Hero section with relevant image • Clear H1 with primary keyword • Engaging, informative content (not keyword-stuffed) • Subheadings (H2, H3) with secondary keywords • Bullet points for readability • Images with descriptive alt text • Internal links to related pages • Strong CTA (Book Appointment, Call Now, WhatsApp) • Trust signals (reviews, certifications, years of experience) • FAQ section (specific to page topic) • Schema markup
+═══════════════════════════════════════════════════════════════════
+BLOG SYSTEM
+─────────────────────────────────────────────────────────────────
+Blog Homepage (/blog):
+Layout: • Hero section: "Beauty Tips & Transformation Stories" • Featured post (large card, latest or most popular) • Category navigation (All, Hair Extensions, Lash Extensions, Brows, Skincare, Tutorials, News) • Post grid (3 columns desktop, 2 tablet, 1 mobile) • Sidebar (desktop):
+Search bar
+Popular posts
+Categories
+Newsletter signup
+Instagram feed widget
+Post Card: • Featured image (16:9 aspect ratio) • Category badge (gold) • Post title (Playfair Display, 24px) • Excerpt (2 lines, truncated) • Author + date • Read time estimate • "Read More" link (gold, arrow icon)
+Pagination: Load more or numbered pages
+─────────────────────────────────────────────────────────────────
+Blog Post Page:
+Layout: Single column, max-width 800px, centered
+Header: • Breadcrumb: Home > Blog > [Category] > [Post Title] • Category badge • Post title (Playfair Display, 48px, black) • Author info (name, photo, bio link) • Publish date + read time • Social share buttons (Facebook, Twitter, WhatsApp, Copy Link)
+Featured Image: • Large, high-quality (16:9) • Caption (if applicable)
+Content: • Rich text formatting (headings, bold, italic, lists, blockquotes) • Images (centered, captioned, optimized) • Videos (embedded, responsive) • Pull quotes (gold accent) • CTA boxes (e.g., "Book a consultation", "Shop extensions")
+Table of Contents (for long posts): • Sticky sidebar (desktop) • Collapsible at top (mobile) • Jump links to H2 sections
+End of Post: • Tags (clickable, gold on hover) • Author bio (expanded, with social links) • "Share this post" section • Related posts (3-4 posts, horizontal scroll)
+Comments Section: • "Leave a comment" form (name, email, comment) • Existing comments (threaded, newest first) • Moderation (approve before publishing)
+─────────────────────────────────────────────────────────────────
+Blog Post Ideas (SEO-focused):
+"Best Hair Extensions in Egypt: Complete Guide 2024"
+Types, costs, maintenance, where to get them
+"Hair Extensions Cost in Cairo: What to Expect"
+Pricing breakdown, factors affecting cost, value comparison
+"Tape-In vs Keratin Hair Extensions: Which is Right for You?"
+Comparison chart, pros/cons, recommendations
+"How to Care for Hair Extensions: Expert Tips"
+Washing, styling, sleeping, products to use/avoid
+"Lash Extensions 101: Everything You Need to Know"
+Types, process, aftercare, myths debunked
+"Microblading vs Tattoo Brows: What's the Difference?"
+Technique comparison, results, longevity
+"Bridal Beauty Timeline: When to Book Your Appointments"
+6-month, 3-month, 1-month, 1-week checklist
+"Hair Extension Myths Debunked by Experts"
+Common misconceptions, truth revealed
+"How to Choose the Right Hair Extension Color"
+Matching tips, color theory, consultation importance
+"Celebrity Hair Trends 2024: Get the Look"
+Current trends, how to achieve them, TransforM services
+Blog SEO: • Target long-tail keywords • Internal linking to service pages, product pages • External links to authoritative sources • Optimized images (alt text, compressed) • Meta descriptions for each post • Schema markup (Article, BlogPosting)
+═══════════════════════════════════════════════════════════════════
+TRANSFORMATION GALLERY PAGE
+─────────────────────────────────────────────────────────────────
+Layout: • Hero: "Real Transformations, Real Results" • Filter bar (sticky on scroll) • Gallery grid (masonry or uniform) • Lightbox for full-screen view
+Filter Options: • All Transformations • Hair Extensions • Lash Extensions • Brows & Microblading • Hair Color • Bridal Transformations
+Each Gallery Item: • Before/After slider or side-by-side • Hover: Overlay with service name + "View Details" • Click: Opens lightbox
+Lightbox View: • Large before/after comparison • Client name (first name only, or anonymous) • Service(s) performed • Technician name • Date • Client testimonial (if available) • "Book This Service" CTA (gold button) • Navigation: Previous/Next arrows • Close button (X)
+Gallery Design: • High-quality images (optimized for web) • Consistent aspect ratio or masonry layout • Smooth loading (lazy load, skeleton screens) • Mobile-optimized (swipe gestures)
+CTA at Bottom: • "Ready for Your Transformation?" • "Book Appointment" button (gold)
+═══════════════════════════════════════════════════════════════════
+REVIEWS PAGE
+─────────────────────────────────────────────────────────────────
+Layout: • Hero: "What Our Clients Say" • Overall rating display (large, gold stars, average rating, total reviews) • Rating breakdown (5 stars: X%, 4 stars: Y%, etc.) • Filter/sort options • Review cards (grid or list)
+Filter Options: • All Reviews • 5 Stars Only • With Photos • Verified Purchases (for products) • By Service (Hair Extensions, Lashes, etc.)
+Sort Options: • Most Recent • Highest Rated • Most Helpful
+Review Card: • Reviewer name + profile photo (or initial avatar) • Star rating (gold) • Review date • Verified badge (if applicable) • Service/product reviewed • Review text • Photos uploaded by reviewer (if any, gallery) • Helpful votes: "Was this helpful? Yes (X) | No (Y)"
+Write a Review Section: • "Share Your Experience" button (gold) • Form:
+Name
+Email
+Service/product (dropdown)
+Star rating (interactive)
+Review title
+Review text (textarea, min 50 characters)
+Upload photos (optional, max 5)
+Submit button • Thank you message after submission • Moderation: Reviews appear after approval
+Google Reviews Integration: • Embed Google Reviews widget • Link to Google Business Profile • Encourage reviews: "Leave us a Google Review" CTA
+═══════════════════════════════════════════════════════════════════
+ABOUT PAGE
+─────────────────────────────────────────────────────────────────
+Section 1: Hero • Background: Elegant salon interior image • Headline: "About TransforM" (Playfair Display, 60px, gold) • Subheadline: "Egypt's #1 luxury beauty destination"
+Section 2: Our Story • Split layout: Image (salon exterior/interior) + text • Content:
+Founding story (when, why, by whom)
+Mission: "To boost confidence and enhance natural beauty"
+Vision: "Leading beauty destination in the Middle East"
+Values: Excellence, innovation, customer satisfaction, transformation
+Milestones (10+ years, 5,000+ clients, etc.)
+Section 3: Meet the Founder • (Same as homepage founder section, can be more detailed) • Mervat Attalla's background, expertise, vision
+Section 4: Our Team • "Meet Our Expert Beauty Artists" • Team member cards (photo, name, title, specialization) • Grid layout (4 columns desktop, 2 tablet, 1 mobile) • Click: Opens modal with full bio
+Section 5: Our Salon • Photo gallery or video tour • Highlight luxury features:
+Gold arches and elegant design
+State-of-the-art equipment
+Comfortable, private stations
+Relaxing ambiance • "Visit Us" CTA
+Section 6: Certifications & Awards • Logos of certifications (if any) • Awards or recognition • Press mentions
+Section 7: Our Commitment • Quality guarantee • Client satisfaction promise • Ethical sourcing (for hair extensions) • Hygiene and safety standards
+CTA: • "Experience TransforM" button (gold) • Links to booking page
+═══════════════════════════════════════════════════════════════════
+CONTACT PAGE
+─────────────────────────────────────────────────────────────────
+Layout: Split (map left, contact info + form right)
+Left Side - Map: • Google Maps embed (interactive) • Pin: TransforM salon location • Full-height on desktop, top section on mobile
+Right Side - Contact Information:
+Address: • Icon: Location pin (gold) • Full address (street, area, city, governorate) • "Get Directions" link (opens Google Maps)
+Phone: • Icon: Phone (gold) • Phone number (clickable tel: link) • "Call Now" button
+WhatsApp: • Icon: WhatsApp (gold) • WhatsApp number • "Chat on WhatsApp" button (gold)
+Email: • Icon: Email (gold) • Email address (clickable mailto: link)
+Working Hours: • Icon: Clock (gold) • Days and hours (e.g., "Open 7 days a week, 10 AM - 10 PM")
+Social Media: • Icons: Instagram, Facebook, TikTok (gold) • Links to profiles
+Contact Form: • Fields:
+Name (required)
+Email (required)
+Phone (required)
+Service Interested In (dropdown, optional)
+Message (textarea, required) • "Send Message" button (gold) • Success message: "Thank you! We'll get back to you within 24 hours." • Error handling: Inline validation
+FAQ Section (Below): • "Frequently Asked Questions" • Accordion format (click to expand) • Common questions:
+How do I book an appointment?
+What payment methods do you accept?
+Do you offer consultations?
+What is your cancellation policy?
+Do you have parking?
+═══════════════════════════════════════════════════════════════════
+BOOKING PAGE (APPOINTMENT SYSTEM)
+─────────────────────────────────────────────────────────────────
+Option 1: Integrated Booking System (Recommended)
+Layout: Multi-step form, progress indicator
+Step 1: Select Service • Service categories (Hair Extensions, Lashes, Brows, Facials, Makeup) • Click category: Expands to show specific services • Each service card:
+Service name
+Duration
+Starting price
+"Select" button (gold) • Multiple services can be selected (checkbox)
+Step 2: Select Date & Time • Calendar view (current month + next 2 months) • Available dates: black text • Unavailable dates: grey, disabled • Selected date: gold background • Time slots (30-minute intervals)
+Available: white background, black text
+Booked: grey, disabled
+Selected: gold background, black text • "Morning", "Afternoon", "Evening" quick filters
+Step 3: Select Technician (Optional) • "Any Available" (default, recommended) • Or choose specific technician:
+Photo, name, specialization
+Availability indicator • Radio buttons
+Step 4: Your Information • Fields:
+First Name (required)
+Last Name (required)
+Email (required)
+Phone (required, with country code selector)
+Special Requests (textarea, optional) • "New Client" or "Returning Client" toggle • If returning: "Sign In" option to autofill
+Step 5: Confirmation • Review booking details:
+Service(s)
+Date & time
+Technician
+Duration
+Total estimated cost • Contact information • "Confirm Booking" button (gold, large) • "Edit" links for each section
+Success Page: • Confirmation message • Booking reference number • Calendar invite download (.ics file) • "Add to Google Calendar" button • Reminder: "You'll receive a confirmation email and SMS" • "What to Expect" section (preparation tips)
+Option 2: External Booking Integration • Embed Calendly, Booksy, or similar • Styled to match TransforM brand (custom CSS if possible)
+Option 3: WhatsApp Booking • "Prefer to book via WhatsApp?" link • Opens WhatsApp with pre-filled message: "Hi TransforM! I'd like to book an appointment for [Service]. My preferred date is [Date] at [Time]. Thank you!"
+Booking Policies (Displayed): • Cancellation policy (24-hour notice required) • Late arrival policy (15-minute grace period) • Deposit policy (if applicable) • "By booking, you agree to our Terms & Conditions"
+═══════════════════════════════════════════════════════════════════
+FOOTER (GLOBAL)
+─────────────────────────────────────────────────────────────────
+Layout: Multi-column (4 columns desktop, 2 tablet, 1 mobile)
+Background: #000000 (black) Text color: #FFFFFF (white) Accent color: #D4AF37 (gold)
+Column 1: Brand • TransforM logo (gold, medium size) • Tagline: "Egypt's #1 Luxury Beauty Destination" • Social media icons (Instagram, Facebook, TikTok, YouTube)
+Gold icons, hover: white
+Column 2: Quick Links • Title: "Quick Links" (gold) • Links:
+Home
+Services
+Boutique
+Transformations
+About Us
+Blog
+Contact
+Book Appointment • White text, hover: gold
+Column 3: Services • Title: "Our Services" (gold) • Links:
+Hair Extensions
+Lash Extensions
+Microblading & Brows
+Facials & Skin Treatments
+Professional Makeup
+Bridal Packages • White text, hover: gold
+Column 4: Contact & Hours • Title: "Get in Touch" (gold) • Address (with location pin icon) • Phone (with phone icon, clickable) • Email (with email icon, clickable) • Working Hours:
+"Open 7 Days a Week"
+"10 AM - 10 PM"
+Newsletter Signup (Full-width, above columns): • Background: #1a1a1a (slightly lighter than footer) • Headline: "Stay Updated with Beauty Tips & Exclusive Offers" • Email input + "Subscribe" button (gold) • Privacy note: "We respect your privacy. Unsubscribe anytime."
+Bottom Bar (Full-width, below columns): • Background: #000000 • Border-top: 1px solid #333 • Left: "ﾩ 2024 TransforM. All rights reserved." • Right: Links (inline)
+Privacy Policy
+Terms & Conditions
+Refund Policy
+Sitemap • Separator: " | " between links • White text, hover: gold
+Mobile Footer: • Accordion format (collapsible sections) • Newsletter signup at top • Social icons prominent
+═══════════════════════════════════════════════════════════════════
+ADDITIONAL FEATURES & INTEGRATIONS
+─────────────────────────────────────────────────────────────────
+Floating WhatsApp Button (Global): • Position: Fixed, bottom-right (24px from edges) • Size: 64px × 64px circle • Background: #D4AF37 (gold) • Icon: WhatsApp logo (white) • Shadow: 0 4px 12px rgba(212, 175, 55, 0.4) • Hover: Scale 1.1, shadow intensifies • Click: Opens WhatsApp chat with pre-filled message • Mobile: Slightly smaller (56px), positioned to not overlap content • Z-index: 1000 (always on top)
+Live Chat Widget: • Integration: Tawk.to, Intercom, or Drift • Styled to match brand (black/gold theme) • Position: Bottom-right (above WhatsApp button if both present) • Greeting: "Hi! How can we help you today?" • Available during business hours, offline message form after hours
+Exit-Intent Popup (First-time visitors only): • Trigger: Mouse moves toward browser close button • Content:
+Headline: "Wait! Get Your FREE Consultation"
+Subheadline: "Book now and receive a complimentary beauty consultation (worth EGP 200)"
+Email input + "Claim My Free Consultation" button (gold)
+Close button (X) • Design: Elegant, not intrusive, matches brand • Cookie: Don't show again for 30 days if closed or submitted
+Testimonial Video Section: • Embed YouTube or Vimeo videos • Client testimonials (with permission) • Before/after video transformations • Autoplay muted, unmute on click • Luxury presentation (gold play button, elegant thumbnails)
+Google Reviews Widget: • Embed Google Reviews on homepage and reviews page • Show average rating, total reviews, recent reviews • Link to Google Business Profile • Encourage visitors to leave reviews
+Instagram Stories Highlights: • Embed Instagram Stories Highlights on homepage • Categories: Transformations, Behind the Scenes, Client Love, Tips • Clickable, opens Instagram in new tab
+Appointment Reminder System: • Automated email reminders (24 hours before appointment) • SMS reminders (2 hours before appointment) • Include:
+Appointment details (service, date, time, technician)
+Salon address and directions
+Preparation tips
+Cancellation/reschedule link
+Contact information
+Loyalty Program Section: • "TransforM Rewards" page • Explain benefits:
+Points for every EGP spent
+Birthday bonuses
+Exclusive discounts
+Early access to new services/products • "Join Now" CTA (free to join) • Member login/dashboard
+Gift Cards: • "Gift Cards" page • Purchase digital or physical gift cards • Customizable amounts (EGP 500, 1000, 2000, custom) • Personalized message option • Email delivery or printable • Redeemable for services or products
+Referral Program: • "Refer a Friend" page • Explain benefits:
+Referrer gets EGP 200 credit
+Friend gets 10% off first service • Unique referral link for each client • Track referrals in client dashboard
+Virtual Consultation: • "Book a Virtual Consultation" option • Video call via Zoom, Google Meet, or WhatsApp • For clients who want to discuss services before visiting • Free 15-minute consultation • Booking form (similar to appointment booking)
+Blog Subscription: • Separate from newsletter (or combined) • "Subscribe to Blog Updates" form • Receive email when new blog post is published • Manage subscription preferences
+Accessibility Features: • Font size adjuster (A-, A, A+) • High contrast mode toggle • Keyboard navigation shortcuts • Screen reader optimization
+Multi-Currency Support (Optional): • If targeting international clients • Currency selector (EGP, USD, EUR) • Automatic conversion based on current rates • Display prices in selected currency
+Size Guide / Consultation Tool: • For e-commerce (hair extensions) • Interactive tool to help choose right length, color, volume • Upload photo for color matching (AI-powered or manual review) • "Not sure? Book a free consultation" CTA
+═══════════════════════════════════════════════════════════════════
+MOBILE-FIRST DESIGN PRINCIPLES
+─────────────────────────────────────────────────────────────────
+Critical Requirements: • 80%+ of Egyptian traffic will be mobile • Mobile experience must be BETTER than desktop, not just "responsive"
+Touch Targets: • Minimum size: 48px × 48px (Apple/Google recommendation) • Spacing: 8px minimum between touch targets • Buttons: Large, easy to tap (no tiny links)
+Navigation: • Hamburger menu (animated to X on open) • Full-screen overlay (not tiny dropdown) • Large, readable menu items (min 18px font) • Book Appointment button always visible (sticky or in menu)
+Forms: • Large input fields (min 44px height) • Proper input types (tel for phone, email for email) • Autocomplete enabled • Inline validation (immediate feedback) • Error messages clear and visible • Submit buttons large and prominent
+Images: • Responsive (srcset for different screen sizes) • Lazy loading (below fold) • Optimized for mobile (smaller file sizes) • Aspect ratios maintained (no layout shift)
+Typography: • Minimum body text: 16px (prevents zoom on iOS) • Line height: 1.6 (easier to read on small screens) • Contrast: High (black on white, white on black) • Line length: 50-75 characters max
+Scrolling: • Smooth, natural scrolling (no hijacking) • Sticky elements: Navigation, CTAs (not too many) • Infinite scroll or "Load More" (not pagination)
+Performance: • Prioritize mobile performance (see Performance Requirements) • Minimize JavaScript (heavy scripts slow mobile) • Optimize images aggressively • Use system fonts when possible (faster loading)
+Gestures: • Swipe gestures for carousels, galleries • Pinch to zoom for images (in lightbox) • Pull to refresh (if applicable)
+Mobile-Specific Features: • Click-to-call phone numbers (tel: links) • Click-to-WhatsApp buttons (wa.me links) • Click-to-email (mailto: links) • GPS integration for directions (maps) • Camera access for photo uploads (virtual try-on, reviews)
+Testing: • Test on real devices (iPhone, Android) • Test on different screen sizes (small, medium, large) • Test on slow connections (3G simulation) • Test touch interactions (not just mouse clicks)
+═══════════════════════════════════════════════════════════════════
+SECURITY & PRIVACY
+─────────────────════════════════════────────────────────────────
+SSL Certificate: • HTTPS for entire site (not just checkout) • Valid SSL certificate (Let's Encrypt or commercial) • Redirect HTTP to HTTPS automatically
+Data Protection: • GDPR-compliant (even if not EU-based, best practice) • Clear privacy policy (what data collected, how used, how protected) • Cookie consent banner (if using cookies) • User data encryption (passwords, payment info) • Secure database (not publicly accessible)
+Payment Security: • PCI DSS compliance (if processing cards directly) • Use trusted payment gateway (Stripe, PayPal, local Egyptian gateways) • Never store full credit card numbers • Tokenization for saved payment methods
+Forms: • CSRF protection (Cross-Site Request Forgery) • Input sanitization (prevent SQL injection, XSS) • Rate limiting (prevent spam, brute force) • Captcha for contact forms (if spam is an issue)
+User Accounts: • Strong password requirements (min 8 characters, mix of letters/numbers/symbols) • Password hashing (bcrypt or similar) • Two-factor authentication (optional, for admin) • Account lockout after failed login attempts • Password reset via email (secure token)
+Admin Panel: • Separate login URL (not /admin or /wp-admin) • Strong authentication • Role-based access control (admin, editor, viewer) • Activity logging (who did what, when)
+Backups: • Automated daily backups (database + files) • Offsite backup storage (not same server) • Test restore process regularly
+Updates: • Keep Next.js, React, and all dependencies updated • Security patches applied promptly • Monitor for vulnerabilities (Dependabot, Snyk)
+═══════════════════════════════════════════════════════════════════
+TESTING & QUALITY ASSURANCE
+─────────────────────────────────────────────────────────────────
+Before Launch Checklist:
+Functionality Testing: • All links work (no 404 errors) • All forms submit correctly (test with real data) • All buttons and CTAs

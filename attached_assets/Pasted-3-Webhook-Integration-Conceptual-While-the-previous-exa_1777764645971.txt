@@ -1,0 +1,29 @@
+3. Webhook Integration (Conceptual)
+While the previous examples use polling to retrieve task results, for production-grade applications, webhooks are the recommended approach. Webhooks provide real-time, push-based notifications about task lifecycle events, eliminating the need for constant polling and reducing latency.
+
+Key API Endpoints Used:
+
+	•	`POST /v2/webhook.create`: To register a new webhook endpoint.
+	•	`GET /v2/webhook.publicKey`: To retrieve the public key for signature verification.
+
+How it works (Conceptual Flow):
+
+	1.	Register Webhook: You would register a webhook endpoint (a URL on your server) with Manus using `webhook.create`. You specify the events you want to be notified about (e.g., `task_created`, `task_stopped`).
+	2.	Manus Sends Events: When a registered event occurs (e.g., a task you initiated completes), Manus sends an HTTP POST request to your webhook endpoint.
+	3.	Verify Signature: Your server receives the webhook request. Crucially, to ensure the request is authentic and hasn’t been tampered with, you must verify the `X-Webhook-Signature` header using the public key obtained from `webhook.publicKey` [6]. This involves:
+	◦	Extracting `X-Webhook-Signature` and `X-Webhook-Timestamp` headers.
+	◦	Checking the timestamp freshness (rejecting requests older than 5 minutes).
+	◦	Reconstructing the signed content: `{timestamp}.{url}.{sha256_hex(body)}`.
+	◦	Verifying the signature using the public key and the reconstructed content.
+	4.	Process Payload: Once verified, your server processes the JSON payload, which contains details about the event (e.g., `task_id`, `task_title`, `stop_reason`, and `attachments` if the task completed with results).
+
+Benefits of Webhooks:
+
+	•	Real-time Updates: Get notified instantly when events happen, rather than waiting for the next poll interval.
+	•	Reduced API Calls: Eliminates the need for frequent `task.listMessages` calls, saving API quota and reducing server load.
+	•	Scalability: More efficient for handling a large number of tasks or tasks with unpredictable completion times.
+
+Example Python Webhook Verification (from `webhooks-security.mdx`):
+
+
+￼

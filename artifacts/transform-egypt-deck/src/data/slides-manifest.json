@@ -1,0 +1,82 @@
+[
+  {
+    "id": "4f71fee9-7655-4c1d-8956-e2c742a8f6bc",
+    "position": 1,
+    "filepath": "src/pages/slides/Title.tsx",
+    "title": "Title",
+    "description": "TransforM Egypt — Brand Overview cover slide",
+    "speakerNotes": ""
+  },
+  {
+    "id": "26c080a4-f2b9-4227-81c1-684631182c33",
+    "position": 2,
+    "filepath": "src/pages/slides/Founder.tsx",
+    "title": "The Founder",
+    "description": "Mervat Atalla — founder portrait and story",
+    "speakerNotes": ""
+  },
+  {
+    "id": "74e47aab-5d69-4f14-ab7f-0639a0a2208a",
+    "position": 3,
+    "filepath": "src/pages/slides/Promise.tsx",
+    "title": "The Promise",
+    "description": "Three brand pillars: materials, artistry, discretion",
+    "speakerNotes": ""
+  },
+  {
+    "id": "94cc51c9-849b-4984-beed-c83cfea7d893",
+    "position": 4,
+    "filepath": "src/pages/slides/Services.tsx",
+    "title": "Signature Services",
+    "description": "Hair, beauty and skin services overview",
+    "speakerNotes": ""
+  },
+  {
+    "id": "85c25706-566e-4b86-a20e-556ae179989d",
+    "position": 5,
+    "filepath": "src/pages/slides/HairExtensions.tsx",
+    "title": "Hair Extensions",
+    "description": "Hair extension specialties — Russian, Indian, Brazilian, Tape-In",
+    "speakerNotes": ""
+  },
+  {
+    "id": "d4573dbe-4ac9-4569-9268-beb9c5450cc8",
+    "position": 6,
+    "filepath": "src/pages/slides/Locations.tsx",
+    "title": "Locations",
+    "description": "Six prime branches across Cairo and the North Coast",
+    "speakerNotes": ""
+  },
+  {
+    "id": "b402c025-d729-4dbc-a273-022a8bcbd829",
+    "position": 7,
+    "filepath": "src/pages/slides/ByTheNumbers.tsx",
+    "title": "By the Numbers",
+    "description": "Key brand stats — years, locations, treatments, clients",
+    "speakerNotes": ""
+  },
+  {
+    "id": "e2c1a9f3-8b4d-4e7a-9f1c-3d5a6b7c8e9f",
+    "position": 8,
+    "filepath": "src/pages/slides/YaraPlatform.tsx",
+    "title": "Yara AI Platform",
+    "description": "Four live AI systems — Voice Call, Chat Widget, WhatsApp Automation, Client CRM",
+    "speakerNotes": ""
+  },
+  {
+    "id": "b1866930-2246-4503-a73a-c638016bb069",
+    "position": 9,
+    "filepath": "src/pages/slides/Experience.tsx",
+    "title": "The Experience",
+    "description": "Pull quote on the TransforM standard with interior backdrop",
+    "speakerNotes": ""
+  },
+  {
+    "id": "0ed22d44-4d70-43cb-9fb9-19766367a039",
+    "position": 10,
+    "filepath": "src/pages/slides/Closing.tsx",
+    "title": "Closing",
+    "description": "Tagline, contact info, and call to book",
+    "speakerNotes": ""
+  }
+]

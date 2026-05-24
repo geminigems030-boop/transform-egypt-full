@@ -1,0 +1,315 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Yara Website Chat API
+//
+// POST /api/chat
+//   Body: { messages: [{role, content}], sessionId: string, clientPhone?: string }
+//   Returns: { reply: string, booked?: boolean, escalated?: boolean }
+//
+// Uses Claude (Anthropic via AI integrations proxy) with an in-memory session
+// store (ephemeral, not persisted to DB — privacy-friendly per spec).
+// ─────────────────────────────────────────────────────────────────────────────
+
+import { Router, type IRouter, type Request, type Response } from "express";
+import Anthropic from "@anthropic-ai/sdk";
+import { db } from "@workspace/db";
+import { appointmentsTable, submissionsTable } from "@workspace/db/schema";
+import { logger } from "../lib/logger";
+import { notifyTeam } from "../lib/notify-team";
+import { findOrCreateClient, normalizePhone } from "../lib/crm";
+import {
+  buildSystemPrompt,
+  lookupClientHistory,
+  getSession,
+  appendToSession,
+  extractBookingData,
+  extractEscalationData,
+  detectEscalationKeywords,
+  cleanResponseText,
+  type ChatMessage,
+} from "../lib/yara-chat";
+
+const router: IRouter = Router();
+
+// ── Anthropic client (uses Replit AI integrations proxy) ──────────────────────
+function getAnthropicClient(): Anthropic | null {
+  const baseURL = process.env["AI_INTEGRATIONS_ANTHROPIC_BASE_URL"];
+  const apiKey = process.env["AI_INTEGRATIONS_ANTHROPIC_API_KEY"];
+  if (!baseURL || !apiKey) return null;
+  return new Anthropic({ baseURL, apiKey });
+}
+
+// ── Rate limit: max 60 messages per session in 30 min ────────────────────────
+const sessionMessageCounts = new Map<string, { count: number; resetAt: number }>();
+const RATE_LIMIT = 60;
+const RATE_WINDOW_MS = 30 * 60 * 1000;
+
+function checkRateLimit(sessionId: string): boolean {
+  const now = Date.now();
+  const entry = sessionMessageCounts.get(sessionId);
+  if (!entry || entry.resetAt < now) {
+    sessionMessageCounts.set(sessionId, { count: 1, resetAt: now + RATE_WINDOW_MS });
+    return true;
+  }
+  entry.count += 1;
+  return entry.count <= RATE_LIMIT;
+}
+
+// ── POST /api/chat ────────────────────────────────────────────────────────────
+//
+// Accepts EITHER:
+//   { messages: [{role: "user"|"assistant", content: string}], sessionId, clientPhone? }
+// OR the simplified form:
+//   { message: string, sessionId, clientPhone? }
+// Both are supported for backward compatibility.
+
+router.post("/chat", async (req: Request, res: Response) => {
+  const body = req.body as Record<string, unknown>;
+
+  const sessionId = typeof body.sessionId === "string" ? body.sessionId.trim().slice(0, 64) : "";
+  const clientPhone = typeof body.clientPhone === "string" ? body.clientPhone.trim() : undefined;
+  // Structured trigger field — avoids overloading user message content with sentinel strings
+  const trigger = body.trigger === "phone_greeting" ? "phone_greeting" : undefined;
+
+  // Support both { messages: [...] } (spec) and { message: "..." } (simplified)
+  let userMessage = "";
+  let incomingMessages: Array<{ role: string; content: string }> | undefined;
+
+  if (Array.isArray(body.messages) && body.messages.length > 0) {
+    // Spec format: use only the last user message; previous turns already stored server-side
+    const msgs = body.messages as Array<{ role: string; content: string }>;
+    const lastUserMsg = [...msgs].reverse().find((m) => m.role === "user");
+    userMessage = typeof lastUserMsg?.content === "string" ? lastUserMsg.content.trim() : "";
+    incomingMessages = msgs;
+  } else if (typeof body.message === "string") {
+    // Simplified format
+    userMessage = body.message.trim();
+  }
+
+  if (!sessionId) {
+    return res.status(400).json({ error: "sessionId is required" });
+  }
+  // Greeting triggers carry no user message — that's intentional
+  if (!trigger && !userMessage) {
+    return res.status(400).json({ error: "message or messages[].content is required" });
+  }
+  if (userMessage.length > 2000) {
+    return res.status(400).json({ error: "message too long (max 2000 chars)" });
+  }
+
+  const client = getAnthropicClient();
+  if (!client) {
+    logger.warn("chat: Anthropic AI integration not configured");
+    return res.status(503).json({
+      error: "AI unavailable",
+      reply: "Sorry, our AI assistant is temporarily unavailable. Please contact us on WhatsApp: +201009780008",
+    });
+  }
+
+  if (!checkRateLimit(sessionId)) {
+    return res.status(429).json({
+      error: "Too many messages",
+      reply: "You've sent too many messages. Please continue on WhatsApp: +201009780008",
+    });
+  }
+
+  // Look up client history if phone provided
+  const clientHistory = clientPhone ? await lookupClientHistory(clientPhone) : null;
+
+  // Build system prompt
+  const currentDate = new Date().toLocaleDateString("en-GB", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+  const isGreetingTrigger = trigger === "phone_greeting";
+  const systemPrompt = buildSystemPrompt({ clientHistory, currentDate, isGreetingTrigger });
+
+  // Get existing session history
+  const history = getSession(sessionId);
+  // For greeting triggers we don't store the synthetic message as a real user turn
+  const newUserMsg: ChatMessage | null = isGreetingTrigger
+    ? null
+    : { role: "user", parts: [{ text: userMessage }] };
+
+  // If the caller sent the full messages array (spec format), we can optionally seed the
+  // session with those turns on first call (when server history is empty). This ensures
+  // the server history stays consistent with what the client knows.
+  if (!isGreetingTrigger && incomingMessages && history.length === 0 && incomingMessages.length > 1) {
+    // Seed all but the last user message (the last one will be appended after the reply)
+    const allButLast = incomingMessages.slice(0, -1);
+    for (const m of allButLast) {
+      if (m.role === "user" || m.role === "assistant") {
+        appendToSession(sessionId, {
+          role: m.role === "assistant" ? "model" : "user",
+          parts: [{ text: m.content }],
+        });
+      }
+    }
+  }
+
+  // Re-read history after potential seeding
+  const historyForRequest = getSession(sessionId);
+
+  // For greeting triggers, send a neutral prompt so the model produces the greeting;
+  // this synthetic prompt is NOT stored in session history.
+  const effectiveUserMessage = isGreetingTrigger
+    ? "Please greet me now."
+    : userMessage;
+
+  // Convert to Anthropic's message format
+  const anthropicMessages: Anthropic.MessageParam[] = [
+    ...historyForRequest.map((msg) => ({
+      role: msg.role === "model" ? ("assistant" as const) : ("user" as const),
+      content: msg.parts[0]?.text ?? "",
+    })),
+    { role: "user" as const, content: effectiveUserMessage },
+  ];
+
+  try {
+    const response = await client.messages.create({
+      model: "claude-sonnet-4-6",
+      max_tokens: 1024,
+      system: systemPrompt,
+      messages: anthropicMessages,
+    });
+
+    const rawReply = response.content
+      .filter((block): block is Anthropic.TextBlock => block.type === "text")
+      .map((block) => block.text)
+      .join("");
+
+    // Save the exchange to session memory
+    // For greeting triggers, only store the model reply (not the synthetic user prompt)
+    if (newUserMsg) appendToSession(sessionId, newUserMsg);
+    appendToSession(sessionId, { role: "model", parts: [{ text: rawReply }] });
+
+    // Compute clean reply early so booking notes can embed the conversation context.
+    const cleanReply = cleanResponseText(rawReply);
+
+    // Check for booking intent
+    const bookingData = extractBookingData(rawReply);
+    let booked = false;
+    let appointmentId: number | undefined;
+
+    if (bookingData) {
+      // Validate datetime strictly — do NOT silently create wrong appointments
+      const scheduledAt = new Date(bookingData.datetime);
+      if (!isNaN(scheduledAt.getTime()) && scheduledAt > new Date()) {
+        try {
+          const clientId = await findOrCreateClient(
+            bookingData.phone,
+            bookingData.name,
+            undefined,
+            bookingData.branch,
+          );
+
+          // Store conversation context in notes as JSON so the admin Chat Activity
+          // panel can surface the customer message and Yara's reply for each booking.
+          const notesPayload = JSON.stringify({
+            info: "Booked via website chat widget",
+            requestedTime: bookingData.datetime,
+            customerMessage: userMessage || null,
+            yaraReply: cleanReply.slice(0, 500),
+          });
+
+          const [appt] = await db
+            .insert(appointmentsTable)
+            .values({
+              clientId,
+              clientName: bookingData.name,
+              clientPhone: normalizePhone(bookingData.phone),
+              service: bookingData.service,
+              branch: bookingData.branch,
+              scheduledAt,
+              status: "scheduled",
+              source: "yara",
+              notes: notesPayload,
+            })
+            .returning();
+
+          if (appt) {
+            appointmentId = appt.id;
+            booked = true;
+
+            void notifyTeam({
+              type: "new_booking",
+              name: bookingData.name,
+              phone: bookingData.phone,
+              service: bookingData.service,
+              branch: bookingData.branch,
+            }).catch(() => undefined);
+
+            logger.info(
+              { appointmentId: appt.id, phone: bookingData.phone.slice(0, 6) + "***" },
+              "chat: booking created via Yara chat",
+            );
+          }
+        } catch (err) {
+          logger.error({ err: (err as Error).message }, "chat: failed to create appointment");
+        }
+      } else {
+        // Booking marker found but datetime is invalid or in the past — log and skip insert
+        logger.warn(
+          { rawDatetime: bookingData.datetime },
+          "chat: BOOKING_READY marker had unparseable or past datetime — skipping appointment insert",
+        );
+      }
+    }
+
+    // Check for escalation — model marker first, then keyword safety net
+    const escalationData =
+      extractEscalationData(rawReply) ?? detectEscalationKeywords(userMessage);
+    let escalated = false;
+
+    if (escalationData) {
+      escalated = true;
+      void notifyTeam({
+        type: "escalation",
+        threadId: sessionId,
+        username: clientHistory?.name ?? clientPhone ?? null,
+        platform: "website_chat",
+        text: `${escalationData.reason}\n\nCustomer: "${escalationData.customerMessage || userMessage}"`,
+      }).catch(() => undefined);
+
+      logger.info({ sessionId: sessionId.slice(0, 8) + "***" }, "chat: escalation triggered");
+    }
+
+    // Log escalation events to the admin submissions inbox so the team can follow up.
+    if (escalated) {
+      void db
+        .insert(submissionsTable)
+        .values({
+          source: "yara_chat_escalation",
+          name: clientHistory?.name ?? null,
+          phone: clientPhone ?? null,
+          message: JSON.stringify({
+            customerMessage: escalationData?.customerMessage || userMessage || null,
+            yaraReply: cleanReply.slice(0, 500),
+            reason: escalationData?.reason ?? null,
+            sessionId: sessionId.slice(0, 8) + "***",
+          }),
+          loggedBy: "yara",
+          status: "new",
+        })
+        .catch((err: Error) =>
+          logger.error({ err: err.message }, "chat: failed to log escalation to submissions"),
+        );
+    }
+
+    return res.json({
+      reply: cleanReply,
+      booked,
+      escalated,
+      ...(appointmentId ? { appointmentId } : {}),
+    });
+  } catch (err) {
+    logger.error({ err: (err as Error).message }, "chat: AI error");
+    return res.status(500).json({
+      error: "AI error",
+      reply: "I'm having trouble responding right now. Please reach us on WhatsApp: +201009780008",
+    });
+  }
+});
+
+export default router;

@@ -1,0 +1,39 @@
+kind = "web"
+previewPath = "/"
+title = "TransforM Egypt - Luxury Beauty Platform"
+version = "1.0.0"
+id = "artifacts/transform-egypt"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 24002
+
+[services.development]
+run = "pnpm --filter @workspace/transform-egypt run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/transform-egypt", "run", "build" ]
+publicDir = "artifacts/transform-egypt/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/robots.txt"
+to = "/robots.txt"
+
+[[services.production.rewrites]]
+from = "/sitemap.xml"
+to = "/sitemap.xml"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "24002"
+BASE_PATH = "/"

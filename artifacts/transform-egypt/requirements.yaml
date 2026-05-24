@@ -1,0 +1,33 @@
+packages:
+  "framer-motion": "For premium page transitions, scroll animations, and stagger effects"
+  "lucide-react": "For beautiful consistent SVG icons"
+  "@radix-ui/react-slider": "For product filtering price ranges"
+  "clsx": "For merging tailwind classes efficiently"
+  "tailwind-merge": "For merging tailwind classes efficiently"
+
+images:
+  - path: "artifacts/transform-egypt/public/images/service-hair.png"
+    description: "High-end editorial fashion photography of a woman with beautiful long voluminous flowing hair extensions, dark background, cinematic lighting, gold accents"
+    aspect_ratio: "4:3"
+  - path: "artifacts/transform-egypt/public/images/service-lashes.png"
+    description: "Macro beauty photography of perfectly styled luxury eyelash extensions, glowing skin, soft cinematic lighting"
+    aspect_ratio: "4:3"
+  - path: "artifacts/transform-egypt/public/images/service-brows.png"
+    description: "Close-up of perfect microbladed eyebrows on a model, flawless skin, luxury beauty salon aesthetic"
+    aspect_ratio: "4:3"
+  - path: "artifacts/transform-egypt/public/images/service-facials.png"
+    description: "Luxury spa facial treatment, soft glowing lighting, serene atmosphere, warm tones, high-end skincare aesthetic"
+    aspect_ratio: "4:3"
+  - path: "artifacts/transform-egypt/public/images/salon-bg.png"
+    description: "Interior of an ultra-luxury Dubai-style beauty salon, black and gold decor, warm ambient lighting, elegant mirrors, highly sophisticated"
+    aspect_ratio: "16:9"
+  - path: "artifacts/transform-egypt/public/images/founder.png"
+    description: "Elegant professional portrait of a stylish female master beauty artist in a black blazer, sophisticated posture, dark background with subtle gold rim lighting"
+    aspect_ratio: "3:4"
+  - path: "artifacts/transform-egypt/public/images/logo.png"
+    description: "Minimalist elegant letter T logo in metallic gold on pure black background, high-end luxury brand identity"
+    aspect_ratio: "1:1"
+
+notes:
+  - Expects @workspace/api-client-react hooks to be generated and available.
+  - Assume English/Arabic bilingual toggle requires RTL layout support via HTML dir attribute.

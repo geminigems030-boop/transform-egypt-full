@@ -1,0 +1,34 @@
+Act as a world-class creative web developer and luxury UI/UX designer. I want to upgrade my existing website for my luxury beauty salon, TransforM, into a "billion-dollar" immersive experience. 
+
+CRITICAL RULE: Do NOT delete or overwrite my existing backend code, routing, or other functional pages. Please analyze my current HTML, CSS, and JS files, and integrate the following visual upgrades and new sections seamlessly into my existing homepage layout.
+
+Aesthetic & Art Direction (Apply Globally):
+* Vibe: Highly exclusive, expensive, and artistic. It should feel like stepping into a highly curated, whimsical interior design space. 
+* Visual Theme: Eclectic, bespoke hand-painted wall murals featuring stylized flora, fauna, and subtle mythological creatures. (CRITICAL: Strictly NO Ancient Egyptian motifs). 
+* Color Palette: Rich, opulent tones. Update my current CSS to feature deep onyx/charcoal backgrounds, champagne-gold accents, and lush emerald or jewel-toned highlights.
+* Typography: Cinematic and editorial. Update global fonts to an elegant serif for headings (e.g., Playfair Display or Cinzel) and a clean, ultra-legible sans-serif for body text. 
+
+Technical & Interactive Upgrades to Inject:
+* Animations: Integrate GSAP (GreenSock) via CDN for high-end, buttery-smooth animations on the new elements. 
+* Smooth Scrolling: Add smooth scrolling (e.g., using Lenis) to the existing page.
+* Micro-interactions: Add a custom cursor and give my existing buttons a glowing, glassmorphism hover state.
+
+New Sections to Inject into the Homepage:
+
+1. New Hero Section (100vh Immersive Entrance)
+* Place this at the very top.
+* Background: A dark, atmospheric canvas with a slow-panning effect to mimic a breathing mural. 
+* Content: Center the word "TransforM" with a cinematic upward fade-in.
+* Tagline: "A Masterpiece in Every Detail." 
+* Button: A sleek "Book Your Experience" button.
+
+2. The TransforM Experience (Editorial Text Block)
+* Headline: The Art of Metamorphosis
+* Body Text: "Step into a realm where artistry meets individuality. At TransforM, beauty is not a routine; it is a highly curated masterpiece. Surrounded by an atmosphere of eclectic elegance and bespoke design, our elite artisans craft looks that are as unique as the vibrant flora that inspire our spaces. Here, every detail is intentional, every touch is transformative, and every client is our greatest canvas."
+
+3. Prestigious Locations (Interactive Hover-Grid)
+* Build an interactive accordion or high-end hover-list showcasing these branches: Nile Ritz Carlton Hotel, Sofitel Downtown Hotel, Walk of Cairo, O Mall New Alamein, Cairo Festival City Mall, City Stars Mall.
+* Effect: Hovering over a location smoothly cross-fades the section's background to match that specific vibe.
+
+4. Floating Action Button (FAB)
+* Add a sticky "Book Now" button anchored to the bottom right of the screen using a glassmorphism blur effect.

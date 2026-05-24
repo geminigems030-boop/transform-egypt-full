@@ -1,0 +1,31 @@
+kind = "slides"
+previewPath = "/transform-egypt-deck/"
+title = "TransforM Egypt — Brand Deck"
+version = "1.0.0"
+id = "artifacts/transform-egypt-deck"
+router = "path"
+
+[[integratedSkills]]
+name = "slides"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/transform-egypt-deck/" ]
+localPort = 22595
+
+[services.development]
+run = "pnpm --filter @workspace/transform-egypt-deck run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/transform-egypt-deck", "run", "build" ]
+publicDir = "artifacts/transform-egypt-deck/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "22595"
+BASE_PATH = "/transform-egypt-deck/"

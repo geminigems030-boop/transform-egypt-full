@@ -1,0 +1,71 @@
+
+import requests
+import os
+import time
+
+MANUS_API_KEY = os.environ.get("MANUS_API_KEY")
+BASE_URL = "https://api.manus.ai/v2"
+
+def create_task(message_content):
+    headers = {
+        "Content-Type": "application/json",
+        "x-manus-api-key": MANUS_API_KEY,
+    }
+    payload = {
+        "message": {"content": message_content},
+        "title": "Basic Demo Task"
+    }
+    response = requests.post(f"{BASE_URL}/task.create", headers=headers, json=payload)
+    response.raise_for_status()
+    return response.json()
+
+def list_messages(task_id):
+    headers = {
+        "x-manus-api-key": MANUS_API_KEY,
+    }
+    response = requests.get(f"{BASE_URL}/task.listMessages?task_id={task_id}&order=asc", headers=headers)
+    response.raise_for_status()
+    return response.json()
+
+if __name__ == "__main__":
+    if not MANUS_API_KEY:
+        print("Error: MANUS_API_KEY environment variable not set.")
+        exit(1)
+
+    print("Creating a new task...")
+    task_response = create_task("Write a short poem about AI.")
+    task_id = task_response["task_id"]
+    task_url = task_response["task_url"]
+    print(f"Task created: {task_id}")
+    print(f"View in Manus app: {task_url}")
+
+    print("Polling for task completion...")
+    status = "running"
+    while status == "running" or status == "waiting":
+        time.sleep(5) # Poll every 5 seconds
+        messages_response = list_messages(task_id)
+        for message in messages_response["messages"]:
+            if message["type"] == "status_update":
+                status = message["status_update"]["agent_status"]
+                print(f"Current status: {status}")
+                if status == "stopped":
+                    print("Task completed!")
+                    for msg in messages_response["messages"]:
+                        if msg["type"] == "assistant_message":
+                            print("\n--- Assistant Message ---")
+                            print(msg["assistant_message"]["content"])
+                            if "attachments" in msg["assistant_message"]:
+                                print("Attachments:")
+                                for attachment in msg["assistant_message"]["attachments"]:
+                                    print(f"  - {attachment["file_name"]}: {attachment["url"]}")
+                    break
+            elif message["type"] == "assistant_message":
+                # Print assistant messages as they come in, if any before final stop
+                pass
+
+    if status == "error":
+        print("Task encountered an error.")
+        for message in messages_response["messages"]:
+            if message["type"] == "error_message":
+                print(f"Error: {message["error_message"]["message"]}")
+

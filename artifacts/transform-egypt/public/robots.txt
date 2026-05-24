@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /cart
+Disallow: /blog/*?utm_
+Disallow: /*?
+
+Sitemap: https://transform-egypt.com/sitemap.xml

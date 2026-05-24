@@ -1,0 +1,410 @@
+openapi: 3.1.0
+info:
+  title: Api
+  version: 0.1.0
+  description: TransforM Egypt API specification
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: products
+    description: Product catalog
+  - name: services
+    description: Beauty services
+  - name: bookings
+    description: Appointment bookings
+  - name: reviews
+    description: Customer reviews
+  - name: cart
+    description: Shopping cart
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /products:
+    get:
+      operationId: listProducts
+      tags: [products]
+      summary: List all products
+      parameters:
+        - in: query
+          name: category
+          schema:
+            type: string
+        - in: query
+          name: limit
+          schema:
+            type: number
+        - in: query
+          name: offset
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Products list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  products:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Product"
+                  total:
+                    type: number
+                required: [products, total]
+
+  /products/{id}:
+    get:
+      operationId: getProduct
+      tags: [products]
+      summary: Get a product by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Product detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+
+  /services:
+    get:
+      operationId: listServices
+      tags: [services]
+      summary: List all beauty services
+      responses:
+        "200":
+          description: Services list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  services:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Service"
+                required: [services]
+
+  /bookings:
+    post:
+      operationId: createBooking
+      tags: [bookings]
+      summary: Create an appointment booking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateBookingRequest"
+      responses:
+        "201":
+          description: Booking created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Booking"
+
+  /reviews:
+    get:
+      operationId: listReviews
+      tags: [reviews]
+      summary: List testimonials/reviews
+      responses:
+        "200":
+          description: Reviews list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reviews:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Review"
+                required: [reviews]
+
+  /cart:
+    get:
+      operationId: getCart
+      tags: [cart]
+      summary: Get current cart
+      responses:
+        "200":
+          description: Cart data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+    post:
+      operationId: addToCart
+      tags: [cart]
+      summary: Add item to cart
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddToCartRequest"
+      responses:
+        "200":
+          description: Updated cart
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+
+  /cart/{productId}:
+    delete:
+      operationId: removeFromCart
+      tags: [cart]
+      summary: Remove item from cart
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Updated cart
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
+    Product:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        nameAr:
+          type: string
+        description:
+          type: string
+        descriptionAr:
+          type: string
+        price:
+          type: number
+        originalPrice:
+          type: number
+        category:
+          type: string
+        images:
+          type: array
+          items:
+            type: string
+        badge:
+          type: string
+        inStock:
+          type: boolean
+        rating:
+          type: number
+        reviewCount:
+          type: number
+        features:
+          type: array
+          items:
+            type: string
+      required:
+        - id
+        - name
+        - nameAr
+        - description
+        - descriptionAr
+        - price
+        - category
+        - images
+        - inStock
+        - rating
+        - reviewCount
+
+    Service:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        nameAr:
+          type: string
+        description:
+          type: string
+        descriptionAr:
+          type: string
+        startingPrice:
+          type: number
+        image:
+          type: string
+        isFeatured:
+          type: boolean
+        badge:
+          type: string
+      required:
+        - id
+        - name
+        - nameAr
+        - description
+        - descriptionAr
+        - startingPrice
+        - image
+        - isFeatured
+
+    Booking:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        service:
+          type: string
+        date:
+          type: string
+        message:
+          type: string
+        status:
+          type: string
+        createdAt:
+          type: string
+      required:
+        - id
+        - name
+        - email
+        - phone
+        - service
+        - date
+        - status
+        - createdAt
+
+    CreateBookingRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        service:
+          type: string
+        date:
+          type: string
+        message:
+          type: string
+      required:
+        - name
+        - email
+        - phone
+        - service
+        - date
+
+    Review:
+      type: object
+      properties:
+        id:
+          type: number
+        clientName:
+          type: string
+        clientImage:
+          type: string
+        rating:
+          type: number
+        text:
+          type: string
+        textAr:
+          type: string
+        service:
+          type: string
+        date:
+          type: string
+      required:
+        - id
+        - clientName
+        - rating
+        - text
+        - textAr
+        - service
+        - date
+
+    Cart:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/CartItem"
+        total:
+          type: number
+        itemCount:
+          type: number
+      required:
+        - items
+        - total
+        - itemCount
+
+    CartItem:
+      type: object
+      properties:
+        productId:
+          type: number
+        name:
+          type: string
+        price:
+          type: number
+        quantity:
+          type: number
+        image:
+          type: string
+      required:
+        - productId
+        - name
+        - price
+        - quantity
+        - image
+
+    AddToCartRequest:
+      type: object
+      properties:
+        productId:
+          type: number
+        quantity:
+          type: number
+      required:
+        - productId
+        - quantity
