@@ -2,6 +2,7 @@
 nixPkgs = ["nodejs_20", "pnpm"]
 
 [phases.install]
+# Only re-install when these files change = huge cache wins
 onlyIncludeFiles = [
   "pnpm-lock.yaml",
   "pnpm-workspace.yaml",
@@ -17,6 +18,7 @@ cmds = [
   "pnpm --filter api-server build"
 ]
 
+# Cache the entire pnpm store between builds
 [cache]
 paths = [".pnpm-store"]
 
