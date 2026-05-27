@@ -7,6 +7,8 @@ import { logger } from "./lib/logger";
 const app: Express = express();
 
 app.use(
+import chatRouter from "./routes/chat";   // adjust path if needed
+app.use("/chat", chatRouter);
   pinoHttp({
     logger,
     serializers: {
