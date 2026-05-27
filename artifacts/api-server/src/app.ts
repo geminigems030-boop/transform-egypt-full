@@ -40,7 +40,7 @@ app.use(
 );
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-app.use("/chat", chatRouter);
 app.use("/api", router);
+app.use("/api/chat", chatRouter);
 
 export default app;
