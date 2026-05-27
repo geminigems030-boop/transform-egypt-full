@@ -2,7 +2,6 @@
 nixPkgs = ["nodejs_20", "pnpm"]
 
 [phases.install]
-# Only re-install when these files change = huge cache wins
 onlyIncludeFiles = [
   "pnpm-lock.yaml",
   "pnpm-workspace.yaml",
@@ -13,14 +12,10 @@ onlyIncludeFiles = [
 cmds = ["pnpm install --frozen-lockfile --prefer-offline"]
 
 [phases.build]
-cmds = [
-  "pnpm --filter api-client-react build",
-  "pnpm --filter api-server build"
-]
+cmds = ["pnpm turbo run build"]
 
-# Cache the entire pnpm store between builds
 [cache]
-paths = [".pnpm-store"]
+paths = [".pnpm-store", ".turbo"]
 
 [start]
 cmd = "pnpm --filter api-client-react start"
