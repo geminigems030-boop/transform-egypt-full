@@ -2,13 +2,12 @@ import express, { type Express } from "express";
 import cors from "cors";
 import pinoHttp from "pino-http";
 import router from "./routes";
+import chatRouter from "./routes/chat";
 import { logger } from "./lib/logger";
 
 const app: Express = express();
 
 app.use(
-import chatRouter from "./routes/chat";   // adjust path if needed
-app.use("/chat", chatRouter);
   pinoHttp({
     logger,
     serializers: {
@@ -41,6 +40,7 @@ app.use(
 );
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
+app.use("/chat", chatRouter);
 app.use("/api", router);
 
 export default app;
