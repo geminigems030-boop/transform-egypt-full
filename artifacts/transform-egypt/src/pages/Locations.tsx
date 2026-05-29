@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Phone, Clock, MessageCircle, ArrowRight, ArrowLeft } from 'lucide-react';
 import { Link } from 'wouter';
@@ -29,7 +30,10 @@ interface BranchLocation {
   closureReasonAr?: string;
 }
 
-const branches: BranchLocation[] = [
+// Static base — full per-branch detail + map schemas. Live open/closed status is
+// overlaid from /api/branches at runtime (see Locations component) so the Google
+// Sheet → content-update flow can flip a branch without a redeploy.
+const STATIC_BRANCHES: BranchLocation[] = [
   {
     number: '01',
     nameEn: 'City Stars Mall',
@@ -55,9 +59,6 @@ const branches: BranchLocation[] = [
     detailAr: 'بجانب كاسبر. خدمة الفاليه متوفرة.',
     mapUrl: 'https://www.google.com/maps/search/Transform+Egypt+Cairo+Festival+City+Mall',
     phone: PHONE_1,
-    closed: true,
-    closureReasonEn: 'Temporarily closed for renovation. Reopening soon — please book a nearby branch.',
-    closureReasonAr: 'مغلق مؤقتاً للتجديد. سيُعاد الافتتاح قريباً — يرجى الحجز في فرع قريب.',
   },
   {
     number: '03',
@@ -130,6 +131,15 @@ const branchSchemas = [
     mapQuery: 'Transform+Egypt+City+Stars+Mall+Cairo',
   },
   {
+    number: '02',
+    name: 'TransforM Egypt — Cairo Festival City Mall',
+    address: 'Cairo Festival City Mall, 3rd Floor, New Cairo, Cairo, Egypt',
+    phone: '+201009780008',
+    lat: 30.0287,
+    lng: 31.4076,
+    mapQuery: 'Transform+Egypt+Cairo+Festival+City+Mall',
+  },
+  {
     number: '03',
     name: 'TransforM Egypt — Sofitel Downtown Cairo',
     address: 'Sofitel Downtown Cairo, Lower Level, Downtown, Cairo, Egypt',
@@ -151,6 +161,32 @@ const branchSchemas = [
 
 export default function Locations() {
   const { lang } = useTranslation();
+  const [branches, setBranches] = useState<BranchLocation[]>(STATIC_BRANCHES);
+
+  // Overlay live open/closed status (and closure reason) from the DB onto the
+  // static branch detail. Matched by English name. Falls back to static on error.
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/branches')
+      .then((r) => (r.ok ? r.json() : { branches: [] }))
+      .then((d: { branches?: Array<{ name: string; status: string; closureReason: string | null; closureReasonAr: string | null }> }) => {
+        if (cancelled || !Array.isArray(d.branches) || d.branches.length === 0) return;
+        const byName = new Map(d.branches.map((b) => [b.name.trim().toLowerCase(), b]));
+        setBranches(STATIC_BRANCHES.map((b) => {
+          const live = byName.get(b.nameEn.trim().toLowerCase());
+          if (!live) return b;
+          const closed = live.status !== 'open';
+          return {
+            ...b,
+            closed,
+            closureReasonEn: closed ? (live.closureReason ?? b.closureReasonEn) : undefined,
+            closureReasonAr: closed ? (live.closureReasonAr ?? b.closureReasonAr) : undefined,
+          };
+        }));
+      })
+      .catch(() => { /* keep static */ });
+    return () => { cancelled = true; };
+  }, []);
 
   return (
     <div className="bg-[#050505] min-h-screen">

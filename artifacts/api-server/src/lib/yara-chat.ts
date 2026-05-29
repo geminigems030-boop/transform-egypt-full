@@ -54,91 +54,118 @@ export function appendToSession(sessionId: string, msg: ChatMessage): void {
 
 // ── Brand constants ───────────────────────────────────────────────────────────
 
+// All prices EGP. This MUST stay in sync with the authoritative price list
+// used by the DM agent (lib/ai-reply.ts) and the voice agent (routes/yara-call.ts).
 const SERVICES_EN = `
-HAIR EXTENSIONS:
-- Nano Ring Extensions — from 4,500 EGP
-- Tape-In Extensions — from 3,500 EGP
-- Micro Ring Extensions — from 4,000 EGP
-- Clip-In Extensions — from 2,500 EGP
-- Keratin Bond Extensions — from 5,000 EGP
-- Weft Extensions — from 3,000 EGP
+HAIR EXTENSIONS — Natural Human Hair (per 100g, applied strand-by-strand):
+- Indian hair (straight): 60 cm — 11,000 | 70 cm — 12,000 | 80 cm — 13,000 | 90 cm — 14,000
+- Russian hair — from 25,000
+- Brazilian hair — from 15,000
+- Turkish hair — from 20,000
+- Curly or Blonde add-on: +2,000 on any type
+- FREE TRIAL: try 1–2 strands free before committing
 
-LASH EXTENSIONS:
-- Classic Lashes — from 600 EGP
-- Volume Lashes — from 800 EGP
-- Mega Volume Lashes — from 1,000 EGP
-- Hybrid Lashes — from 700 EGP
+HAIR EXTENSIONS — Tape-In:
+- Range 10,000–30,000 | Invisible Double Face 20,000 | Curly/Blonde +2,000
+- Installation only (client brings their own hair): 4,000
 
-EYEBROWS:
-- Microblading — from 2,500 EGP
-- Ombre Brows — from 2,000 EGP
-- Nano Brows — from 2,800 EGP
-- Brow Lamination — from 800 EGP
+HAIR REFILL (refilling fallen strands): 4,000 per 100g
+MICRO-LINKS — from 30,000
+WIGS — from 25,000
+TOPPERS (for thinning areas / genetic hair loss) — from 8,000
+HAIR TREATMENTS (keratin, botox, protein, scalp care) — from 2,000
+
+LASHES:
+- Classic 1,050 | 2D 1,300 | 3D 1,500 | Volume 1,800 | Mega Volume 2,100 | Fox Lashes 3,000
+
+BROWS & PERMANENT MAKEUP:
+- Microblading 1,900 (touch-up 1,150) | Lip Blushing 2,700 (touch-up 1,400)
+- Brow Extensions 1,450 | Micropigmentation 3,800 per area
 
 SKINCARE:
-- HydraFacial — from 1,500 EGP
-- Chemical Peels — from 1,000 EGP
-- Laser Hair Removal — pricing on consultation
-- LED Therapy — from 800 EGP
+- Deep cleansing facial — from 1,500 | Dermapen 2,000 | Lifting face massage 1,000
+- Dermaplaning 500 | Diamond Crystal 2,000 | Face wax 600
+- Bundle (Skin Booster + Glutathione + 3rd treatment): 4,000 (each 1,500 separately)
 
 NAILS:
-- Gel Manicure — from 400 EGP
-- Gel Pedicure — from 500 EGP
-- Nail Art — from 600 EGP
-- Acrylic Extensions — from 700 EGP
+- Hard gel & acrylic 1,500 (+extensions 1,500) | Nail treatment 300
+- Gel color 350 | Gel removal 250 | Nail design 200
+- Artificial nails from 450 | Hand manicure 300 | Foot pedicure 350
+- Regular polish 150 | French 200
+
+PAYMENT: Cash · Credit & debit cards · Installments — available on all services.
 `.trim();
 
+// الأسعار بالجنيه المصري — مطابقة لقائمة أسعار وكيل الرسائل (ai-reply.ts) ووكيل المكالمات.
 const SERVICES_AR = `
-إكستنشن الشعر:
-- نانو رينج — من ٤٥٠٠ ج.م.
-- تيب إن — من ٣٥٠٠ ج.م.
-- مايكرو رينج — من ٤٠٠٠ ج.م.
-- كليب إن — من ٢٥٠٠ ج.م.
-- كيراتين بوند — من ٥٠٠٠ ج.م.
-- ويفت — من ٣٠٠٠ ج.م.
+إكستنشن الشعر — شعر طبيعي ١٠٠٪ (لكل ١٠٠ جرام، خصلة خصلة):
+- شعر هندي (سادة): ٦٠ سم — 11,000 | ٧٠ سم — 12,000 | ٨٠ سم — 13,000 | ٩٠ سم — 14,000
+- شعر روسي — يبدأ من 25,000
+- شعر برازيلي — يبدأ من 15,000
+- شعر تركي — يبدأ من 20,000
+- إضافة كيرلي أو بلوند: +2,000 على أي نوع
+- تجربة مجانية: جربي خصلة أو اتنين مجاناً قبل ما تقرري
 
-رموش إكستنشن:
-- كلاسيك — من ٦٠٠ ج.م.
-- فوليوم — من ٨٠٠ ج.م.
-- ميجا فوليوم — من ١٠٠٠ ج.م.
-- هايبرد — من ٧٠٠ ج.م.
+إكستنشن تيب إن:
+- من 10,000 لـ 30,000 | إنفيزيبل دابل فيس 20,000 | كيرلي/بلوند +2,000
+- تركيب فقط (العميلة بتجيب شعرها): 4,000
 
-الحواجب:
-- مايكروبليدينج — من ٢٥٠٠ ج.م.
-- أومبري براوز — من ٢٠٠٠ ج.م.
-- نانو براوز — من ٢٨٠٠ ج.م.
-- براو لاميناشن — من ٨٠٠ ج.م.
+تعبية / ريفيل (تعويض الخصل اللي وقعت): 4,000 لكل ١٠٠ جرام
+ميكرو لينكس — يبدأ من 30,000
+بواريك (ويج) — يبدأ من 25,000
+توبر (للفراغات أو الصلع الوراثي) — يبدأ من 8,000
+علاجات الشعر (كيراتين، بوتوكس، بروتين، عناية فروة الرأس) — تبدأ من 2,000
+
+رموش:
+- كلاسيك 1,050 | 2D 1,300 | 3D 1,500 | فوليوم 1,800 | ميجا فوليوم 2,100 | فوكس 3,000
+
+الحواجب والميكب الدائم:
+- مايكروبليدنج 1,900 (تتش أب 1,150) | توريد شفايف 2,700 (تتش أب 1,400)
+- بروز (brow extensions) 1,450 | مايكروبيجمنتيشن 3,800 للمنطقة
 
 العناية بالبشرة:
-- هيدرافيشيال — من ١٥٠٠ ج.م.
-- بيلينج — من ١٠٠٠ ج.م.
-- ليزر إزالة الشعر — السعر عند الاستشارة
-- LED ثيرابي — من ٨٠٠ ج.م.
+- تنظيف بشرة عميق — يبدأ من 1,500 | ديرما بين 2,000 | مساج شد للوجه 1,000
+- ديرمابلانينج 500 | دايموند كريستال 2,000 | واكس وش 600
+- باقة (سكين بوستر + جلوتاثيون + علاج تالت): 4,000 (كل واحد 1,500 لو لوحده)
 
 الأظافر:
-- مانيكير جل — من ٤٠٠ ج.م.
-- باديكير جل — من ٥٠٠ ج.م.
-- نيل ارت — من ٦٠٠ ج.م.
-- أكريليك — من ٧٠٠ ج.م.
+- هارد جل وأكريليك 1,500 (+تطويل 1,500) | علاج الأظافر 300
+- لون جل 350 | إزالة الجل 250 | ديزاين 200
+- تركيب أظافر صناعية من 450 | مانيكير يد 300 | باديكير قدم 350
+- مانيكير عادي 150 | فرنش 200
+
+طرق الدفع: كاش · كروت كريدت ودبت · تقسيط — متاح على كل الخدمات.
 `.trim();
 
 const BRANCHES_EN = `
-OUR BRANCHES:
-1. City Stars Mall — Ground floor, Gate 7, Cairo. Open daily 10 AM – 10 PM.
-2. Sofitel Downtown — Lower level, Downtown Cairo. Open daily 10 AM – 10 PM.
-3. O Mall — New Alamein, North Coast. Open daily 10 AM – 10 PM (seasonal).
+OUR BRANCHES — currently open:
+1. City Stars Mall, Nasr City — Ground floor, Gate 7, next to Cafe Supreme. Open daily from 12:00 noon.
+2. Sofitel Hotel, Downtown Cairo — Lower level, next to Banque Misr. Open daily from 12:00 noon.
+3. Cairo Festival City Mall (CFCM), New Cairo — 3rd Floor, next to Casper. Premium branch, open daily during mall hours.
 
-Contact us: 01009780008 / 01004545700
+TEMPORARILY CLOSED — do NOT offer these for bookings:
+- O Mall, New Alamein
+- Walk of Cairo, Sheikh Zayed
+- Nile Ritz Hotel, Downtown
+
+We are currently in Cairo only.
+Contact us: 01009780008
 WhatsApp: +201009780008
 `.trim();
 
 const BRANCHES_AR = `
-فروعنا:
-١. سيتي ستارز مول — الدور الأرضي، بوابة ٧، القاهرة. مفتوح يومياً ١٠ ص – ١٠ م.
-٢. سوفيتيل داون تاون — الدور السفلي، وسط البلد. مفتوح يومياً ١٠ ص – ١٠ م.
-٣. أوه مول — العلمين الجديدة، الساحل الشمالي. مفتوح يومياً ١٠ ص – ١٠ م (موسمي).
+فروعنا — مفتوحة حالياً:
+١. سيتي ستارز مول، مدينة نصر — الدور الأرضي، بوابة ٧، جنب كافيه سوبريم. مفتوح يومياً من الساعة ١٢ الظهر.
+٢. فندق سوفيتيل، وسط البلد — الدور السفلي، جنب بنك مصر. مفتوح يومياً من الساعة ١٢ الظهر.
+٣. كايرو فستيفال سيتي مول (CFCM)، القاهرة الجديدة — الدور الثالث، جنب كاسبر. فرع بريميوم، مفتوح يومياً بمواعيد المول.
 
-تواصلوا معنا: ٠١٠٠٩٧٨٠٠٠٨ / ٠١٠٠٤٥٤٥٧٠٠
+مقفولة مؤقتاً — متعرضيش الفروع دي للحجز:
+- أوه مول، العلمين الجديدة
+- ووك أوف كايرو، الشيخ زايد
+- فندق نايل ريتز، وسط البلد
+
+إحنا حالياً في القاهرة بس.
+تواصلوا معنا: ٠١٠٠٩٧٨٠٠٠٨
 واتساب: ‏+201009780008
 `.trim();
 
@@ -147,9 +174,21 @@ const BRANCHES_AR = `
 export interface ClientHistory {
   name: string | null;
   visitCount: number;
+  totalSpend: number;
   lastVisit: Date | null;
   lastService: string | null;
   preferredBranch: string | null;
+}
+
+// ── Loyalty tiers ─────────────────────────────────────────────────────────────
+// Derived live from visit count / spend — no stored column, so it's always
+// accurate and needs no migration. Used to give returning clients VIP treatment.
+export type LoyaltyTier = "new" | "regular" | "vip";
+
+export function getLoyaltyTier(visitCount: number, totalSpend: number): LoyaltyTier {
+  if (visitCount >= 5 || totalSpend >= 20000) return "vip";
+  if (visitCount >= 2) return "regular";
+  return "new";
 }
 
 export async function lookupClientHistory(rawPhone: string): Promise<ClientHistory | null> {
@@ -173,6 +212,7 @@ export async function lookupClientHistory(rawPhone: string): Promise<ClientHisto
     return {
       name: client.name,
       visitCount: client.visitCount,
+      totalSpend: Number(client.totalSpend ?? 0),
       lastVisit: client.lastVisit,
       lastService: lastAppt?.service ?? null,
       preferredBranch: client.preferredBranch,
@@ -189,8 +229,10 @@ export function buildSystemPrompt(params: {
   clientHistory?: ClientHistory | null;
   currentDate: string;
   isGreetingTrigger?: boolean;
+  offersSection?: string;
+  branchesSection?: string;
 }): string {
-  const { clientHistory, currentDate, isGreetingTrigger } = params;
+  const { clientHistory, currentDate, isGreetingTrigger, offersSection, branchesSection } = params;
 
   let clientContext = "";
   if (clientHistory?.name) {
@@ -200,15 +242,23 @@ export function buildSystemPrompt(params: {
     const greetingInstruction = isGreetingTrigger
       ? `The customer just shared their phone number. Greet them warmly by name RIGHT NOW — mention their last service and how long ago it was, then ask how you can help them today. Keep it to 2–3 sentences, warm and personal.`
       : `Greet this client warmly by name and mention their last service naturally in context.`;
+    const tier = getLoyaltyTier(clientHistory.visitCount, clientHistory.totalSpend);
+    const loyaltyInstruction =
+      tier === "vip"
+        ? `LOYALTY: This is a VIP client (5+ visits or high spend). Give them special VIP treatment — recognise their loyalty warmly, offer priority booking and a complimentary consultation, and make them feel valued. Do NOT invent monetary discounts or offers that aren't in the knowledge base.`
+        : tier === "regular"
+          ? `LOYALTY: This is a returning regular client. Acknowledge that it's lovely to see them again and treat them with extra warmth and familiarity.`
+          : "";
     clientContext = `
 RETURNING CLIENT PROFILE:
 - Name: ${clientHistory.name}
+- Loyalty tier: ${tier.toUpperCase()}
 - Visit count: ${clientHistory.visitCount}
 - Last visit: ${lastVisitStr ?? "unknown"}
 - Last service: ${clientHistory.lastService ?? "unknown"}
 - Preferred branch: ${clientHistory.preferredBranch ?? "unknown"}
 
-${greetingInstruction}
+${greetingInstruction}${loyaltyInstruction ? "\n" + loyaltyInstruction : ""}
 `.trim();
   } else if (isGreetingTrigger) {
     clientContext = `NEW_CUSTOMER_GREETING: The customer just shared their phone number but is not in our records yet. Welcome them warmly as a new guest and let them know you're here to help them explore our services or book an appointment. Keep it brief and inviting — 1–2 sentences.`;
@@ -235,14 +285,14 @@ ${clientContext ? clientContext + "\n\n" : ""}SERVICES & PRICING:
 ${SERVICES_EN}
 
 BRANCHES & HOURS:
-${BRANCHES_EN}
+${branchesSection || BRANCHES_EN}
 
-BOOKING PROCESS:
+${offersSection ? offersSection + "\n\n" : "OFFERS: There are no active offers right now. Never invent or imply any discount or deal — if asked, say prices are fixed and offer to help pick the best option.\n\n"}BOOKING PROCESS:
 To create a booking request, collect ALL of these from the customer:
 1. Full name
 2. Phone number (Egyptian mobile, e.g. 010xxxxxxxx)
 3. Preferred service
-4. Preferred branch (City Stars, Sofitel Downtown, or O Mall New Alamein)
+4. Preferred branch (City Stars Mall, Sofitel Downtown, or Cairo Festival City Mall — these are the branches open now; never book a closed branch)
 5. Preferred date and time
 
 Once you have all 5, respond with EXACTLY this JSON marker at the END of your message:

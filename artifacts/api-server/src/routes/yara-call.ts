@@ -24,6 +24,8 @@ import { db } from "@workspace/db";
 import { appointmentsTable } from "@workspace/db/schema";
 import { logger } from "../lib/logger";
 import { notifyTeam } from "../lib/notify-team";
+import { createBookingEvent } from "../lib/google-calendar";
+import { buildBranchesPromptSection } from "../lib/branches";
 import { normalizePhone, findOrCreateClient } from "../lib/crm";
 
 const router: IRouter = Router();
@@ -38,10 +40,13 @@ const ADMIN_TOKEN = process.env.ADMIN_TOKEN;
 // Dynamic variables ({{...}}) are filled per-session from the pre-call intake
 // form and injected via Conversation.startSession({ dynamicVariables: {...} }).
 // Called at sync time so the embedded date is always current.
-export function buildYaraSystemPrompt(): string {
+export async function buildYaraSystemPrompt(): Promise<string> {
   const today = new Date().toLocaleDateString("en-GB", {
     weekday: "long", day: "numeric", month: "long", year: "numeric",
   }); // e.g. "Sunday, 18 May 2025"
+  // Live branches from the DB so reopening CFCM (etc.) is reflected on the next
+  // agent sync. Falls back to the static block below if the DB is unreachable.
+  const branchesSection = await buildBranchesPromptSection();
   return `You are Yara, the beauty consultant for TransforM Egypt — the #1 luxury hair extensions and beauty salon in Egypt and the Middle East, trusted by celebrities and top clients.
 
 ## Client context (provided before each call)
@@ -126,17 +131,18 @@ NAILS:
 PAYMENT: Cash ✓ | Cards (credit & debit) ✓ | Installments ✓ (all services)
 
 ## Branches
-OPEN — currently accepting bookings:
+${branchesSection || `OPEN — currently accepting bookings:
 - City Stars Mall, Nasr City — Ground floor, Gate 7, next to Cafe Supreme — 01009780008
 - Sofitel Hotel, Downtown Cairo — Lower level, next to Banque Misr — 01009780008
+- Cairo Festival City Mall (CFCM), New Cairo — 3rd Floor, next to Casper. PREMIUM branch, open daily during mall hours — 01009780008
 
 CLOSED — do NOT offer for bookings:
 - O Mall, New Alamein — CLOSED
 - Walk of Cairo, Sheikh Zayed — CLOSED
-- Nile Ritz Hotel, Downtown — CLOSED
-- Cairo Festival City Mall (5th Settlement) — TEMPORARILY CLOSED FOR RENOVATION
+- Nile Ritz Hotel, Downtown — CLOSED`}
 
-If client asks about a closed branch, apologise and redirect to City Stars or Sofitel.
+If client asks about a closed branch, apologise and redirect to an OPEN branch above.
+New Cairo / 5th Settlement clients → recommend the Cairo Festival City Mall branch if it is open (nearest to them).
 If client is outside Cairo, apologise warmly — currently Cairo only.
 
 ## Booking
@@ -145,7 +151,7 @@ You already know the client name and phone from the intake form. Just confirm: s
 ## Booking tool — CRITICAL INSTRUCTIONS
 When the client has confirmed ALL of the following, call the book_appointment tool immediately:
 1. Their preferred service (e.g. "tape-in hair extensions", "microblading", "Russian hair extensions")
-2. Their preferred branch — City Stars Mall or Sofitel Hotel ONLY (never a closed branch)
+2. Their preferred branch — City Stars Mall, Cairo Festival City Mall, or Sofitel Hotel ONLY (never a closed branch)
 3. A date and time — can be approximate ("Saturday morning", "next Tuesday at 3") or "TBD" if they cannot decide yet
 
 Call the tool ONCE with all confirmed details. Do NOT wait to call it — call it as soon as you have points 1, 2, and 3 confirmed.
@@ -157,11 +163,20 @@ After the tool returns success, confirm aloud:
 
 If the tool returns an error, apologise warmly and offer to connect them on WhatsApp instead: wa.me/201009780008
 
-NEVER book: O Mall, Sheikh Zayed, Nile Ritz, or Cairo Festival City — they are closed.
+NEVER book: O Mall, Sheikh Zayed, or Nile Ritz — they are closed.
 
 If asked about something you do not know, offer to connect them on WhatsApp: wa.me/201009780008
 
 End every call warmly — e.g. (Warmly) "Looking forward to seeing you at TransforM, {{client_name}}!"
+
+## SPOKEN OUTPUT RULES — CRITICAL FOR CLEAN VOICE
+This is a VOICE call. Everything you say is read aloud by a text-to-speech engine,
+so the text must be clean and speakable:
+- NEVER use markdown, asterisks, bullet points, hashes, emojis, or symbols. Plain spoken words only.
+- Keep each sentence in ONE language. Do NOT mix Arabic and English words inside the same sentence — it makes the voice glitch. If you must switch language, finish the sentence first, then start a new one in the other language.
+- Say prices and numbers as natural spoken words (e.g. "eleven thousand pounds", not "11,000 EGP"). In Arabic say "حداشر ألف جنيه".
+- No URLs or links read aloud — if you need to share one, say "هبعتهولك على الواتساب" / "I'll send it to you on WhatsApp".
+- Short, natural sentences. Pause naturally. Never read out formatting or labels.
 
 ## Pronunciation guide
 Speak all Egyptian Arabic words with correct Egyptian dialect pronunciation.
@@ -437,6 +452,17 @@ router.post("/yara-call/book", async (req: Request, res: Response) => {
       ? `on ${appt.scheduledAt instanceof Date ? appt.scheduledAt.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" }) : String(appt.scheduledAt)}`
       : "— our team will call to confirm the time";
 
+    // Mirror into the shared Google Calendar (no-op unless configured).
+    void createBookingEvent({
+      clientName: name,
+      clientPhone: normPhone,
+      service,
+      branch,
+      scheduledAt: appt.scheduledAt instanceof Date ? appt.scheduledAt : null,
+      hasSpecificTime,
+      notes,
+    }).catch(() => {});
+
     return res.json({
       success: true,
       appointment_id: appt.id,
@@ -476,6 +502,19 @@ export const YARA_TURN_CONFIG = {
   turn_eagerness: "patient",
   speculative_turn: false,
   silence_end_of_speech_delay_milliseconds: 1500,
+} as const;
+
+// ── YARA_TTS_CONFIG ─────────────────────────────────────────────────────────
+// Higher stability + similarity makes the Arabic voice far more consistent and
+// avoids the "Arabic greeting then gibberish" artefact that low stability +
+// mixed-script text produces. Applied on every sync via buildAgentPatchPayload.
+//   stability 0.85       — steadier prosody (less random drift on Arabic phonemes)
+//   similarity_boost 0.95 — stays close to the reference voice
+//   speed 1.0            — natural pace
+export const YARA_TTS_CONFIG = {
+  stability: 0.85,
+  similarity_boost: 0.95,
+  speed: 1.0,
 } as const;
 
 // ── buildBookToolConfig ───────────────────────────────────────────────────────
@@ -518,7 +557,7 @@ function buildBookToolConfig(adminToken: string) {
           branch: {
             type: "string" as const,
             description:
-              "Branch name: 'City Stars Mall' or 'Sofitel Hotel'. Never a closed branch. If the client truly cannot decide, pass 'TBD'.",
+              "Branch name: 'City Stars Mall', 'Cairo Festival City Mall', or 'Sofitel Hotel'. Never a closed branch. If the client truly cannot decide, pass 'TBD'.",
           },
           scheduled_at: {
             type: "string" as const,
@@ -605,16 +644,17 @@ async function ensureBookingTool(apiKey: string, adminToken: string): Promise<st
 // Shared helper — returns the single PATCH body used by both the admin route
 // and the startup syncYaraPrompt call. Keeps both paths identical.
 
-function buildAgentPatchPayload(bookingToolId: string | null) {
+async function buildAgentPatchPayload(bookingToolId: string | null) {
   return {
     conversation_config: {
       agent: {
         prompt: {
-          prompt: buildYaraSystemPrompt(),
+          prompt: await buildYaraSystemPrompt(),
           ...(bookingToolId ? { tool_ids: [bookingToolId] } : {}),
         },
       },
       turn: YARA_TURN_CONFIG,
+      tts: YARA_TTS_CONFIG,
     },
   };
 }
@@ -757,7 +797,7 @@ router.post("/yara-call/sync-prompt", async (req: Request, res: Response) => {
           "xi-api-key": ELEVENLABS_API_KEY,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(buildAgentPatchPayload(bookingToolId)),
+        body: JSON.stringify(await buildAgentPatchPayload(bookingToolId)),
       },
     );
 
@@ -815,7 +855,7 @@ export async function syncYaraPrompt(): Promise<boolean> {
           "xi-api-key": ELEVENLABS_API_KEY,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(buildAgentPatchPayload(bookingToolId)),
+        body: JSON.stringify(await buildAgentPatchPayload(bookingToolId)),
       },
     );
     if (!patchRes.ok) {

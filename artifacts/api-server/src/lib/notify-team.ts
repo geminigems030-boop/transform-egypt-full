@@ -21,7 +21,8 @@ export type NotifyEvent =
   | { type: "new_booking"; name?: string; phone?: string; email?: string; service?: string; branch?: string }
   | { type: "new_lead"; name?: string; phone?: string; email?: string; service?: string; source: string }
   | { type: "call_summary"; callSid: string; direction: "inbound" | "outbound"; callerNumber: string; outcome: string; durationSeconds?: number; summary?: string }
-  | { type: "appointment_action"; action: "confirmed" | "completed" | "cancelled" | "rescheduled"; appointmentId: number; clientName?: string; clientPhone: string; service: string; branch?: string; scheduledAt: string };
+  | { type: "appointment_action"; action: "confirmed" | "completed" | "cancelled" | "rescheduled"; appointmentId: number; clientName?: string; clientPhone: string; service: string; branch?: string; scheduledAt: string }
+  | { type: "daily_briefing"; text: string };
 
 type EventType = NotifyEvent["type"];
 
@@ -49,6 +50,7 @@ async function getActiveMembersForEvent(eventType: EventType): Promise<string[]>
       if (eventType === "new_lead") return r.notifyOnLead;
       if (eventType === "call_summary") return r.notifyOnCall;
       if (eventType === "appointment_action") return r.notifyOnBooking;
+      if (eventType === "daily_briefing") return r.notifyOnBooking;
       return false;
     })
     .map((r) => r.whatsappPhone || r.phone)
@@ -156,6 +158,19 @@ function buildMessage(event: NotifyEvent): string {
         SIGNATURE,
       ].filter((line) => line !== "").join("\n");
     }
+
+    case "daily_briefing":
+      // The full briefing body is composed by the scheduler (it has the DB
+      // queries); we just wrap it with the brand header + footer here.
+      return [
+        `*TransforM Egypt — Good morning ☀️*`,
+        ``,
+        event.text,
+        ``,
+        `https://transform-egypt.com/admin`,
+        ``,
+        SIGNATURE,
+      ].join("\n");
   }
 }
 

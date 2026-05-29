@@ -4,6 +4,9 @@ import { ensureWebhookSubscriptions } from "./lib/meta-graph";
 import { seedProductsIfEmpty } from "./lib/seed-products";
 import { startIgPoller } from "./lib/ig-poller";
 import { startAutomationScheduler } from "./lib/automation-scheduler";
+import { refreshModesFromDb } from "./lib/social-settings";
+import { ensureOffersTable } from "./lib/offers";
+import { seedBranchesIfEmpty } from "./lib/branches";
 import { syncYaraPrompt } from "./routes/yara-call";
 
 const rawPort = process.env["PORT"];
@@ -40,6 +43,16 @@ app.listen(port, (err) => {
   startIgPoller();
   // WhatsApp automation scheduler — reminders, follow-ups, re-engagement.
   startAutomationScheduler();
+  // Ensure the social_settings table exists and load the persisted IG/FB/TikTok
+  // auto-reply modes into the in-memory cache. Non-fatal — falls back to the
+  // AI_REPLY_MODE_* env defaults if the DB is unreachable.
+  void refreshModesFromDb();
+  // Ensure the offers table exists so the dynamic promotions engine works
+  // (public /api/offers + Yara injection). Idempotent, non-fatal.
+  void ensureOffersTable().catch(() => undefined);
+  // Ensure + seed the branches table (CFCM open, etc.) so the website + Yara
+  // read live branch status and the content webhook can flip branches.
+  void seedBranchesIfEmpty();
   // Sync Yara's ElevenLabs system prompt with YARA_SYSTEM_PROMPT on every start.
   // Non-fatal — server continues even if ElevenLabs is unreachable.
   void syncYaraPrompt();

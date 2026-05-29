@@ -65,6 +65,19 @@ function fmtSpend(p: string) {
   return isNaN(n) ? '—' : `EGP ${n.toLocaleString()}`;
 }
 
+// Loyalty tier derived live from visits/spend — mirrors getLoyaltyTier() in the
+// api-server's yara-chat.ts so the admin tag matches what Yara sees.
+function LoyaltyBadge({ visitCount, totalSpend }: { visitCount: number; totalSpend: string }) {
+  const spend = parseFloat(totalSpend ?? '0') || 0;
+  if (visitCount >= 5 || spend >= 20000) {
+    return <span className="text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-gold/20 text-gold border border-gold/40">VIP</span>;
+  }
+  if (visitCount >= 2) {
+    return <span className="text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-white/10 text-white/60 border border-white/15">Regular</span>;
+  }
+  return null;
+}
+
 export default function ClientsPanel({ token }: { token: string }) {
   const headers = { 'X-Admin-Token': token };
 
@@ -186,7 +199,10 @@ export default function ClientsPanel({ token }: { token: string }) {
                   onClick={() => openProfile(c.id)}
                 >
                   <td className="px-4 py-3">
-                    <div className="font-medium text-white">{c.name ?? '—'}</div>
+                    <div className="font-medium text-white flex items-center gap-2">
+                      {c.name ?? '—'}
+                      <LoyaltyBadge visitCount={c.visitCount} totalSpend={c.totalSpend} />
+                    </div>
                     <div className="text-xs text-white/40 md:hidden">{c.phone}</div>
                   </td>
                   <td className="px-4 py-3 text-white/60 hidden md:table-cell">{c.phone}</td>
