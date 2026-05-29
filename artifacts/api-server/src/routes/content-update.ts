@@ -10,26 +10,26 @@
 // Auth: shared secret in the `x-content-secret` header (env CONTENT_WEBHOOK_SECRET).
 //
 // Body — a single change or a batch:
-//   { "type": "offer",   "action": "upsert"|"delete", "data": {...} }
-//   { "type": "product", "action": "update",          "data": {...} }
+//   { "type": "offer"|"product"|"branch"|"service", "action": ..., "data": {...} }
 //   { "rows": [ { type, action, data }, ... ] }
 //
 // offer.data:   { id?, title, titleAr?, description?, descriptionAr?, active? }
-//   - upsert matches by id, else by exact title (case-insensitive); inserts if new.
 // product.data: { name (or id), price?, originalPrice?, inStock?, badge? }
-//   - matches productsTable by id or exact name (case-insensitive).
+// branch.data:  { name (or id), status:"open"|"closed", hours?, address?, phone?, closureReason?, isPremium? }
+//   - reopening/closing a branch here (e.g. CFCM) instantly updates the website + Yara.
+// service.data: { name (or id), startingPrice (or price)?, badge? }
 //
-// Branch open/closed status is currently defined in code + the AI prompts (not
-// the DB), so "branch" rows are acknowledged but not applied — see the note in
-// the response. Moving branches into the DB is a separate follow-up.
+// All matches are by id or exact name (case-insensitive). Caches are invalidated
+// on write so the site + Yara reflect changes within seconds.
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { Router, type IRouter, type Request, type Response } from "express";
 import { eq, ilike } from "drizzle-orm";
 import { db } from "@workspace/db";
-import { offersTable, productsTable } from "@workspace/db/schema";
+import { offersTable, productsTable, branchesTable, servicesTable } from "@workspace/db/schema";
 import { logger } from "../lib/logger";
 import { ensureOffersTable, invalidateOffersCache } from "../lib/offers";
+import { ensureBranchesTable, invalidateBranchesCache } from "../lib/branches";
 import { invalidateCatalogCache } from "../lib/ai-reply";
 
 const router: IRouter = Router();
@@ -127,6 +127,68 @@ async function applyProduct(data: Record<string, unknown>): Promise<string> {
   return res.length > 0 ? `product updated (${res.length})` : "product: no match found";
 }
 
+async function applyBranch(action: string, data: Record<string, unknown>): Promise<string> {
+  await ensureBranchesTable();
+  const id = typeof data.id === "number" ? data.id : Number(data.id) || null;
+  const name = s(data.name, 200);
+
+  if (action === "delete") {
+    if (id) await db.delete(branchesTable).where(eq(branchesTable.id, id));
+    else if (name) await db.delete(branchesTable).where(ilike(branchesTable.name, name));
+    invalidateBranchesCache();
+    return "branch deleted";
+  }
+
+  // Map sheet fields → columns. `status` accepts open/closed/true/false.
+  const updates: Record<string, unknown> = {};
+  const statusBool = bool(data.status ?? data.open ?? data.active);
+  if (statusBool !== undefined) updates.status = statusBool ? "open" : "closed";
+  if (data.hours !== undefined) updates.hours = s(data.hours);
+  if (data.address !== undefined) updates.address = s(data.address);
+  if (data.addressAr !== undefined) updates.addressAr = s(data.addressAr);
+  if (data.phone !== undefined) updates.phone = s(data.phone);
+  if (data.closureReason !== undefined) updates.closureReason = s(data.closureReason);
+  if (data.isPremium !== undefined && bool(data.isPremium) !== undefined) updates.isPremium = bool(data.isPremium);
+  if (Object.keys(updates).length === 0 && action !== "upsert") return "branch: nothing to update";
+  updates.updatedAt = new Date();
+
+  // Find existing by id or name.
+  let existingId = id;
+  if (!existingId && name) {
+    const [row] = await db.select({ id: branchesTable.id }).from(branchesTable).where(ilike(branchesTable.name, name)).limit(1);
+    existingId = row?.id ?? null;
+  }
+  if (existingId) {
+    await db.update(branchesTable).set(updates).where(eq(branchesTable.id, existingId));
+    invalidateBranchesCache();
+    return "branch updated";
+  }
+  if (name) {
+    await db.insert(branchesTable).values({ name, status: statusBool === false ? "closed" : "open", ...updates } as typeof branchesTable.$inferInsert);
+    invalidateBranchesCache();
+    return "branch created";
+  }
+  return "branch: no id or name provided";
+}
+
+async function applyService(data: Record<string, unknown>): Promise<string> {
+  const id = typeof data.id === "number" ? data.id : Number(data.id) || null;
+  const name = s(data.name, 200);
+  const updates: Record<string, unknown> = {};
+  if (data.startingPrice !== undefined || data.price !== undefined) {
+    const p = s(data.startingPrice ?? data.price);
+    if (p !== null) updates.startingPrice = p;
+  }
+  if (data.badge !== undefined) updates.badge = s(data.badge, 60);
+  if (Object.keys(updates).length === 0) return "service: nothing to update";
+
+  let res;
+  if (id) res = await db.update(servicesTable).set(updates).where(eq(servicesTable.id, id)).returning({ id: servicesTable.id });
+  else if (name) res = await db.update(servicesTable).set(updates).where(ilike(servicesTable.name, name)).returning({ id: servicesTable.id });
+  else return "service: no id or name provided";
+  return res.length > 0 ? `service updated (${res.length})` : "service: no match found";
+}
+
 async function applyChange(row: ChangeRow): Promise<string> {
   const type = (row.type ?? "").toLowerCase();
   const action = (row.action ?? "upsert").toLowerCase();
@@ -143,8 +205,9 @@ async function applyChange(row: ChangeRow): Promise<string> {
       return applyProduct(data);
     case "branch":
     case "location":
-      // Branch status lives in code + AI prompts, not the DB (yet).
-      return "branch: acknowledged but not applied (branch status is code-managed)";
+      return applyBranch(action, data);
+    case "service":
+      return applyService(data);
     default:
       return `unknown type "${type}" — ignored`;
   }

@@ -28,6 +28,7 @@ import {
   type ChatMessage,
 } from "../lib/yara-chat";
 import { getActiveOffers, formatOffersForChat } from "../lib/offers";
+import { buildBranchesPromptSection } from "../lib/branches";
 import { createBookingEvent } from "../lib/google-calendar";
 
 const router: IRouter = Router();
@@ -127,12 +128,17 @@ router.post("/chat", async (req: Request, res: Response) => {
   const isGreetingTrigger = trigger === "phone_greeting";
   // Live offers so the website Yara recommends current promos (graceful if none/err).
   let offersSection = "";
+  let branchesSection = "";
   try {
-    offersSection = formatOffersForChat(await getActiveOffers());
+    [offersSection, branchesSection] = await Promise.all([
+      getActiveOffers().then(formatOffersForChat),
+      buildBranchesPromptSection(),
+    ]);
   } catch {
     offersSection = "";
+    branchesSection = "";
   }
-  const systemPrompt = buildSystemPrompt({ clientHistory, currentDate, isGreetingTrigger, offersSection });
+  const systemPrompt = buildSystemPrompt({ clientHistory, currentDate, isGreetingTrigger, offersSection, branchesSection });
 
   // Get existing session history
   const history = getSession(sessionId);

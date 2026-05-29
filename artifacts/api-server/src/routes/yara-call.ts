@@ -25,6 +25,7 @@ import { appointmentsTable } from "@workspace/db/schema";
 import { logger } from "../lib/logger";
 import { notifyTeam } from "../lib/notify-team";
 import { createBookingEvent } from "../lib/google-calendar";
+import { buildBranchesPromptSection } from "../lib/branches";
 import { normalizePhone, findOrCreateClient } from "../lib/crm";
 
 const router: IRouter = Router();
@@ -39,10 +40,13 @@ const ADMIN_TOKEN = process.env.ADMIN_TOKEN;
 // Dynamic variables ({{...}}) are filled per-session from the pre-call intake
 // form and injected via Conversation.startSession({ dynamicVariables: {...} }).
 // Called at sync time so the embedded date is always current.
-export function buildYaraSystemPrompt(): string {
+export async function buildYaraSystemPrompt(): Promise<string> {
   const today = new Date().toLocaleDateString("en-GB", {
     weekday: "long", day: "numeric", month: "long", year: "numeric",
   }); // e.g. "Sunday, 18 May 2025"
+  // Live branches from the DB so reopening CFCM (etc.) is reflected on the next
+  // agent sync. Falls back to the static block below if the DB is unreachable.
+  const branchesSection = await buildBranchesPromptSection();
   return `You are Yara, the beauty consultant for TransforM Egypt — the #1 luxury hair extensions and beauty salon in Egypt and the Middle East, trusted by celebrities and top clients.
 
 ## Client context (provided before each call)
@@ -127,7 +131,7 @@ NAILS:
 PAYMENT: Cash ✓ | Cards (credit & debit) ✓ | Installments ✓ (all services)
 
 ## Branches
-OPEN — currently accepting bookings:
+${branchesSection || `OPEN — currently accepting bookings:
 - City Stars Mall, Nasr City — Ground floor, Gate 7, next to Cafe Supreme — 01009780008
 - Sofitel Hotel, Downtown Cairo — Lower level, next to Banque Misr — 01009780008
 - Cairo Festival City Mall (CFCM), New Cairo — 3rd Floor, next to Casper. PREMIUM branch, open daily during mall hours — 01009780008
@@ -135,10 +139,10 @@ OPEN — currently accepting bookings:
 CLOSED — do NOT offer for bookings:
 - O Mall, New Alamein — CLOSED
 - Walk of Cairo, Sheikh Zayed — CLOSED
-- Nile Ritz Hotel, Downtown — CLOSED
+- Nile Ritz Hotel, Downtown — CLOSED`}
 
-If client asks about a closed branch, apologise and redirect to City Stars, Cairo Festival City, or Sofitel.
-New Cairo / 5th Settlement clients → recommend the Cairo Festival City Mall branch (it is open and nearest).
+If client asks about a closed branch, apologise and redirect to an OPEN branch above.
+New Cairo / 5th Settlement clients → recommend the Cairo Festival City Mall branch if it is open (nearest to them).
 If client is outside Cairo, apologise warmly — currently Cairo only.
 
 ## Booking
@@ -640,12 +644,12 @@ async function ensureBookingTool(apiKey: string, adminToken: string): Promise<st
 // Shared helper — returns the single PATCH body used by both the admin route
 // and the startup syncYaraPrompt call. Keeps both paths identical.
 
-function buildAgentPatchPayload(bookingToolId: string | null) {
+async function buildAgentPatchPayload(bookingToolId: string | null) {
   return {
     conversation_config: {
       agent: {
         prompt: {
-          prompt: buildYaraSystemPrompt(),
+          prompt: await buildYaraSystemPrompt(),
           ...(bookingToolId ? { tool_ids: [bookingToolId] } : {}),
         },
       },
@@ -793,7 +797,7 @@ router.post("/yara-call/sync-prompt", async (req: Request, res: Response) => {
           "xi-api-key": ELEVENLABS_API_KEY,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(buildAgentPatchPayload(bookingToolId)),
+        body: JSON.stringify(await buildAgentPatchPayload(bookingToolId)),
       },
     );
 
@@ -851,7 +855,7 @@ export async function syncYaraPrompt(): Promise<boolean> {
           "xi-api-key": ELEVENLABS_API_KEY,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(buildAgentPatchPayload(bookingToolId)),
+        body: JSON.stringify(await buildAgentPatchPayload(bookingToolId)),
       },
     );
     if (!patchRes.ok) {

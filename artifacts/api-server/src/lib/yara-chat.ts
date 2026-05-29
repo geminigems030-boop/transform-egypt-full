@@ -230,8 +230,9 @@ export function buildSystemPrompt(params: {
   currentDate: string;
   isGreetingTrigger?: boolean;
   offersSection?: string;
+  branchesSection?: string;
 }): string {
-  const { clientHistory, currentDate, isGreetingTrigger, offersSection } = params;
+  const { clientHistory, currentDate, isGreetingTrigger, offersSection, branchesSection } = params;
 
   let clientContext = "";
   if (clientHistory?.name) {
@@ -284,7 +285,7 @@ ${clientContext ? clientContext + "\n\n" : ""}SERVICES & PRICING:
 ${SERVICES_EN}
 
 BRANCHES & HOURS:
-${BRANCHES_EN}
+${branchesSection || BRANCHES_EN}
 
 ${offersSection ? offersSection + "\n\n" : "OFFERS: There are no active offers right now. Never invent or imply any discount or deal — if asked, say prices are fixed and offer to help pick the best option.\n\n"}BOOKING PROCESS:
 To create a booking request, collect ALL of these from the customer:

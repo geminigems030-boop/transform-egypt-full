@@ -77,7 +77,7 @@ async function seed() {
       inStock: true,
       rating: "4.9",
       reviewCount: 128,
-      features: JSON.stringify(["100% Human Hair", "Ethically Sourced", "6-12 Month Lifespan", "Heat Stylable", "Color Treated"]),
+      features: ["100% Human Hair", "Ethically Sourced", "6-12 Month Lifespan", "Heat Stylable", "Color Treated"],
     },
     {
       name: "Keratin Bond Extensions - Dark Brown",
@@ -92,7 +92,7 @@ async function seed() {
       inStock: true,
       rating: "4.8",
       reviewCount: 89,
-      features: JSON.stringify(["100% Human Hair", "50 Strands", "Heat Stylable", "8-12 Month Lifespan"]),
+      features: ["100% Human Hair", "50 Strands", "Heat Stylable", "8-12 Month Lifespan"],
     },
     {
       name: "Clip-In Extensions Set - Ombre",
@@ -107,7 +107,7 @@ async function seed() {
       inStock: true,
       rating: "4.7",
       reviewCount: 203,
-      features: JSON.stringify(["8-Piece Set", "Reusable", "No Damage", "Instant Application"]),
+      features: ["8-Piece Set", "Reusable", "No Damage", "Instant Application"],
     },
     {
       name: "Full Lace Wig - Natural Wave",
@@ -122,7 +122,7 @@ async function seed() {
       inStock: true,
       rating: "5.0",
       reviewCount: 34,
-      features: JSON.stringify(["Full Lace", "Pre-plucked", "Baby Hair", "Swiss Lace", "Customizable"]),
+      features: ["Full Lace", "Pre-plucked", "Baby Hair", "Swiss Lace", "Customizable"],
     },
     {
       name: "TransforM Hair Care Kit",
@@ -137,7 +137,7 @@ async function seed() {
       inStock: true,
       rating: "4.9",
       reviewCount: 567,
-      features: JSON.stringify(["Sulfate-Free", "Paraben-Free", "Extension Safe", "3-Piece Kit"]),
+      features: ["Sulfate-Free", "Paraben-Free", "Extension Safe", "3-Piece Kit"],
     },
     {
       name: "Micro-Ring Extensions - Black",
@@ -152,7 +152,7 @@ async function seed() {
       inStock: true,
       rating: "4.8",
       reviewCount: 72,
-      features: JSON.stringify(["No Heat Required", "No Glue", "100 Strands", "Reusable Rings"]),
+      features: ["No Heat Required", "No Glue", "100 Strands", "Reusable Rings"],
     },
   ]);
 

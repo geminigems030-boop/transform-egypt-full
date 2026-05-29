@@ -17,6 +17,7 @@ import { productsTable } from "@workspace/db/schema";
 import { eq } from "drizzle-orm";
 import { logger } from "./logger";
 import { buildOffersPromptSection } from "./offers";
+import { buildBranchesPromptSection } from "./branches";
 
 const client = new Anthropic({
   baseURL: process.env["AI_INTEGRATIONS_ANTHROPIC_BASE_URL"],
@@ -221,24 +222,12 @@ const BRAND_SYSTEM_PROMPT = [
   "",
   "{{BOUTIQUE_CATALOG}}",
   "",
-  "BRANCHES — CURRENTLY OPEN",
-  "These three branches are currently accepting bookings:",
-  "- City Stars Mall, Nasr City — Ground floor, Gate 7, next to Cafe Supreme. Open daily from 12:00 noon.",
-  "  Google Maps: https://www.google.com/maps/search/City+Stars+Mall+Cairo",
-  "- Sofitel Hotel, Downtown Cairo — Downstairs, facing Mashy Masr (ممشى مصر), next to Banque Misr. Open daily from 12:00 noon.",
-  "  Google Maps: https://www.google.com/maps/search/Sofitel+Cairo+Nile+El+Gezirah",
-  "- Cairo Festival City Mall (CFCM), New Cairo (التجمع / 5th Settlement) — 3rd Floor, next to Casper. PREMIUM branch, open daily during mall hours.",
-  "  Google Maps: https://www.google.com/maps/search/Cairo+Festival+City+Mall",
+  "{{BRANCHES}}",
   "",
   "LOCATION RULE: When a customer asks 'فين الفرع؟' / 'عنوان إيه؟' / 'كيف أوصل؟' / 'where are you?' → include the relevant branch Google Maps link naturally.",
   "Also share WhatsApp for help: https://wa.me/201009780008",
   "",
-  "BRANCHES OUT OF SERVICE — do NOT offer for bookings:",
-  "- Walk of Cairo, Sheikh Zayed — CLOSED. Do NOT give directions here.",
-  "- Nile Ritz Hotel, Downtown — CLOSED.",
-  "- O Mall, New Alamein — CLOSED.",
-  "",
-  "CLOSED BRANCH RULE: If customer asks about Sheikh Zayed / Zayed / Walk of Cairo / Alamein / Nile Ritz:",
+  "CLOSED BRANCH RULE: If customer asks about a branch listed as TEMPORARILY CLOSED above (e.g. Sheikh Zayed / Walk of Cairo / Nile Ritz / O Mall Alamein):",
   "Apologise and redirect to open branches.",
   "NOTE: New Cairo / 5th Settlement / التجمع / Rehab / Madinaty customers → recommend the Cairo Festival City Mall (CFCM) branch — it is OPEN and nearest to them.",
   "Example: أسفة يا فندم الفرع ده مش شغال حالياً — بس عندنا سيتي ستارز مدينة نصر، سوفتيل وسط البلد، وكايرو فستيفال سيتي مول في التجمع. أقرب ليكِ أنهي؟",
@@ -456,13 +445,15 @@ function getCairoTime(): string {
 
 /** Assembles the full system prompt with a live boutique product catalog and current Cairo time. */
 async function buildSystemPrompt(): Promise<string> {
-  const [catalog, offers] = await Promise.all([
+  const [catalog, offers, branches] = await Promise.all([
     getProductsCatalogSection(),
     buildOffersPromptSection(),
+    buildBranchesPromptSection(),
   ]);
   return BRAND_SYSTEM_PROMPT
     .replace("{{BOUTIQUE_CATALOG}}", catalog)
     .replace("{{ACTIVE_OFFERS}}", offers)
+    .replace("{{BRANCHES}}", branches || "BRANCHES: please ask the customer to check transform-egypt.com/locations.")
     .replace("{{CAIRO_TIME}}", getCairoTime());
 }
 

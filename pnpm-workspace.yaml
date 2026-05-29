@@ -43,6 +43,14 @@ onlyBuiltDependencies:
   - unrs-resolver
 
 overrides:
+  # Pin a single zod version. drizzle-zod accepts zod ^3.25 || ^4, and a stray
+  # zod@4 was being hoisted alongside the catalog's zod@3.25.76, so the schema's
+  # `z` and drizzle-zod's createInsertSchema referenced different ZodType copies
+  # — breaking `tsc --build` on lib/db. Forcing one copy fixes the type clash.
+  zod: 3.25.76
+  # @anthropic-ai/sdk lists zod as a peer with range ^3.25 || ^4, which pnpm was
+  # satisfying with a separate zod@4 copy. Scope-pin it so only zod@3.25.76 exists.
+  '@anthropic-ai/sdk>zod': 3.25.76
   '@esbuild-kit/esm-loader': npm:tsx@^4.21.0
   '@expo/ngrok-bin>@expo/ngrok-bin-darwin-arm64': '-'
   '@expo/ngrok-bin>@expo/ngrok-bin-darwin-x64': '-'
