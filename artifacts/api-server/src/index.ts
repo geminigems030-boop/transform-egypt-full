@@ -5,6 +5,7 @@ import { seedProductsIfEmpty } from "./lib/seed-products";
 import { startIgPoller } from "./lib/ig-poller";
 import { startAutomationScheduler } from "./lib/automation-scheduler";
 import { refreshModesFromDb } from "./lib/social-settings";
+import { ensureOffersTable } from "./lib/offers";
 import { syncYaraPrompt } from "./routes/yara-call";
 
 const rawPort = process.env["PORT"];
@@ -45,6 +46,9 @@ app.listen(port, (err) => {
   // auto-reply modes into the in-memory cache. Non-fatal — falls back to the
   // AI_REPLY_MODE_* env defaults if the DB is unreachable.
   void refreshModesFromDb();
+  // Ensure the offers table exists so the dynamic promotions engine works
+  // (public /api/offers + Yara injection). Idempotent, non-fatal.
+  void ensureOffersTable().catch(() => undefined);
   // Sync Yara's ElevenLabs system prompt with YARA_SYSTEM_PROMPT on every start.
   // Non-fatal — server continues even if ElevenLabs is unreachable.
   void syncYaraPrompt();

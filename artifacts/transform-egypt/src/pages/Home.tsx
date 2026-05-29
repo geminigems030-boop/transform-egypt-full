@@ -13,6 +13,7 @@ import LazyImage from '@/components/LazyImage';
 import Faq from '@/components/sections/Faq';
 import Press from '@/components/sections/Press';
 import { InstagramFeed } from '@/components/InstagramFeed';
+import OffersBanner from '@/components/OffersBanner';
 import { useListServices, useListReviews } from '@workspace/api-client-react';
 import { trackContact } from '@/lib/analytics';
 
@@ -519,6 +520,9 @@ export default function Home() {
           <ChevronDown className="w-8 h-8 opacity-70" />
         </motion.div>
       </section>
+
+      {/* DYNAMIC OFFERS — renders only when offers are live (managed in /admin → Offers) */}
+      <OffersBanner lang={lang} />
 
       {/* SECTION 2: SOCIAL PROOF */}
       <section className="bg-ivory py-16 md:py-24 border-b border-taupe">

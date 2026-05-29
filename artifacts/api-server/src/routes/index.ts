@@ -24,6 +24,8 @@ import chatRouter from "./chat";
 import chatActivityRouter from "./chat-activity";
 import automationRouter from "./automation";
 import socialRouter from "./social";
+import offersRouter from "./offers";
+import contentUpdateRouter from "./content-update";
 
 const router: IRouter = Router();
 
@@ -52,5 +54,7 @@ router.use(chatRouter);
 router.use(chatActivityRouter);
 router.use(automationRouter);
 router.use(socialRouter);
+router.use(offersRouter);
+router.use(contentUpdateRouter);
 
 export default router;

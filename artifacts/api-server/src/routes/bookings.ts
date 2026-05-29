@@ -4,6 +4,7 @@ import { bookingsTable, appointmentsTable } from "@workspace/db/schema";
 import { CreateBookingBody } from "@workspace/api-zod";
 import { normalizePhone, findOrCreateClient } from "../lib/crm";
 import { notifyTeam } from "../lib/notify-team";
+import { createBookingEvent } from "../lib/google-calendar";
 
 const router: IRouter = Router();
 
@@ -73,6 +74,20 @@ router.post("/bookings", async (req, res) => {
     }).catch((notifyErr) =>
       req.log.warn({ notifyErr }, "team notify failed for booking"),
     );
+
+    // 4. Mirror into the shared Google Calendar (no-op unless configured).
+    {
+      const parsed = new Date(body.date);
+      const hasSpecificTime = !isNaN(parsed.getTime());
+      void createBookingEvent({
+        clientName: body.name,
+        clientPhone: body.phone,
+        service: body.service,
+        scheduledAt: hasSpecificTime ? parsed : null,
+        hasSpecificTime,
+        notes: body.message ?? null,
+      }).catch((calErr) => req.log.warn({ calErr }, "calendar sync failed for booking"));
+    }
 
     res.status(201).json({
       id: booking.id,

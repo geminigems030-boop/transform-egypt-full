@@ -16,6 +16,7 @@ import { db } from "@workspace/db";
 import { productsTable } from "@workspace/db/schema";
 import { eq } from "drizzle-orm";
 import { logger } from "./logger";
+import { buildOffersPromptSection } from "./offers";
 
 const client = new Anthropic({
   baseURL: process.env["AI_INTEGRATIONS_ANTHROPIC_BASE_URL"],
@@ -216,11 +217,7 @@ const BRAND_SYSTEM_PROMPT = [
   "  Installments (تقسيط) ✓ — available on all services. Details confirmed at the branch.",
   "  All payment methods available across both branches.",
   "",
-  "OFFERS / PROMOTIONS — STRICT RULE:",
-  "NEVER mention, invent, imply, or hint at any offer, promotion, discount, deal, or special price that is not explicitly written in this knowledge base.",
-  "Do NOT say things like: 'عندنا عرض حالياً', 'فيه خصم', 'عندنا بروموشن', 'we have a special offer', 'limited time deal', or any similar phrase.",
-  "If a customer asks 'فيه عروض؟' / 'any offers?' / 'any discounts?': reply honestly — اسعارنا ثابتة يا فندم — بس ممكن تتصلي بالفرع تسأل لو فيه أي عروض متاحة حالياً.",
-  "Currently active offers: NONE listed. Do not invent any.",
+  "{{ACTIVE_OFFERS}}",
   "",
   "{{BOUTIQUE_CATALOG}}",
   "",
@@ -371,6 +368,11 @@ const BRAND_SYSTEM_PROMPT = [
 interface CatalogCache { text: string; expiresAt: number }
 let _catalogCache: CatalogCache | null = null;
 
+/** Drop the cached boutique catalog so the next reply reflects fresh DB prices. */
+export function invalidateCatalogCache(): void {
+  _catalogCache = null;
+}
+
 async function getProductsCatalogSection(): Promise<string> {
   if (_catalogCache && Date.now() < _catalogCache.expiresAt) {
     return _catalogCache.text;
@@ -454,9 +456,13 @@ function getCairoTime(): string {
 
 /** Assembles the full system prompt with a live boutique product catalog and current Cairo time. */
 async function buildSystemPrompt(): Promise<string> {
-  const catalog = await getProductsCatalogSection();
+  const [catalog, offers] = await Promise.all([
+    getProductsCatalogSection(),
+    buildOffersPromptSection(),
+  ]);
   return BRAND_SYSTEM_PROMPT
     .replace("{{BOUTIQUE_CATALOG}}", catalog)
+    .replace("{{ACTIVE_OFFERS}}", offers)
     .replace("{{CAIRO_TIME}}", getCairoTime());
 }
 

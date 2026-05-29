@@ -27,6 +27,8 @@ import {
   cleanResponseText,
   type ChatMessage,
 } from "../lib/yara-chat";
+import { getActiveOffers, formatOffersForChat } from "../lib/offers";
+import { createBookingEvent } from "../lib/google-calendar";
 
 const router: IRouter = Router();
 
@@ -123,7 +125,14 @@ router.post("/chat", async (req: Request, res: Response) => {
     day: "numeric",
   });
   const isGreetingTrigger = trigger === "phone_greeting";
-  const systemPrompt = buildSystemPrompt({ clientHistory, currentDate, isGreetingTrigger });
+  // Live offers so the website Yara recommends current promos (graceful if none/err).
+  let offersSection = "";
+  try {
+    offersSection = formatOffersForChat(await getActiveOffers());
+  } catch {
+    offersSection = "";
+  }
+  const systemPrompt = buildSystemPrompt({ clientHistory, currentDate, isGreetingTrigger, offersSection });
 
   // Get existing session history
   const history = getSession(sessionId);
@@ -243,6 +252,16 @@ router.post("/chat", async (req: Request, res: Response) => {
               phone: bookingData.phone,
               service: bookingData.service,
               branch: bookingData.branch,
+            }).catch(() => undefined);
+
+            // Mirror into the shared Google Calendar (no-op unless configured).
+            void createBookingEvent({
+              clientName: bookingData.name,
+              clientPhone: bookingData.phone,
+              service: bookingData.service,
+              branch: bookingData.branch,
+              scheduledAt,
+              hasSpecificTime: true,
             }).catch(() => undefined);
 
             logger.info(

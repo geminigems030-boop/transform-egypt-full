@@ -12,10 +12,11 @@ import AppointmentsPanel from '@/components/AppointmentsPanel';
 import ClientsPanel from '@/components/ClientsPanel';
 import AutomationPanel from '@/components/AutomationPanel';
 import SocialPanel from '@/components/SocialPanel';
+import OffersPanel from '@/components/OffersPanel';
 
 const TOKEN_STORAGE_KEY = 'tm_admin_token_v1';
 
-type TabKey = 'spins' | 'submissions' | 'inbox' | 'campaigns' | 'ads' | 'calls' | 'appointments' | 'clients' | 'automation' | 'social' | 'chat';
+type TabKey = 'spins' | 'submissions' | 'inbox' | 'campaigns' | 'ads' | 'calls' | 'appointments' | 'clients' | 'automation' | 'social' | 'offers' | 'chat';
 
 interface Lead {
   id: number;
@@ -495,6 +496,7 @@ export default function Admin() {
             <TabBtn active={tab === 'calls'} onClick={() => setTab('calls')} icon={<PhoneCall className="w-4 h-4" />} label="Calls" />
             <TabBtn active={tab === 'automation'} onClick={() => setTab('automation')} icon={<Bot className="w-4 h-4" />} label="Automation" />
             <TabBtn active={tab === 'social'} onClick={() => setTab('social')} icon={<Share2 className="w-4 h-4" />} label="Social AI" />
+            <TabBtn active={tab === 'offers'} onClick={() => setTab('offers')} icon={<Sparkles className="w-4 h-4" />} label="Offers" />
             <TabBtn active={tab === 'chat'} onClick={() => setTab('chat')} icon={<MessageSquare className="w-4 h-4" />} label="Chat Activity" />
           </div>
         </div>
@@ -555,6 +557,7 @@ export default function Admin() {
         {tab === 'calls' && <CallsPanel token={token} />}
         {tab === 'automation' && <AutomationPanel token={token ?? ''} />}
         {tab === 'social' && <SocialPanel token={token ?? ''} />}
+        {tab === 'offers' && <OffersPanel token={token ?? ''} />}
         {tab === 'chat' && <YaraChatPanel token={token ?? ''} />}
       </div>
 

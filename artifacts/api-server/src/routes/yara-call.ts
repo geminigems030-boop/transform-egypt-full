@@ -24,6 +24,7 @@ import { db } from "@workspace/db";
 import { appointmentsTable } from "@workspace/db/schema";
 import { logger } from "../lib/logger";
 import { notifyTeam } from "../lib/notify-team";
+import { createBookingEvent } from "../lib/google-calendar";
 import { normalizePhone, findOrCreateClient } from "../lib/crm";
 
 const router: IRouter = Router();
@@ -163,6 +164,15 @@ NEVER book: O Mall, Sheikh Zayed, or Nile Ritz — they are closed.
 If asked about something you do not know, offer to connect them on WhatsApp: wa.me/201009780008
 
 End every call warmly — e.g. (Warmly) "Looking forward to seeing you at TransforM, {{client_name}}!"
+
+## SPOKEN OUTPUT RULES — CRITICAL FOR CLEAN VOICE
+This is a VOICE call. Everything you say is read aloud by a text-to-speech engine,
+so the text must be clean and speakable:
+- NEVER use markdown, asterisks, bullet points, hashes, emojis, or symbols. Plain spoken words only.
+- Keep each sentence in ONE language. Do NOT mix Arabic and English words inside the same sentence — it makes the voice glitch. If you must switch language, finish the sentence first, then start a new one in the other language.
+- Say prices and numbers as natural spoken words (e.g. "eleven thousand pounds", not "11,000 EGP"). In Arabic say "حداشر ألف جنيه".
+- No URLs or links read aloud — if you need to share one, say "هبعتهولك على الواتساب" / "I'll send it to you on WhatsApp".
+- Short, natural sentences. Pause naturally. Never read out formatting or labels.
 
 ## Pronunciation guide
 Speak all Egyptian Arabic words with correct Egyptian dialect pronunciation.
@@ -438,6 +448,17 @@ router.post("/yara-call/book", async (req: Request, res: Response) => {
       ? `on ${appt.scheduledAt instanceof Date ? appt.scheduledAt.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" }) : String(appt.scheduledAt)}`
       : "— our team will call to confirm the time";
 
+    // Mirror into the shared Google Calendar (no-op unless configured).
+    void createBookingEvent({
+      clientName: name,
+      clientPhone: normPhone,
+      service,
+      branch,
+      scheduledAt: appt.scheduledAt instanceof Date ? appt.scheduledAt : null,
+      hasSpecificTime,
+      notes,
+    }).catch(() => {});
+
     return res.json({
       success: true,
       appointment_id: appt.id,
@@ -477,6 +498,19 @@ export const YARA_TURN_CONFIG = {
   turn_eagerness: "patient",
   speculative_turn: false,
   silence_end_of_speech_delay_milliseconds: 1500,
+} as const;
+
+// ── YARA_TTS_CONFIG ─────────────────────────────────────────────────────────
+// Higher stability + similarity makes the Arabic voice far more consistent and
+// avoids the "Arabic greeting then gibberish" artefact that low stability +
+// mixed-script text produces. Applied on every sync via buildAgentPatchPayload.
+//   stability 0.85       — steadier prosody (less random drift on Arabic phonemes)
+//   similarity_boost 0.95 — stays close to the reference voice
+//   speed 1.0            — natural pace
+export const YARA_TTS_CONFIG = {
+  stability: 0.85,
+  similarity_boost: 0.95,
+  speed: 1.0,
 } as const;
 
 // ── buildBookToolConfig ───────────────────────────────────────────────────────
@@ -616,6 +650,7 @@ function buildAgentPatchPayload(bookingToolId: string | null) {
         },
       },
       turn: YARA_TURN_CONFIG,
+      tts: YARA_TTS_CONFIG,
     },
   };
 }

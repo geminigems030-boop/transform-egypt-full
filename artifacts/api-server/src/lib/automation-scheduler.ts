@@ -14,9 +14,14 @@ import {
   clientsTable,
   automationLogTable,
   automationSettingsTable,
+  submissionsTable,
 } from "@workspace/db/schema";
 import { sendWhatsApp, isAnyWhatsAppConfigured } from "./whatsapp";
+import { notifyTeam } from "./notify-team";
 import { logger } from "./logger";
+
+// Branches currently accepting bookings — surfaced in the daily briefing.
+const OPEN_BRANCHES = ["City Stars Mall", "Cairo Festival City Mall", "Sofitel Downtown"];
 import {
   reminder24hMessage,
   reminder2hMessage,
@@ -473,6 +478,81 @@ export async function getAutomationPreview(): Promise<AutomationPreview> {
   };
 }
 
+// ── Daily Morning Briefing ──────────────────────────────────────────────────
+// A 9 AM Cairo WhatsApp to the owner/team: today's bookings (grouped by branch),
+// new leads captured yesterday→today, and which branches are open. Reuses the
+// team-notification plumbing (notifyOnBooking recipients).
+
+/** Returns the UTC [start,end] instants that bound the given Cairo calendar day. */
+function cairoDayBounds(offsetDays: number): { start: Date; end: Date } {
+  const now = new Date();
+  const target = new Date(now.getTime() + offsetDays * 24 * 60 * 60 * 1000);
+  const cairoDateStr = target.toLocaleDateString("sv", { timeZone: "Africa/Cairo" });
+  const utcMidnight = new Date(`${cairoDateStr}T00:00:00.000Z`);
+  const cairoTimeStr = utcMidnight.toLocaleTimeString("en-GB", {
+    timeZone: "Africa/Cairo",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+  });
+  const [h, m, s] = cairoTimeStr.split(":").map(Number);
+  const cairoOffsetMs = ((h ?? 0) * 3600 + (m ?? 0) * 60 + (s ?? 0)) * 1000;
+  const start = new Date(utcMidnight.getTime() - cairoOffsetMs);
+  const end = new Date(start.getTime() + 24 * 60 * 60 * 1000 - 1);
+  return { start, end };
+}
+
+export async function runDailyBriefing(): Promise<boolean> {
+  if (!isAnyWhatsAppConfigured()) return false;
+
+  const today = cairoDayBounds(0);
+  const yesterday = cairoDayBounds(-1);
+
+  // Today's appointments (anything not cancelled), with branch for grouping.
+  const todaysAppts = await db
+    .select({ branch: appointmentsTable.branch, status: appointmentsTable.status })
+    .from(appointmentsTable)
+    .where(
+      and(
+        gte(appointmentsTable.scheduledAt, today.start),
+        lte(appointmentsTable.scheduledAt, today.end),
+        sql`${appointmentsTable.status} <> 'cancelled'`,
+      ),
+    );
+
+  // New leads captured since the start of yesterday (covers overnight DMs).
+  const [{ count: newLeads }] = await db
+    .select({ count: sql<number>`cast(count(*) as int)` })
+    .from(submissionsTable)
+    .where(gte(submissionsTable.createdAt, yesterday.start));
+
+  // Group today's bookings by branch.
+  const byBranch = new Map<string, number>();
+  for (const a of todaysAppts) {
+    const key = a.branch?.trim() || "Unassigned";
+    byBranch.set(key, (byBranch.get(key) ?? 0) + 1);
+  }
+
+  const bookingLines =
+    todaysAppts.length === 0
+      ? ["• No bookings scheduled yet today."]
+      : [...byBranch.entries()].map(([branch, n]) => `• ${n} booking${n === 1 ? "" : "s"} at ${branch}`);
+
+  const text = [
+    `Today: ${todaysAppts.length} booking${todaysAppts.length === 1 ? "" : "s"}, ${newLeads ?? 0} new lead${(newLeads ?? 0) === 1 ? "" : "s"}.`,
+    ``,
+    `Bookings by branch:`,
+    ...bookingLines,
+    ``,
+    `Open branches today: ${OPEN_BRANCHES.join(" ✅, ")} ✅`,
+  ].join("\n");
+
+  await notifyTeam({ type: "daily_briefing", text });
+  logger.info({ bookings: todaysAppts.length, newLeads }, "automation: daily briefing sent");
+  return true;
+}
+
 // ── Manual test send ──────────────────────────────────────────────────────────
 
 export async function sendTestMessage(phone: string, eventType: string): Promise<boolean> {
@@ -499,9 +579,9 @@ export function startAutomationScheduler(): void {
     }
   });
 
-  // Daily at 9:00am Cairo time (UTC+2, so 07:00 UTC)
+  // Daily at 9:00am Cairo time
   cron.schedule(
-    "0 7 * * *",
+    "0 9 * * *",
     async () => {
       try {
         const [followups, reengaged] = await Promise.all([runFollowups(), runReengagement()]);
@@ -509,9 +589,16 @@ export function startAutomationScheduler(): void {
       } catch (err) {
         logger.error({ err: (err as Error).message }, "automation: daily batch failed");
       }
+      // Morning briefing to the owner/team — separate try so a failure here
+      // never blocks the follow-up/re-engagement batch above.
+      try {
+        await runDailyBriefing();
+      } catch (err) {
+        logger.error({ err: (err as Error).message }, "automation: daily briefing failed");
+      }
     },
     { timezone: "Africa/Cairo" },
   );
 
-  logger.info("automation: scheduler started (reminders every 5m, daily batch at 09:00 Cairo)");
+  logger.info("automation: scheduler started (reminders every 5m, daily batch + briefing at 09:00 Cairo)");
 }

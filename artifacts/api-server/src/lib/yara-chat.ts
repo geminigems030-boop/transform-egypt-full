@@ -174,9 +174,21 @@ const BRANCHES_AR = `
 export interface ClientHistory {
   name: string | null;
   visitCount: number;
+  totalSpend: number;
   lastVisit: Date | null;
   lastService: string | null;
   preferredBranch: string | null;
+}
+
+// ── Loyalty tiers ─────────────────────────────────────────────────────────────
+// Derived live from visit count / spend — no stored column, so it's always
+// accurate and needs no migration. Used to give returning clients VIP treatment.
+export type LoyaltyTier = "new" | "regular" | "vip";
+
+export function getLoyaltyTier(visitCount: number, totalSpend: number): LoyaltyTier {
+  if (visitCount >= 5 || totalSpend >= 20000) return "vip";
+  if (visitCount >= 2) return "regular";
+  return "new";
 }
 
 export async function lookupClientHistory(rawPhone: string): Promise<ClientHistory | null> {
@@ -200,6 +212,7 @@ export async function lookupClientHistory(rawPhone: string): Promise<ClientHisto
     return {
       name: client.name,
       visitCount: client.visitCount,
+      totalSpend: Number(client.totalSpend ?? 0),
       lastVisit: client.lastVisit,
       lastService: lastAppt?.service ?? null,
       preferredBranch: client.preferredBranch,
@@ -216,8 +229,9 @@ export function buildSystemPrompt(params: {
   clientHistory?: ClientHistory | null;
   currentDate: string;
   isGreetingTrigger?: boolean;
+  offersSection?: string;
 }): string {
-  const { clientHistory, currentDate, isGreetingTrigger } = params;
+  const { clientHistory, currentDate, isGreetingTrigger, offersSection } = params;
 
   let clientContext = "";
   if (clientHistory?.name) {
@@ -227,15 +241,23 @@ export function buildSystemPrompt(params: {
     const greetingInstruction = isGreetingTrigger
       ? `The customer just shared their phone number. Greet them warmly by name RIGHT NOW — mention their last service and how long ago it was, then ask how you can help them today. Keep it to 2–3 sentences, warm and personal.`
       : `Greet this client warmly by name and mention their last service naturally in context.`;
+    const tier = getLoyaltyTier(clientHistory.visitCount, clientHistory.totalSpend);
+    const loyaltyInstruction =
+      tier === "vip"
+        ? `LOYALTY: This is a VIP client (5+ visits or high spend). Give them special VIP treatment — recognise their loyalty warmly, offer priority booking and a complimentary consultation, and make them feel valued. Do NOT invent monetary discounts or offers that aren't in the knowledge base.`
+        : tier === "regular"
+          ? `LOYALTY: This is a returning regular client. Acknowledge that it's lovely to see them again and treat them with extra warmth and familiarity.`
+          : "";
     clientContext = `
 RETURNING CLIENT PROFILE:
 - Name: ${clientHistory.name}
+- Loyalty tier: ${tier.toUpperCase()}
 - Visit count: ${clientHistory.visitCount}
 - Last visit: ${lastVisitStr ?? "unknown"}
 - Last service: ${clientHistory.lastService ?? "unknown"}
 - Preferred branch: ${clientHistory.preferredBranch ?? "unknown"}
 
-${greetingInstruction}
+${greetingInstruction}${loyaltyInstruction ? "\n" + loyaltyInstruction : ""}
 `.trim();
   } else if (isGreetingTrigger) {
     clientContext = `NEW_CUSTOMER_GREETING: The customer just shared their phone number but is not in our records yet. Welcome them warmly as a new guest and let them know you're here to help them explore our services or book an appointment. Keep it brief and inviting — 1–2 sentences.`;
@@ -264,7 +286,7 @@ ${SERVICES_EN}
 BRANCHES & HOURS:
 ${BRANCHES_EN}
 
-BOOKING PROCESS:
+${offersSection ? offersSection + "\n\n" : "OFFERS: There are no active offers right now. Never invent or imply any discount or deal — if asked, say prices are fixed and offer to help pick the best option.\n\n"}BOOKING PROCESS:
 To create a booking request, collect ALL of these from the customer:
 1. Full name
 2. Phone number (Egyptian mobile, e.g. 010xxxxxxxx)
