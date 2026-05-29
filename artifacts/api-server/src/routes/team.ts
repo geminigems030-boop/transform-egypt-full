@@ -137,19 +137,20 @@ router.delete("/admin/team/:id", adminAuth, async (req, res) => {
 });
 
 router.post("/admin/team/test-wa", adminAuth, async (req, res) => {
-  const b = req.body as Record<string, unknown>;
-  const phone = typeof b.phone === "string" ? b.phone.trim() : "";
-  if (!phone) return res.status(400).json({ error: "phone is required" });
-  if (!isTwilioConfigured()) {
-    return res.status(503).json({
-      error: "Twilio not configured. Add TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, and TWILIO_WHATSAPP_FROM to environment secrets.",
-    });
-  }
-  const ok = await sendWhatsApp(
-    phone,
-    `🌸 *TransforM Egypt* — Test notification from Yara AI.\n\nYour WhatsApp alerts are working correctly! ✅`,
-  );
-  return res.json({ ok, phone });
-});
+    const b = req.body as Record<string, unknown>;
+    const phone = typeof b.phone === "string" ? b.phone.trim() : "";
+    if (!phone) return res.status(400).json({ error: "phone is required" });
+
+    const { sendWhatsAppDetailed, isAnyWhatsAppConfigured } = await import("../lib/whatsapp");
+    if (!isAnyWhatsAppConfigured()) {
+      return res.status(503).json({ error: "No WhatsApp provider configured. Add Twilio or Meta WhatsApp credentials to environment secrets." });
+    }
+
+    const result = await sendWhatsAppDetailed(
+      phone,
+      `🌸 *TransforM Egypt* — Test notification from Yara AI.\n\nYour WhatsApp alerts are working correctly! ✅`,
+    );
+    return res.json({ ok: result.ok, phone, provider: result.provider, error: result.error ?? null });
+  });
 
 export default router;
