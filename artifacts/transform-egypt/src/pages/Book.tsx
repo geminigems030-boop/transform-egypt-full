@@ -13,10 +13,13 @@ const PHONE_1 = '01009780008';
 const PHONE_2 = '01004545700';
 const WHATSAPP_NUM = '201009780008';
 
-const branchList = [
+// Fallback list of currently-open branches (used until /api/branches loads, or if
+// it fails). Live open branches are fetched in the component so this stays in
+// sync with the DB / Google Sheet without a redeploy.
+const FALLBACK_BRANCHES = [
   { en: 'City Stars Mall — Ground floor, Gate 7', ar: 'سيتي ستارز مول — الدور الأرضي، بوابة 7' },
+  { en: 'Cairo Festival City Mall — 3rd Floor, New Cairo', ar: 'كايرو فيستيفال سيتي مول — الدور الثالث، القاهرة الجديدة' },
   { en: 'Sofitel Downtown Cairo — Downstairs', ar: 'سوفيتيل داون تاون — الدور السفلي' },
-  { en: 'O Mall — New Alamein', ar: 'أوه مول — العلمين الجديدة' },
 ];
 
 const serviceOptions = [
@@ -50,19 +53,43 @@ export default function Book() {
   const { toast } = useToast();
   const { lang } = useTranslation();
   const bookMutation = useCreateBooking();
-  useEffect(() => {
-    trackInitiateBooking();
-  }, []);
+  const [branchList, setBranchList] = useState(FALLBACK_BRANCHES);
 
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
     service: 'Free Consultation',
-    branch: branchList[0].en,
+    branch: FALLBACK_BRANCHES[0].en,
     date: '',
     message: ''
   });
+
+  useEffect(() => {
+    trackInitiateBooking();
+  }, []);
+
+  // Pull the live open branches from the DB so the dropdown matches reality
+  // (e.g. CFCM open, O Mall hidden) without a redeploy. Falls back silently.
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/branches')
+      .then((r) => (r.ok ? r.json() : { branches: [] }))
+      .then((d: { branches?: Array<{ name: string; nameAr: string | null; city: string | null; cityAr: string | null; status: string }> }) => {
+        if (cancelled || !Array.isArray(d.branches)) return;
+        const open = d.branches.filter((b) => b.status === 'open');
+        if (open.length === 0) return;
+        const mapped = open.map((b) => ({
+          en: b.city ? `${b.name} — ${b.city}` : b.name,
+          ar: b.nameAr ? (b.cityAr ? `${b.nameAr} — ${b.cityAr}` : b.nameAr) : (b.city ? `${b.name} — ${b.city}` : b.name),
+        }));
+        setBranchList(mapped);
+        // Keep the selected branch valid against the new options.
+        setFormData((prev) => (mapped.some((m) => m.en === prev.branch) ? prev : { ...prev, branch: mapped[0].en }));
+      })
+      .catch(() => { /* keep fallback */ });
+    return () => { cancelled = true; };
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -139,7 +166,7 @@ export default function Book() {
               </div>
               <div>
                 <strong className="text-gold block mb-1 flex items-center gap-2"><Clock className="w-4 h-4" />{lang === 'ar' ? 'ساعات العمل' : 'Hours'}</strong>
-                {lang === 'ar' ? 'يومياً: 10 صباحاً - 10 مساءً' : 'Daily: 10:00 AM – 10:00 PM'}
+                {lang === 'ar' ? 'يومياً: من 12 ظهراً' : 'Daily: from 12:00 noon'}
               </div>
               <a href={buildWhatsAppLink({ name: formData.name, service: formData.service, branch: formData.branch, lang })} onClick={() => trackContact('whatsapp')} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-[#25D366] hover:underline font-medium">
                 <MessageCircle className="w-4 h-4" />{lang === 'ar' ? 'واتساب' : 'WhatsApp Booking'}
