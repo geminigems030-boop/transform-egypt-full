@@ -5,12 +5,12 @@
 //   Body: { messages: [{role, content}], sessionId: string, clientPhone?: string }
 //   Returns: { reply: string, booked?: boolean, escalated?: boolean }
 //
-// Uses Claude (Anthropic via AI integrations proxy) with an in-memory session
+// Uses Google Gemini (AI Studio, free tier) with an in-memory session
 // store (ephemeral, not persisted to DB — privacy-friendly per spec).
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { Router, type IRouter, type Request, type Response } from "express";
-import Anthropic from "@anthropic-ai/sdk";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { db } from "@workspace/db";
 import { appointmentsTable, submissionsTable } from "@workspace/db/schema";
 import { logger } from "../lib/logger";
@@ -30,12 +30,12 @@ import {
 
 const router: IRouter = Router();
 
-// ── Anthropic client (uses Replit AI integrations proxy) ──────────────────────
-function getAnthropicClient(): Anthropic | null {
-  const baseURL = process.env["AI_INTEGRATIONS_ANTHROPIC_BASE_URL"];
-  const apiKey = process.env["AI_INTEGRATIONS_ANTHROPIC_API_KEY"];
-  if (!baseURL || !apiKey) return null;
-  return new Anthropic({ baseURL, apiKey });
+// ── Gemini client (Google AI Studio, free tier) ──────────────────────────────
+const GEMINI_MODEL = process.env["GEMINI_MODEL"] || "gemini-2.0-flash";
+function getGeminiClient(): GoogleGenerativeAI | null {
+  const apiKey = process.env["GEMINI_API_KEY"];
+  if (!apiKey) return null;
+  return new GoogleGenerativeAI(apiKey);
 }
 
 // ── Rate limit: max 60 messages per session in 30 min ────────────────────────
@@ -96,9 +96,9 @@ router.post("/chat", async (req: Request, res: Response) => {
     return res.status(400).json({ error: "message too long (max 2000 chars)" });
   }
 
-  const client = getAnthropicClient();
-  if (!client) {
-    logger.warn("chat: Anthropic AI integration not configured");
+  const genAI = getGeminiClient();
+  if (!genAI) {
+    logger.warn("chat: GEMINI_API_KEY not configured");
     return res.status(503).json({
       error: "AI unavailable",
       reply: "Sorry, our AI assistant is temporarily unavailable. Please contact us on WhatsApp: +201009780008",
@@ -157,27 +157,32 @@ router.post("/chat", async (req: Request, res: Response) => {
     ? "Please greet me now."
     : userMessage;
 
-  // Convert to Anthropic's message format
-  const anthropicMessages: Anthropic.MessageParam[] = [
-    ...historyForRequest.map((msg) => ({
-      role: msg.role === "model" ? ("assistant" as const) : ("user" as const),
-      content: msg.parts[0]?.text ?? "",
-    })),
-    { role: "user" as const, content: effectiveUserMessage },
+  // Gemini uses the same { role, parts:[{text}] } shape as our session store,
+  // where "model" is the assistant role — so history maps over directly.
+  const mapped = historyForRequest.map((msg) => ({
+    role: msg.role,
+    parts: [{ text: msg.parts[0]?.text ?? "" }],
+  }));
+  // Gemini requires the conversation to begin with a user turn. A phone-greeting
+  // stores only Yara's opening line (a model turn), so drop any leading model
+  // turns to keep the history valid.
+  while (mapped.length && mapped[0]?.role === "model") mapped.shift();
+  const contents = [
+    ...mapped,
+    { role: "user" as const, parts: [{ text: effectiveUserMessage }] },
   ];
 
   try {
-    const response = await client.messages.create({
-      model: "claude-sonnet-4-6",
-      max_tokens: 1024,
-      system: systemPrompt,
-      messages: anthropicMessages,
+    const model = genAI.getGenerativeModel({
+      model: GEMINI_MODEL,
+      systemInstruction: systemPrompt,
+    });
+    const response = await model.generateContent({
+      contents,
+      generationConfig: { maxOutputTokens: 1024 },
     });
 
-    const rawReply = response.content
-      .filter((block): block is Anthropic.TextBlock => block.type === "text")
-      .map((block) => block.text)
-      .join("");
+    const rawReply = response.response.text();
 
     // Save the exchange to session memory
     // For greeting triggers, only store the model reply (not the synthetic user prompt)
