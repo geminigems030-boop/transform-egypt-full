@@ -3,6 +3,22 @@
   "outputDirectory": "dist/public",
   "rewrites": [
     {
+      "source": "/api/chat/:path*",
+      "destination": "https://api.transform-egypt.com/api/chat/:path*"
+    },
+    {
+      "source": "/chat/:path*",
+      "destination": "https://api.transform-egypt.com/api/chat/:path*"
+    },
+    {
+      "source": "/api/yara-call/:path*",
+      "destination": "https://api.transform-egypt.com/api/yara-call/:path*"
+    },
+    {
+      "source": "/api/:path*",
+      "destination": "https://api.transform-egypt.com/api/:path*"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
