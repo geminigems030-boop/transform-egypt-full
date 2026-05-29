@@ -43,7 +43,7 @@ export const pageMeta: Record<string, PageMeta> = {
   "/locations": {
     title: "Our 6 Locations in Cairo & North Coast | TransforM Egypt",
     description:
-      "Visit TransforM Egypt at City Stars, Sofitel Downtown, or O Mall New Alamein. Hours, addresses, WhatsApp. (Cairo Festival City, Nile Ritz-Carlton & Walk of Cairo branches are temporarily closed for renovation.)",
+      "Visit TransforM Egypt at City Stars Mall, Cairo Festival City Mall (New Cairo), or Sofitel Downtown. Hours, addresses, WhatsApp. (Nile Ritz-Carlton & Walk of Cairo branches are temporarily closed for renovation.)",
   },
   "/team": {
     title: "Meet Our Master Artists | TransforM Egypt Stylists",

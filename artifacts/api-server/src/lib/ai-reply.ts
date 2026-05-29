@@ -24,14 +24,29 @@ const client = new Anthropic({
 
 export type AIMode = "off" | "suggest" | "auto";
 
-export function getMode(channel: "dms" | "comments"): AIMode {
-  const v = (
-    channel === "dms"
-      ? process.env["AI_REPLY_MODE_DMS"]
-      : process.env["AI_REPLY_MODE_COMMENTS"]
-  )?.toLowerCase();
-  if (v === "off" || v === "auto") return v;
+export function parseMode(v: unknown): AIMode {
+  const s = typeof v === "string" ? v.toLowerCase() : "";
+  if (s === "off" || s === "auto") return s;
   return "suggest"; // safe default
+}
+
+// Effective per-channel auto-reply modes. Seeded from env on module load so
+// behaviour is unchanged before the DB is consulted; overridden at runtime by
+// the admin Social AI panel via setModeCache() (see lib/social-settings.ts).
+// getMode() stays synchronous because it's called in the inbound webhook hot
+// path (routes/webhooks.ts) where an async DB hit per message is undesirable.
+const modeCache: { dms: AIMode; comments: AIMode } = {
+  dms: parseMode(process.env["AI_REPLY_MODE_DMS"]),
+  comments: parseMode(process.env["AI_REPLY_MODE_COMMENTS"]),
+};
+
+export function getMode(channel: "dms" | "comments"): AIMode {
+  return modeCache[channel];
+}
+
+/** Update the in-memory mode cache. Persistence lives in lib/social-settings.ts. */
+export function setModeCache(channel: "dms" | "comments", mode: AIMode): void {
+  modeCache[channel] = mode;
 }
 
 // Escalation keywords — if ANY appears in the inbound text, the draft is
@@ -209,12 +224,14 @@ const BRAND_SYSTEM_PROMPT = [
   "",
   "{{BOUTIQUE_CATALOG}}",
   "",
-  "BRANCHES — CURRENTLY OPEN (open from 12:00 noon daily)",
-  "ONLY these two branches are currently accepting bookings:",
-  "- City Stars Mall, Nasr City — Ground floor, Gate 7, next to Cafe Supreme.",
+  "BRANCHES — CURRENTLY OPEN",
+  "These three branches are currently accepting bookings:",
+  "- City Stars Mall, Nasr City — Ground floor, Gate 7, next to Cafe Supreme. Open daily from 12:00 noon.",
   "  Google Maps: https://www.google.com/maps/search/City+Stars+Mall+Cairo",
-  "- Sofitel Hotel, Downtown Cairo — Downstairs, facing Mashy Masr (ممشى مصر), next to Banque Misr.",
+  "- Sofitel Hotel, Downtown Cairo — Downstairs, facing Mashy Masr (ممشى مصر), next to Banque Misr. Open daily from 12:00 noon.",
   "  Google Maps: https://www.google.com/maps/search/Sofitel+Cairo+Nile+El+Gezirah",
+  "- Cairo Festival City Mall (CFCM), New Cairo (التجمع / 5th Settlement) — 3rd Floor, next to Casper. PREMIUM branch, open daily during mall hours.",
+  "  Google Maps: https://www.google.com/maps/search/Cairo+Festival+City+Mall",
   "",
   "LOCATION RULE: When a customer asks 'فين الفرع؟' / 'عنوان إيه؟' / 'كيف أوصل؟' / 'where are you?' → include the relevant branch Google Maps link naturally.",
   "Also share WhatsApp for help: https://wa.me/201009780008",
@@ -223,11 +240,11 @@ const BRAND_SYSTEM_PROMPT = [
   "- Walk of Cairo, Sheikh Zayed — CLOSED. Do NOT give directions here.",
   "- Nile Ritz Hotel, Downtown — CLOSED.",
   "- O Mall, New Alamein — CLOSED.",
-  "- Cairo Festival City Mall (CFC / التجمع / 5th Settlement) — TEMPORARILY CLOSED FOR RENOVATION.",
   "",
-  "CLOSED BRANCH RULE: If customer asks about Sheikh Zayed / Zayed / Walk of Cairo / Alamein / New Cairo / 5th Settlement / Rehab / Madinaty / Nile Ritz / CFC:",
+  "CLOSED BRANCH RULE: If customer asks about Sheikh Zayed / Zayed / Walk of Cairo / Alamein / Nile Ritz:",
   "Apologise and redirect to open branches.",
-  "Example: أسفة يا فندم الفرع ده مش شغال حالياً — بس عندنا فرعين متاحين: سيتي ستارز مدينة نصر أو سوفتيل وسط البلد. أقرب ليكِ أنهي؟",
+  "NOTE: New Cairo / 5th Settlement / التجمع / Rehab / Madinaty customers → recommend the Cairo Festival City Mall (CFCM) branch — it is OPEN and nearest to them.",
+  "Example: أسفة يا فندم الفرع ده مش شغال حالياً — بس عندنا سيتي ستارز مدينة نصر، سوفتيل وسط البلد، وكايرو فستيفال سيتي مول في التجمع. أقرب ليكِ أنهي؟",
   "",
   "OUTSIDE CAIRO — CRITICAL: If customer mentions Alexandria / الإسكندرية, Mansoura / المنصورة, Assiut / أسيوط, Luxor / الأقصر, Aswan / أسوان, Hurghada / الغردقة, Port Said / بورسعيد, Suez / السويس, Tanta / طنطا, Zagazig / الزقازيق, Minya / المنيا, or ANY city outside Cairo, or another country:",
   "1. Apologise warmly — we are only in Cairo right now.",

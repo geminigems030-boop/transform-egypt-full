@@ -129,14 +129,15 @@ PAYMENT: Cash ✓ | Cards (credit & debit) ✓ | Installments ✓ (all services)
 OPEN — currently accepting bookings:
 - City Stars Mall, Nasr City — Ground floor, Gate 7, next to Cafe Supreme — 01009780008
 - Sofitel Hotel, Downtown Cairo — Lower level, next to Banque Misr — 01009780008
+- Cairo Festival City Mall (CFCM), New Cairo — 3rd Floor, next to Casper. PREMIUM branch, open daily during mall hours — 01009780008
 
 CLOSED — do NOT offer for bookings:
 - O Mall, New Alamein — CLOSED
 - Walk of Cairo, Sheikh Zayed — CLOSED
 - Nile Ritz Hotel, Downtown — CLOSED
-- Cairo Festival City Mall (5th Settlement) — TEMPORARILY CLOSED FOR RENOVATION
 
-If client asks about a closed branch, apologise and redirect to City Stars or Sofitel.
+If client asks about a closed branch, apologise and redirect to City Stars, Cairo Festival City, or Sofitel.
+New Cairo / 5th Settlement clients → recommend the Cairo Festival City Mall branch (it is open and nearest).
 If client is outside Cairo, apologise warmly — currently Cairo only.
 
 ## Booking
@@ -145,7 +146,7 @@ You already know the client name and phone from the intake form. Just confirm: s
 ## Booking tool — CRITICAL INSTRUCTIONS
 When the client has confirmed ALL of the following, call the book_appointment tool immediately:
 1. Their preferred service (e.g. "tape-in hair extensions", "microblading", "Russian hair extensions")
-2. Their preferred branch — City Stars Mall or Sofitel Hotel ONLY (never a closed branch)
+2. Their preferred branch — City Stars Mall, Cairo Festival City Mall, or Sofitel Hotel ONLY (never a closed branch)
 3. A date and time — can be approximate ("Saturday morning", "next Tuesday at 3") or "TBD" if they cannot decide yet
 
 Call the tool ONCE with all confirmed details. Do NOT wait to call it — call it as soon as you have points 1, 2, and 3 confirmed.
@@ -157,7 +158,7 @@ After the tool returns success, confirm aloud:
 
 If the tool returns an error, apologise warmly and offer to connect them on WhatsApp instead: wa.me/201009780008
 
-NEVER book: O Mall, Sheikh Zayed, Nile Ritz, or Cairo Festival City — they are closed.
+NEVER book: O Mall, Sheikh Zayed, or Nile Ritz — they are closed.
 
 If asked about something you do not know, offer to connect them on WhatsApp: wa.me/201009780008
 
@@ -518,7 +519,7 @@ function buildBookToolConfig(adminToken: string) {
           branch: {
             type: "string" as const,
             description:
-              "Branch name: 'City Stars Mall' or 'Sofitel Hotel'. Never a closed branch. If the client truly cannot decide, pass 'TBD'.",
+              "Branch name: 'City Stars Mall', 'Cairo Festival City Mall', or 'Sofitel Hotel'. Never a closed branch. If the client truly cannot decide, pass 'TBD'.",
           },
           scheduled_at: {
             type: "string" as const,

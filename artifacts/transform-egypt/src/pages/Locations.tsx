@@ -55,9 +55,6 @@ const branches: BranchLocation[] = [
     detailAr: 'بجانب كاسبر. خدمة الفاليه متوفرة.',
     mapUrl: 'https://www.google.com/maps/search/Transform+Egypt+Cairo+Festival+City+Mall',
     phone: PHONE_1,
-    closed: true,
-    closureReasonEn: 'Temporarily closed for renovation. Reopening soon — please book a nearby branch.',
-    closureReasonAr: 'مغلق مؤقتاً للتجديد. سيُعاد الافتتاح قريباً — يرجى الحجز في فرع قريب.',
   },
   {
     number: '03',
@@ -128,6 +125,15 @@ const branchSchemas = [
     lat: 30.0728,
     lng: 31.3463,
     mapQuery: 'Transform+Egypt+City+Stars+Mall+Cairo',
+  },
+  {
+    number: '02',
+    name: 'TransforM Egypt — Cairo Festival City Mall',
+    address: 'Cairo Festival City Mall, 3rd Floor, New Cairo, Cairo, Egypt',
+    phone: '+201009780008',
+    lat: 30.0287,
+    lng: 31.4076,
+    mapQuery: 'Transform+Egypt+Cairo+Festival+City+Mall',
   },
   {
     number: '03',

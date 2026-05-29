@@ -14,3 +14,4 @@ export * from "./clients";
 export * from "./appointments";
 export * from "./automation_log";
 export * from "./automation_settings";
+export * from "./social_settings";

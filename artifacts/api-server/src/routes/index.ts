@@ -23,6 +23,7 @@ import yaraCallRouter from "./yara-call";
 import chatRouter from "./chat";
 import chatActivityRouter from "./chat-activity";
 import automationRouter from "./automation";
+import socialRouter from "./social";
 
 const router: IRouter = Router();
 
@@ -50,5 +51,6 @@ router.use(yaraCallRouter);
 router.use(chatRouter);
 router.use(chatActivityRouter);
 router.use(automationRouter);
+router.use(socialRouter);
 
 export default router;

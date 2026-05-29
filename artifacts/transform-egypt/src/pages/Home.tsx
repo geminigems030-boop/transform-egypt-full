@@ -230,6 +230,14 @@ const prestigiousLocations = [
   },
   {
     number: '02',
+    nameEn: 'Cairo Festival City Mall', nameAr: 'كايرو فيستيفال سيتي مول',
+    subtitleEn: '3rd Floor · New Cairo', subtitleAr: 'الدور الثالث · القاهرة الجديدة',
+    tagEn: 'Premium New Cairo Flagship', tagAr: 'الفرع البريميوم بالقاهرة الجديدة',
+    color: '#0d1a0d',
+    mapUrl: 'https://www.google.com/maps/search/Transform+Egypt+Cairo+Festival+City+Mall',
+  },
+  {
+    number: '03',
     nameEn: 'Sofitel Cairo', nameAr: 'سوفيتيل القاهرة',
     subtitleEn: 'Sofitel Downtown Cairo · Lower Level', subtitleAr: 'سوفيتيل داون تاون · الدور السفلي',
     tagEn: 'Five-Star Elegance', tagAr: 'أناقة خمس نجوم',
@@ -237,7 +245,7 @@ const prestigiousLocations = [
     mapUrl: 'https://www.google.com/maps/search/Transform+Egypt+Sofitel+Downtown+Cairo',
   },
   {
-    number: '03',
+    number: '04',
     nameEn: 'The Nile Ritz-Carlton', nameAr: 'نايل ريتز كارلتون',
     subtitleEn: '1st Floor · Nile Corniche', subtitleAr: 'الدور الأول · كورنيش النيل',
     tagEn: 'Ultra-Luxury Waterfront', tagAr: 'فخامة على ضفاف النيل',
@@ -246,7 +254,7 @@ const prestigiousLocations = [
     closed: true,
   },
   {
-    number: '04',
+    number: '05',
     nameEn: 'Walk of Cairo', nameAr: 'ووك أوف كايرو',
     subtitleEn: 'Sheikh Zayed · Open-Air Promenade', subtitleAr: 'الشيخ زايد · بروميناد مفتوح',
     tagEn: 'Sheikh Zayed\'s Finest', tagAr: 'أرقى الشيخ زايد',
@@ -255,7 +263,7 @@ const prestigiousLocations = [
     closed: true,
   },
   {
-    number: '05',
+    number: '06',
     nameEn: 'O Mall — New Alamein', nameAr: 'أوه مول — العلمين الجديدة',
     subtitleEn: 'Mediterranean Coast · North Coast', subtitleAr: 'الساحل المتوسطي · الساحل الشمالي',
     tagEn: 'The Mediterranean Retreat', tagAr: 'ملاذ البحر المتوسط',

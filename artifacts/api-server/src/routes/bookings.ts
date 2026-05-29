@@ -3,6 +3,7 @@ import { db } from "@workspace/db";
 import { bookingsTable, appointmentsTable } from "@workspace/db/schema";
 import { CreateBookingBody } from "@workspace/api-zod";
 import { normalizePhone, findOrCreateClient } from "../lib/crm";
+import { notifyTeam } from "../lib/notify-team";
 
 const router: IRouter = Router();
 
@@ -59,6 +60,19 @@ router.post("/bookings", async (req, res) => {
         req.log.warn({ crmErr }, "CRM mirror failed for booking");
       }
     })();
+
+    // 3. Notify the team via WhatsApp (fire-and-forget). The new_booking event
+    // type is already supported by notify-team.ts but was never wired up here,
+    // so website booking-form submissions previously triggered no team alert.
+    void notifyTeam({
+      type: "new_booking",
+      name: body.name,
+      phone: body.phone,
+      email: body.email,
+      service: body.service,
+    }).catch((notifyErr) =>
+      req.log.warn({ notifyErr }, "team notify failed for booking"),
+    );
 
     res.status(201).json({
       id: booking.id,
