@@ -18,4 +18,4 @@ cmds = ["pnpm turbo run build"]
 paths = [".pnpm-store", ".turbo"]
 
 [start]
-cmd = "pnpm --filter api-client-react start"
+cmd = "pnpm --filter api-server start"
