@@ -34,7 +34,51 @@ import { createBookingEvent } from "../lib/google-calendar";
 const router: IRouter = Router();
 
 // ── Gemini client (Google AI Studio, free tier) ──────────────────────────────
-const GEMINI_MODEL = process.env["GEMINI_MODEL"] || "gemini-2.0-flash";
+// Try the configured model first, then fall back through known-good models.
+// Google periodically retires model aliases (e.g. gemini-1.5-flash), which would
+// otherwise hard-500 the whole chat. The fallback keeps Yara answering and logs
+// the exact failure of each model so the root cause is visible in the logs.
+const MODEL_CANDIDATES: string[] = Array.from(
+  new Set(
+    [
+      process.env["GEMINI_MODEL"],
+      "gemini-2.5-flash",
+      "gemini-flash-latest",
+      "gemini-2.0-flash",
+      "gemini-1.5-flash",
+    ].filter((m): m is string => Boolean(m)),
+  ),
+);
+
+async function generateWithFallback(
+  genAI: GoogleGenerativeAI,
+  systemPrompt: string,
+  contents: Array<{ role: string; parts: Array<{ text: string }> }>,
+): Promise<string> {
+  let lastErr: unknown;
+  for (const modelName of MODEL_CANDIDATES) {
+    try {
+      const model = genAI.getGenerativeModel({ model: modelName, systemInstruction: systemPrompt });
+      const response = await model.generateContent({
+        contents,
+        generationConfig: { maxOutputTokens: 1024 },
+      });
+      const text = response.response.text();
+      if (modelName !== MODEL_CANDIDATES[0]) {
+        logger.warn({ model: modelName }, "chat: primary model failed, succeeded on fallback");
+      }
+      return text;
+    } catch (err) {
+      lastErr = err;
+      logger.warn(
+        { model: modelName, err: (err as Error).message },
+        "chat: Gemini model failed, trying next candidate",
+      );
+    }
+  }
+  throw lastErr ?? new Error("All Gemini model candidates failed");
+}
+
 function getGeminiClient(): GoogleGenerativeAI | null {
   const apiKey = process.env["GEMINI_API_KEY"];
   if (!apiKey) return null;
@@ -188,16 +232,7 @@ router.post("/chat", async (req: Request, res: Response) => {
   ];
 
   try {
-    const model = genAI.getGenerativeModel({
-      model: GEMINI_MODEL,
-      systemInstruction: systemPrompt,
-    });
-    const response = await model.generateContent({
-      contents,
-      generationConfig: { maxOutputTokens: 1024 },
-    });
-
-    const rawReply = response.response.text();
+    const rawReply = await generateWithFallback(genAI, systemPrompt, contents);
 
     // Save the exchange to session memory
     // For greeting triggers, only store the model reply (not the synthetic user prompt)
