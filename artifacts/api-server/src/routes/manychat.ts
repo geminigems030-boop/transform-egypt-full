@@ -124,7 +124,7 @@ async function tryTranscribeAudioFromUrl(url: string): Promise<string | null> {
     );
 
     const genAI = new GoogleGenerativeAI(GEMINI_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: process.env["GEMINI_MODEL"] || "gemini-2.0-flash" });
 
     const result = await model.generateContent([
       "This is a voice message sent by a customer to a beauty salon's Instagram DM. " +
